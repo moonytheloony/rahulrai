@@ -10,6 +10,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Repositories
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.IO;
+    using Common.Entities;
 
     #region
 

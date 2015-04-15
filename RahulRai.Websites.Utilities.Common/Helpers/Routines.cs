@@ -17,12 +17,16 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
     using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
+    using System.Runtime.Serialization;
     using System.Security;
     using System.Security.Claims;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
+    using System.Web.Script.Serialization;
     using System.Xml.Linq;
+    using Exceptions;
+    using RegularTypes;
 
     #endregion
 
@@ -31,12 +35,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
     /// </summary>
     public static class Routines
     {
-        /// <summary>
-        /// The activity dictionary.
-        /// </summary>
-        private static ConcurrentDictionary<string, Activity> activityDictionary = new ConcurrentDictionary<string, Activity>();
-
-        #region Public Methods and Operators
+       #region Public Methods and Operators
 
         /// <summary>
         /// The add to CSV.
@@ -124,49 +123,6 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
 
             var specificType = generic.MakeGenericType(new[] { innerType });
             return Activator.CreateInstance(specificType, args);
-        }
-
-        /// <summary>
-        /// The create workflow activity from XAML.
-        /// </summary>
-        /// <param name="workflowXaml">
-        /// The workflow XAML.
-        /// </param>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Activity"/>.
-        /// </returns>
-        public static Activity CreateWorkflowActivityFromXaml(string workflowXaml, Assembly type)
-        {
-            if (string.IsNullOrEmpty(workflowXaml) || (type == null))
-            {
-                return null;
-            }
-
-            if (activityDictionary.ContainsKey(workflowXaml))
-            {
-                return activityDictionary[workflowXaml];
-            }
-
-            var xamlReaderSettings = new XamlXmlReaderSettings { LocalAssembly = type };
-            StringReader stringReader = null;
-            var xamlServicesSettings = new ActivityXamlServicesSettings { CompileExpressions = true };
-            try
-            {
-                stringReader = new StringReader(workflowXaml);
-                var xamlXmlReader = new XamlXmlReader(stringReader, xamlReaderSettings);
-                var workflow = ActivityXamlServices.Load(xamlXmlReader, xamlServicesSettings);
-                return activityDictionary.GetOrAdd(workflowXaml, workflow);
-            }
-            finally
-            {
-                if (stringReader != null)
-                {
-                    stringReader.Dispose();
-                }
-            }
         }
 
         /// <summary>

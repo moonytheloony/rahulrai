@@ -6,6 +6,9 @@
 namespace RahulRai.Websites.Utilities.Common.Entities
 {
     using System.Collections.Generic;
+    using System.Linq;
+    using Helpers;
+    using RegularTypes;
 
     /// <summary>
     ///     Transient entity

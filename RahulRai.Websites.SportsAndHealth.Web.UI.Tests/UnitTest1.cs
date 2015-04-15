@@ -1,5 +1,8 @@
-﻿using System;
+﻿#region
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+#endregion
 
 namespace RahulRai.Websites.SportsAndHealth.Web.UI.Tests
 {

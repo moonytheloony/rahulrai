@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileType.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RahulRai.Websites.Utilities.Common.Entities
+﻿namespace RahulRai.Websites.Utilities.Common.Entities
 {
     /// <summary>
     ///     The file type.
@@ -14,7 +8,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         /// <summary>
         ///     The internal.
         /// </summary>
-        Internal, 
+        Internal,
 
         /// <summary>
         ///     The external.

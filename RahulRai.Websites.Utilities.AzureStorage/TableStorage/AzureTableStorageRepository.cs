@@ -1,20 +1,21 @@
-﻿#region
-
-
-
-#endregion
-
-namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
+﻿namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using Repositories;
+    using Common.Entities;
+    using Common.Exceptions;
+    using Common.RegularTypes;
+    using Microsoft.WindowsAzure.Storage;
+    using Microsoft.WindowsAzure.Storage.RetryPolicies;
+    using Microsoft.WindowsAzure.Storage.Table;
+
+    #endregion
 
     #region
-
-    
 
     #endregion
 
@@ -24,7 +25,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
     /// <typeparam name="TElement">
     ///     Element for entity
     /// </typeparam>
-    public class AzureTableStorageRepository<TElement> : IUnstructuredDataRepository<TElement>
+    public class AzureTableStorageRepository<TElement>
         where TElement : class, new()
     {
         #region Fields
@@ -39,23 +40,11 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
         /// </summary>
         private readonly Func<TElement, DynamicTableEntity> convertToTableEntity;
 
+        private readonly string tableName = string.Empty;
+
         #endregion
 
         #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="AzureTableStorageRepository{TElement}" /> class.
-        /// </summary>
-        /// <param name="context">
-        ///     The context.
-        /// </param>
-        public AzureTableStorageRepository(IContext context)
-            : this(
-                context,
-                AzureTableStorageAssist.ConvertEntityToDynamicTableEntity,
-                AzureTableStorageAssist.ConvertDynamicEntityToEntity<TElement>)
-        {
-        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="AzureTableStorageRepository{TElement}" /> class.
@@ -70,19 +59,20 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
         ///     The converter from table entity to entity.
         /// </param>
         public AzureTableStorageRepository(
-            IContext context,
+            string storageAccountConnectionString,
+            string tableName,
             Func<TElement, DynamicTableEntity> convertToTableEntity,
             Func<DynamicTableEntity, TElement> convertToEntity)
         {
-            Contract.Requires<InputValidationFailedException>(null != context, "context");
+            Contract.Requires<InputValidationFailedException>(
+                !string.IsNullOrWhiteSpace(storageAccountConnectionString), "storageAccountConnectionString");
             Contract.Requires<InputValidationFailedException>(null != convertToTableEntity, "convertToTableEntity");
             Contract.Requires<InputValidationFailedException>(null != convertToEntity, "convertToEntity");
 
-            Context = context;
             this.convertToTableEntity = convertToTableEntity;
             this.convertToEntity = convertToEntity;
-
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(context.UnstructuredStorageConnectionString);
+            this.tableName = tableName;
+            var storageAccount = CloudStorageAccount.Parse(storageAccountConnectionString);
             CloudTableClient = storageAccount.CreateCloudTableClient();
             CloudTableClient.DefaultRequestOptions.RetryPolicy =
                 new ExponentialRetry(
@@ -97,15 +87,6 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
             };
             TableOperations = new TableBatchOperation();
         }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets or sets the context.
-        /// </summary>
-        public IContext Context { get; set; }
 
         #endregion
 
@@ -140,7 +121,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
         /// </summary>
         public virtual void CreateStorageObjectAndSetExecutionContext()
         {
-            ActiveTable = CloudTableClient.GetTableReference(Context.UnstructuredStorageObjectName);
+            ActiveTable = CloudTableClient.GetTableReference(tableName);
             ActiveTable.CreateIfNotExists(TableRequestOptions);
         }
 
@@ -175,17 +156,17 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
         /// </returns>
         public virtual IList<TElement> GetAll(string key)
         {
-            TableQuery query =
+            var query =
                 new TableQuery().Where(
                     TableQuery.GenerateFilterCondition(KnownTypes.PartitionKey, QueryComparisons.Equal, key));
-            IEnumerable<DynamicTableEntity> result = ActiveTable.ExecuteQuery(query, TableRequestOptions);
+            var result = ActiveTable.ExecuteQuery(query, TableRequestOptions);
             return result.Select(convertToEntity).ToList();
         }
 
         /// <inheritdoc />
         public virtual IList<TElement> GetAll()
         {
-            IEnumerable<DynamicTableEntity> result = ActiveTable.ExecuteQuery(
+            var result = ActiveTable.ExecuteQuery(
                 new TableQuery(),
                 TableRequestOptions);
             return result.Select(convertToEntity).ToList();
@@ -206,7 +187,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
         /// </returns>
         public virtual TElement GetById(string key, string id)
         {
-            TableOperation operation = TableOperation.Retrieve(key, id);
+            var operation = TableOperation.Retrieve(key, id);
             var result = ActiveTable.Execute(operation, TableRequestOptions).Result as DynamicTableEntity;
             return result == null ? null : convertToEntity(result);
         }
@@ -259,13 +240,12 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
         {
             try
             {
-                TableResult result = ActiveTable.Execute(TableOperations[0], TableRequestOptions);
+                var result = ActiveTable.Execute(TableOperations[0], TableRequestOptions);
                 TableOperations = new TableBatchOperation();
                 return IsSuccessStatusCode(result.HttpStatusCode);
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(CommonTraceMessages.ErrorExecutingTableOperationMsg, exception);
                 return false;
             }
         }
@@ -275,7 +255,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
         {
             try
             {
-                IList<TableResult> result = ActiveTable.ExecuteBatch(
+                var result = ActiveTable.ExecuteBatch(
                     TableOperations,
                     TableRequestOptions);
                 TableOperations = new TableBatchOperation();
@@ -285,7 +265,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
             }
             catch (Exception exception)
             {
-                throw new CtpecSystemException("Error executing batch table operation.", exception);
+                throw new BlogSystemException("Error executing batch table operation.", exception);
             }
         }
 
@@ -294,7 +274,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
         /// </summary>
         public virtual void SetExecutionContext()
         {
-            ActiveTable = CloudTableClient.GetTableReference(Context.UnstructuredStorageObjectName);
+            ActiveTable = CloudTableClient.GetTableReference(tableName);
         }
 
         /// <summary>

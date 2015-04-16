@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileOperationStatus.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RahulRai.Websites.Utilities.Common.Entities
+﻿namespace RahulRai.Websites.Utilities.Common.Entities
 {
     /// <summary>
     ///     The file operation status.
@@ -14,17 +8,17 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         /// <summary>
         ///     The folder created.
         /// </summary>
-        FolderCreated, 
+        FolderCreated,
 
         /// <summary>
         ///     The error.
         /// </summary>
-        Error, 
+        Error,
 
         /// <summary>
         ///     The folder deleted.
         /// </summary>
-        FolderDeleted, 
+        FolderDeleted,
 
         /// <summary>
         ///     The file created or updated.
@@ -32,27 +26,27 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         FileCreatedOrUpdated,
 
         /// <summary>
-        /// The file updated with new version.
+        ///     The file updated with new version.
         /// </summary>
         FileUpdatedWithNewVersion,
 
         /// <summary>
         ///     The file deleted.
         /// </summary>
-        FileDeleted, 
+        FileDeleted,
 
         /// <summary>
         ///     The initiated copy operation.
         /// </summary>
-        InitiatedCopyOperation, 
+        InitiatedCopyOperation,
 
         /// <summary>
-        /// The copy completed.
+        ///     The copy completed.
         /// </summary>
-        CopyCompleted, 
+        CopyCompleted,
 
         /// <summary>
-        /// The time out.
+        ///     The time out.
         /// </summary>
         Timeout
     }

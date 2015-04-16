@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="KnownTypes.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace RahulRai.Websites.Utilities.Common.RegularTypes
+﻿namespace RahulRai.Websites.Utilities.Common.RegularTypes
 {
     #region
 
@@ -13,7 +8,7 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
     #endregion
 
     /// <summary>
-    /// Known Types.
+    ///     Known Types.
     /// </summary>
     public static class KnownTypes
     {
@@ -274,12 +269,12 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public const string Email = "Email";
 
         /// <summary>
-        /// The entity id.
+        ///     The entity id.
         /// </summary>
         public const string EntityId = "EntityId";
 
         /// <summary>
-        /// The entity version id.
+        ///     The entity version id.
         /// </summary>
         public const string EntityVersionId = "EntityVersionId";
 
@@ -344,7 +339,7 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public const string FileExternalUrl = "FileExternalUrl";
 
         /// <summary>
-        /// The file URL inside the BLOB storage.
+        ///     The file URL inside the BLOB storage.
         /// </summary>
         public const string FileUrl = "FileUrl";
 
@@ -456,7 +451,7 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// <summary>
         ///     No. of Bytes for a Giga Byte
         /// </summary>
-        public const int GB = KB * MB;
+        public const int GB = KB*MB;
 
         /// <summary>
         ///     The get request.
@@ -496,7 +491,7 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// <summary>
         ///     No. of Bytes for a Mega Byte
         /// </summary>
-        public const int MB = KB * KB;
+        public const int MB = KB*KB;
 
         /// <summary>
         ///     The match any
@@ -511,12 +506,12 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// <summary>
         ///     Size of metadata
         /// </summary>
-        public const int MetadataSize = 1024 * 8;
+        public const int MetadataSize = 1024*8;
 
         /// <summary>
         ///     Represents the milliseconds in a minute
         /// </summary>
-        public const int MinToMillisecond = 1000 * 60;
+        public const int MinToMillisecond = 1000*60;
 
         /// <summary>
         ///     The name.
@@ -614,7 +609,7 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public const string Timestamp = "Timestamp";
 
         /// <summary>
-        /// The token validator
+        ///     The token validator
         /// </summary>
         public const string TokenValidator = @"authorization\sbearer\s\w+";
 
@@ -637,7 +632,7 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         ///     Debug Events
         /// </summary>
         public const string DebugEvents = "Debug Events";
-        
+
         /// <summary>
         ///     Colon and space
         /// </summary>
@@ -658,7 +653,7 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// </summary>
         public const string ValidEmailIdRegex =
             @"^(?("")("".+?""@)|(([0-9a-zA-Z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-zA-Z])@))"
-                + @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$";
+            + @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$";
 
         /// <summary>
         ///     Valid GUID pattern.
@@ -707,22 +702,22 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public const string XslTransformationFileExtension = "xslt";
 
         /// <summary>
-        /// Needs approval
+        ///     Needs approval
         /// </summary>
         public const string NeedsApproval = "NeedsApproval";
 
         /// <summary>
-        /// The container type main
+        ///     The container type main
         /// </summary>
         public const string ContainerTypeMain = "main";
 
         /// <summary>
-        /// The container type transient
+        ///     The container type transient
         /// </summary>
         public const string ContainerTypeTransient = "transient";
 
         /// <summary>
-        /// The maximum Azure table string property length (in characters).
+        ///     The maximum Azure table string property length (in characters).
         /// </summary>
         public const int MaxTableStringPropertyLength = 16384; // 16 KB
 

@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EntityType.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace RahulRai.Websites.Utilities.Common.RegularTypes
+﻿namespace RahulRai.Websites.Utilities.Common.RegularTypes
 {
     /// <summary>
     ///     The rights.
@@ -11,22 +6,22 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
     public enum EntityType
     {
         /// <summary>
-        /// The organization.
+        ///     The organization.
         /// </summary>
-        Organisation, 
+        Organisation,
 
         /// <summary>
-        /// The user.
+        ///     The user.
         /// </summary>
-        User, 
+        User,
 
         /// <summary>
-        /// The data set.
+        ///     The data set.
         /// </summary>
-        DataSet, 
+        DataSet,
 
         /// <summary>
-        /// The file.
+        ///     The file.
         /// </summary>
         File
     }

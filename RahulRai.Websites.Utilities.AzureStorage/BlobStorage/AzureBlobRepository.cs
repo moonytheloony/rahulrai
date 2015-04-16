@@ -1,28 +1,32 @@
-﻿#region
-
-
-
-#endregion
-
-namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
+﻿namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.IO;
-    using System.Threading;
-    using Repositories;
-
     #region
 
-    
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using Common.Entities;
+    using Common.Exceptions;
+    using Common.Helpers;
+    using Common.RegularTypes;
+    using Microsoft.WindowsAzure.Storage;
+    using Microsoft.WindowsAzure.Storage.Blob;
+    using Microsoft.WindowsAzure.Storage.RetryPolicies;
+
+    #endregion
+
+    #region
 
     #endregion
 
     /// <summary>
     ///     The azure blob repository.
     /// </summary>
-    public class AzureBlobRepository : IFileRepository
+    public class AzureBlobRepository
     {
         #region Constructors and Destructors
 
@@ -32,12 +36,12 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         /// <param name="context">
         ///     The context.
         /// </param>
-        public AzureBlobRepository(IContext context)
+        public AzureBlobRepository(string storageAccountConnectionString)
         {
-            Contract.Requires<InputValidationFailedException>(null != context, "context");
-            Context = context;
-            RepositoryClient = CloudStorageAccount.Parse(context.FileServerAccessString).CreateCloudBlobClient();
-            RepositoryClient.DefaultRequestOptions.RetryPolicy =
+            Contract.Requires<InputValidationFailedException>(
+                !string.IsNullOrWhiteSpace(storageAccountConnectionString), "storageAccountConnectionString");
+            BlobClient = CloudStorageAccount.Parse(storageAccountConnectionString).CreateCloudBlobClient();
+            BlobClient.DefaultRequestOptions.RetryPolicy =
                 new ExponentialRetry(
                     TimeSpan.FromSeconds(CustomRetryPolicy.RetryBackOffSeconds),
                     CustomRetryPolicy.MaxRetries);
@@ -52,21 +56,12 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
 
         #endregion
 
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets or sets the context.
-        /// </summary>
-        public IContext Context { get; set; }
-
-        #endregion
-
         #region Properties
 
         /// <summary>
         ///     Gets or sets the repository client.
         /// </summary>
-        private CloudBlobClient RepositoryClient { get; set; }
+        private CloudBlobClient BlobClient { get; set; }
 
         #endregion
 
@@ -91,7 +86,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         {
             try
             {
-                var container = RepositoryClient.GetContainerReference(folderName);
+                var container = BlobClient.GetContainerReference(folderName);
                 var blockBlob = container.GetBlockBlobReference(fileName);
                 blockBlob.Properties.ContentType = MimeMapping.GetMimeMapping(fileName);
                 blockBlob.UploadFromStream(fileStream);
@@ -99,7 +94,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(
+                Trace.TraceError(
                     Routines.FormatStringInvariantCulture(
                         "File operation failed with the following error {0}",
                         exception.Message),
@@ -134,7 +129,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         {
             try
             {
-                var container = RepositoryClient.GetContainerReference(folderName);
+                var container = BlobClient.GetContainerReference(folderName);
                 var blobDirectory = container.GetDirectoryReference(directoryName);
                 var blockBlob = blobDirectory.GetBlockBlobReference(fileName);
                 blockBlob.Properties.ContentType = MimeMapping.GetMimeMapping(fileName);
@@ -143,7 +138,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(
+                Trace.TraceError(
                     Routines.FormatStringInvariantCulture(
                         "File operation failed with the following error {0}",
                         exception.Message),
@@ -152,137 +147,6 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
             }
 
             return FileOperationStatus.FileCreatedOrUpdated;
-        }
-
-        /// <summary>
-        ///     The copy file across server.
-        /// </summary>
-        /// <param name="sourceFolder">
-        ///     The source folder.
-        /// </param>
-        /// <param name="fileName">
-        ///     The file name.
-        /// </param>
-        /// <param name="targetContext">
-        ///     The target context.
-        /// </param>
-        /// <param name="targetFolder">
-        ///     The target folder.
-        /// </param>
-        /// <param name="targetFileName">
-        ///     The target File Name.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="FileOperationStatus" />.
-        /// </returns>
-        public FileOperationStatus CopyFileAcrossServer(
-            string sourceFolder,
-            string fileName,
-            IContext targetContext,
-            string targetFolder,
-            string targetFileName)
-        {
-            try
-            {
-                var sourceContainer = RepositoryClient.GetContainerReference(sourceFolder);
-                var cloudContext = targetContext as CloudContext;
-                if (cloudContext != null)
-                {
-                    var targetRepository = cloudContext.FileRepository as AzureBlobRepository;
-                    if (targetRepository != null)
-                    {
-                        var targetContainer = targetRepository.RepositoryClient.GetContainerReference(targetFolder);
-                        var sourceBlob = sourceContainer.GetBlockBlobReference(fileName);
-                        var targetBlob = targetContainer.GetBlockBlobReference(targetFileName);
-                        targetBlob.StartCopyFromBlob(sourceBlob);
-                        return FileOperationStatus.InitiatedCopyOperation;
-                    }
-                }
-            }
-            catch (StorageException exception)
-            {
-                AuditAndTraceWriter.WriteToErrorLog(
-                    Routines.FormatStringInvariantCulture(
-                        "File operation failed with the following error {0}",
-                        exception.Message),
-                    null);
-                return FileOperationStatus.Error;
-            }
-
-            return FileOperationStatus.Error;
-        }
-
-        /// <summary>
-        ///     The copy file across server synchronous.
-        /// </summary>
-        /// <param name="sourceFolder">
-        ///     The source folder.
-        /// </param>
-        /// <param name="fileName">
-        ///     The file name.
-        /// </param>
-        /// <param name="targetContext">
-        ///     The target context.
-        /// </param>
-        /// <param name="targetFolder">
-        ///     The target folder.
-        /// </param>
-        /// <param name="targetFileName">
-        ///     The target File Name.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="FileOperationStatus" />.
-        /// </returns>
-        public FileOperationStatus CopyFileAcrossServerSynchronous(
-            string sourceFolder,
-            string fileName,
-            IContext targetContext,
-            string targetFolder,
-            string targetFileName)
-        {
-            try
-            {
-                var synchronusCounter = 0;
-                var sourceContainer = RepositoryClient.GetContainerReference(sourceFolder);
-                var cloudContext = targetContext as CloudContext;
-                if (cloudContext != null)
-                {
-                    var targetRepository = cloudContext.FileRepository as AzureBlobRepository;
-                    if (targetRepository != null)
-                    {
-                        var targetContainer = targetRepository.RepositoryClient.GetContainerReference(targetFolder);
-                        var sourceBlob = sourceContainer.GetBlockBlobReference(fileName);
-                        var targetBlob = targetContainer.GetBlockBlobReference(targetFileName);
-                        targetBlob.StartCopyFromBlob(sourceBlob);
-                        while (10 > synchronusCounter++)
-                        {
-                            Thread.Sleep(TimeSpan.FromSeconds(5));
-                            switch (targetBlob.CopyState.Status)
-                            {
-                                case CopyStatus.Aborted:
-                                case CopyStatus.Failed:
-                                case CopyStatus.Invalid:
-                                    return FileOperationStatus.Error;
-                                case CopyStatus.Success:
-                                    return FileOperationStatus.CopyCompleted;
-                            }
-                        }
-
-                        return FileOperationStatus.Timeout;
-                    }
-                }
-            }
-            catch (StorageException exception)
-            {
-                AuditAndTraceWriter.WriteToErrorLog(
-                    Routines.FormatStringInvariantCulture(
-                        "File operation failed with the following error {0}",
-                        exception.Message),
-                    null);
-                return FileOperationStatus.Error;
-            }
-
-            return FileOperationStatus.Error;
         }
 
         /// <summary>
@@ -303,7 +167,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         /// <returns>
         ///     The <see cref="FileOperationStatus" />.
         /// </returns>
-        public FileOperationStatus CopyFileWithinServer(
+        public FileOperationStatus CopyFileWithinStorageAccount(
             string sourceFolder,
             string fileName,
             string targetFolder,
@@ -311,8 +175,8 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         {
             try
             {
-                var sourceContainer = RepositoryClient.GetContainerReference(sourceFolder);
-                var targetContainer = RepositoryClient.GetContainerReference(targetFolder);
+                var sourceContainer = BlobClient.GetContainerReference(sourceFolder);
+                var targetContainer = BlobClient.GetContainerReference(targetFolder);
                 var sourceBlob = sourceContainer.GetBlockBlobReference(fileName);
                 var targetBlob = targetContainer.GetBlockBlobReference(targetFileName);
                 targetBlob.StartCopyFromBlob(sourceBlob);
@@ -320,7 +184,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(
+                Trace.TraceError(
                     Routines.FormatStringInvariantCulture(
                         "File operation failed with the following error {0}",
                         exception.Message),
@@ -329,64 +193,6 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
             }
         }
 
-        /// <summary>
-        ///     The copy file within server synchronous.
-        /// </summary>
-        /// <param name="sourceFolder">
-        ///     The source folder.
-        /// </param>
-        /// <param name="fileName">
-        ///     The file name.
-        /// </param>
-        /// <param name="targetFolder">
-        ///     The target folder.
-        /// </param>
-        /// <param name="targetFileName">
-        ///     The target File Name.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="FileOperationStatus" />.
-        /// </returns>
-        public FileOperationStatus CopyFileWithinServerSynchronous(
-            string sourceFolder,
-            string fileName,
-            string targetFolder,
-            string targetFileName)
-        {
-            try
-            {
-                var synchronusCounter = 0;
-                var sourceContainer = RepositoryClient.GetContainerReference(sourceFolder);
-                var targetContainer = RepositoryClient.GetContainerReference(targetFolder);
-                var sourceBlob = sourceContainer.GetBlockBlobReference(fileName);
-                var targetBlob = targetContainer.GetBlockBlobReference(targetFileName);
-                targetBlob.StartCopyFromBlob(sourceBlob);
-                while (10 > synchronusCounter++)
-                {
-                    Thread.Sleep(TimeSpan.FromSeconds(5));
-                    switch (targetBlob.CopyState.Status)
-                    {
-                        case CopyStatus.Aborted:
-                        case CopyStatus.Failed:
-                        case CopyStatus.Invalid:
-                            return FileOperationStatus.Error;
-                        case CopyStatus.Success:
-                            return FileOperationStatus.CopyCompleted;
-                    }
-                }
-
-                return FileOperationStatus.Timeout;
-            }
-            catch (StorageException exception)
-            {
-                AuditAndTraceWriter.WriteToErrorLog(
-                    Routines.FormatStringInvariantCulture(
-                        "File operation failed with the following error {0}",
-                        exception.Message),
-                    null);
-                return FileOperationStatus.Error;
-            }
-        }
 
         /// <summary>
         ///     The create folder.
@@ -409,7 +215,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(
+                Trace.TraceError(
                     Routines.FormatStringInvariantCulture(
                         "File operation failed with the following error {0}",
                         exception.Message),
@@ -451,7 +257,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(
+                Trace.TraceError(
                     Routines.FormatStringInvariantCulture(
                         "File operation failed with the following error {0}",
                         exception.Message),
@@ -476,19 +282,19 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         {
             try
             {
-                var container = RepositoryClient.GetContainerReference(folderName);
+                var container = BlobClient.GetContainerReference(folderName);
                 var directory = container.GetDirectoryReference(directoryName);
                 foreach (
                     var blockBlob in
                         directory.ListBlobs(true)
-                            .Select(file => RepositoryClient.GetBlobReferenceFromServer(file.Uri)))
+                            .Select(file => BlobClient.GetBlobReferenceFromServer(file.Uri)))
                 {
                     blockBlob.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
                 }
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(
+                Trace.TraceError(
                     Routines.FormatStringInvariantCulture(
                         "File operation failed with the following error {0}",
                         exception.Message),
@@ -515,13 +321,13 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         {
             try
             {
-                var container = RepositoryClient.GetContainerReference(folderName);
+                var container = BlobClient.GetContainerReference(folderName);
                 var blockBlob = container.GetBlockBlobReference(fileName);
                 blockBlob.DeleteIfExists();
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(
+                Trace.TraceError(
                     Routines.FormatStringInvariantCulture(
                         "File operation failed with the following error {0}",
                         exception.Message),
@@ -545,12 +351,12 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         {
             try
             {
-                var blockBlob = RepositoryClient.GetBlobReferenceFromServer(fullyQualifiedFileName);
+                var blockBlob = BlobClient.GetBlobReferenceFromServer(fullyQualifiedFileName);
                 blockBlob.DeleteIfExists();
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(
+                Trace.TraceError(
                     Routines.FormatStringInvariantCulture(
                         "File operation failed with the following error {0}",
                         exception.Message),
@@ -574,13 +380,13 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         {
             try
             {
-                var container = RepositoryClient.GetContainerReference(folderName);
+                var container = BlobClient.GetContainerReference(folderName);
                 container.DeleteIfExists();
                 return FileOperationStatus.FolderDeleted;
             }
             catch (StorageException exception)
             {
-                AuditAndTraceWriter.WriteToErrorLog(
+                Trace.TraceError(
                     Routines.FormatStringInvariantCulture(
                         "File operation failed with the following error {0}",
                         exception.Message),
@@ -603,7 +409,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         /// </returns>
         public DataFile DownloadFile(string folderName, string fileName)
         {
-            var container = RepositoryClient.GetContainerReference(folderName);
+            var container = BlobClient.GetContainerReference(folderName);
             var blockBlob = container.GetBlockBlobReference(fileName);
             blockBlob.FetchAttributes();
             var fileContent = new byte[blockBlob.Properties.Length];
@@ -627,7 +433,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         /// </returns>
         public DataFile DownloadFile(Uri fullyQualifiedFileName)
         {
-            var blockBlob = RepositoryClient.GetBlobReferenceFromServer(fullyQualifiedFileName);
+            var blockBlob = BlobClient.GetBlobReferenceFromServer(fullyQualifiedFileName);
             var fileContent = new byte[blockBlob.Properties.Length];
             blockBlob.DownloadToByteArray(fileContent, 0);
             return new DataFile
@@ -655,7 +461,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         /// </returns>
         public FileOperationStatus DownloadFile(string folderName, string fileName, string targetFilePath)
         {
-            var container = RepositoryClient.GetContainerReference(folderName);
+            var container = BlobClient.GetContainerReference(folderName);
             var blockBlob = container.GetBlockBlobReference(fileName);
             blockBlob.DownloadToFile(targetFilePath, FileMode.CreateNew);
             return FileOperationStatus.FileCreatedOrUpdated;
@@ -672,7 +478,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         /// </returns>
         public IEnumerable<Document> EnlistDocuments(string folderName)
         {
-            var container = RepositoryClient.GetContainerReference(folderName);
+            var container = BlobClient.GetContainerReference(folderName);
             var blockBlobs = container.ListBlobs(null, true, BlobListingDetails.All);
             return
                 blockBlobs.Select(
@@ -701,7 +507,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         /// </returns>
         public IEnumerable<Document> EnlistFilesInSubdirectory(string folderName, string directoryName)
         {
-            var container = RepositoryClient.GetContainerReference(folderName);
+            var container = BlobClient.GetContainerReference(folderName);
             var blobDirectory = container.GetDirectoryReference(directoryName);
             return
                 blobDirectory.ListBlobs()
@@ -725,7 +531,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         /// </returns>
         public IEnumerable<Folder> EnlistFolders()
         {
-            var containers = RepositoryClient.ListContainers(null, ContainerListingDetails.All);
+            var containers = BlobClient.ListContainers(null, ContainerListingDetails.All);
             return containers.Select(container => new Folder {Name = container.Name, Metadata = container.Metadata});
         }
 
@@ -740,7 +546,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         /// </returns>
         public IEnumerable<string> EnlistSubdirectories(string folderName)
         {
-            var container = RepositoryClient.GetContainerReference(folderName);
+            var container = BlobClient.GetContainerReference(folderName);
             return from blobItem in container.ListBlobs()
                 where blobItem is CloudBlobDirectory
                 let directoryItem = blobItem as CloudBlobDirectory
@@ -772,7 +578,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
                 SharedAccessExpiryTime = DateTime.Now + fileReadAccessPeriod
             };
 
-            var container = RepositoryClient.GetContainerReference(folderName);
+            var container = BlobClient.GetContainerReference(folderName);
             var blockBlob = container.GetBlockBlobReference(fileName);
             var sas = blockBlob.GetSharedAccessSignature(policy);
             return new Uri(Routines.FormatStringCurrentCulture(blockBlob.Uri.AbsoluteUri, sas));
@@ -799,7 +605,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
                 SharedAccessExpiryTime = DateTime.Now + fileReadAccessPeriod
             };
 
-            var blockBlob = RepositoryClient.GetBlobReferenceFromServer(fullyQualifiedFileName);
+            var blockBlob = BlobClient.GetBlobReferenceFromServer(fullyQualifiedFileName);
             var sas = blockBlob.GetSharedAccessSignature(policy);
             return new Uri(Routines.FormatStringInvariantCulture("{0}{1}", blockBlob.Uri.AbsoluteUri, sas));
         }
@@ -823,7 +629,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStore
         private CloudBlobContainer CreateContainerWithPermissions(string folderName, VisibilityType visibilityType)
         {
             var containerPermission = new BlobContainerPermissions();
-            var container = RepositoryClient.GetContainerReference(folderName.ToLowerInvariant());
+            var container = BlobClient.GetContainerReference(folderName.ToLowerInvariant());
             container.CreateIfNotExists();
             switch (visibilityType)
             {

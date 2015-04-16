@@ -1,21 +1,22 @@
-﻿#region
-
-
-
-#endregion
-
-namespace RahulRai.Websites.Utilities.AzureStorage.UnstructuredStorage
+﻿namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Serialization;
+    using Common.Exceptions;
+    using Common.Helpers;
+    using Common.RegularTypes;
+    using Microsoft.WindowsAzure.Storage.Table;
+
+    #endregion
 
     #region
-
-    
 
     #endregion
 

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileLeaseStatus.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// <summary>
-//   The file lease status.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RahulRai.Websites.Utilities.Common.Entities
+﻿namespace RahulRai.Websites.Utilities.Common.Entities
 {
     /// <summary>
     ///     The file lease status.

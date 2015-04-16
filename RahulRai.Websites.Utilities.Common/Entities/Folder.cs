@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Folder.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// <summary>
-//   The folder.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RahulRai.Websites.Utilities.Common.Entities
+﻿namespace RahulRai.Websites.Utilities.Common.Entities
 {
     #region
 
@@ -20,10 +11,10 @@ namespace RahulRai.Websites.Utilities.Common.Entities
     /// </summary>
     public class Folder
     {
-       #region Public Properties
+        #region Public Properties
 
         /// <summary>
-        /// Gets or sets the metadata.
+        ///     Gets or sets the metadata.
         /// </summary>
         public IDictionary<string, string> Metadata { get; set; }
 

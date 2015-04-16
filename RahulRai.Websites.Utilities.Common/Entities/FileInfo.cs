@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileInfo.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// <summary>
-//   The data file info.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RahulRai.Websites.Utilities.Common.Entities
+﻿namespace RahulRai.Websites.Utilities.Common.Entities
 {
     #region
 
@@ -22,21 +13,21 @@ namespace RahulRai.Websites.Utilities.Common.Entities
     public class FileInfo
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileInfo"/> class.
+        ///     Initializes a new instance of the <see cref="FileInfo" /> class.
         /// </summary>
         public FileInfo()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileInfo" /> class.
+        ///     Initializes a new instance of the <see cref="FileInfo" /> class.
         /// </summary>
         /// <param name="fileMetadata">The file metadata.</param>
         public FileInfo(Dictionary<string, string> fileMetadata)
         {
-            this.FileMetadata = fileMetadata;
+            FileMetadata = fileMetadata;
         }
-        
+
         #region Public Properties
 
         /// <summary>
@@ -45,7 +36,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public Guid DataSetId { get; set; }
 
         /// <summary>
-        /// Gets or sets the file set metadata.
+        ///     Gets or sets the file set metadata.
         /// </summary>
         public Dictionary<string, string> FileMetadata { get; set; }
 
@@ -55,10 +46,10 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public string Status { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [is active].
+        ///     Gets or sets a value indicating whether [is active].
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [is active]; otherwise, <c>false</c>.
+        ///     <c>true</c> if [is active]; otherwise, <c>false</c>.
         /// </value>
         public bool IsActive { get; set; }
 
@@ -68,50 +59,50 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets the organization identifier.
+        ///     Gets or sets the organization identifier.
         /// </summary>
         /// <value>
-        /// The organization identifier.
+        ///     The organization identifier.
         /// </value>
         public Guid OrganisationId { get; set; }
 
         /// <summary>
-        /// Gets or sets the file identifier.
+        ///     Gets or sets the file identifier.
         /// </summary>
         /// <value>
-        /// The file identifier.
+        ///     The file identifier.
         /// </value>
         public Guid FileId { get; set; }
 
         /// <summary>
-        /// Gets or sets the created time.
+        ///     Gets or sets the created time.
         /// </summary>
         /// <value>
-        /// The created time.
+        ///     The created time.
         /// </value>
         public DateTime CreatedTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the modified time.
+        ///     Gets or sets the modified time.
         /// </summary>
         /// <value>
-        /// The modified time.
+        ///     The modified time.
         /// </value>
         public DateTime ModifiedTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the version.
+        ///     Gets or sets the version.
         /// </summary>
         /// <value>
-        /// The version.
+        ///     The version.
         /// </value>
         public Guid Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of the file.
+        ///     Gets or sets the type of the file.
         /// </summary>
         /// <value>
-        /// The type of the file.
+        ///     The type of the file.
         /// </value>
         public FileType FileType { get; set; }
 

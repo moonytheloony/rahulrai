@@ -1,12 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DuplicateDataInputException.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace RahulRai.Websites.Utilities.Common.Exceptions
+﻿namespace RahulRai.Websites.Utilities.Common.Exceptions
 {
+    #region
+
     using System;
     using System.Runtime.Serialization;
+
+    #endregion
 
     /// <summary>
     ///     The duplicate data input exception.
@@ -24,10 +23,10 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DuplicateDataInputException"/> class.
+        ///     Initializes a new instance of the <see cref="DuplicateDataInputException" /> class.
         /// </summary>
         /// <param name="message">
-        /// The message.
+        ///     The message.
         /// </param>
         public DuplicateDataInputException(string message)
             : base(message)
@@ -35,13 +34,13 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DuplicateDataInputException"/> class.
+        ///     Initializes a new instance of the <see cref="DuplicateDataInputException" /> class.
         /// </summary>
         /// <param name="message">
-        /// The message.
+        ///     The message.
         /// </param>
         /// <param name="innerException">
-        /// The inner exception.
+        ///     The inner exception.
         /// </param>
         public DuplicateDataInputException(string message, Exception innerException)
             : base(message, innerException)
@@ -49,13 +48,13 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DuplicateDataInputException"/> class.
+        ///     Initializes a new instance of the <see cref="DuplicateDataInputException" /> class.
         /// </summary>
         /// <param name="serializationInfo">
-        /// The serialization info.
+        ///     The serialization info.
         /// </param>
         /// <param name="streamingContext">
-        /// The streaming context.
+        ///     The streaming context.
         /// </param>
         protected DuplicateDataInputException(SerializationInfo serializationInfo, StreamingContext streamingContext)
             : base(serializationInfo, streamingContext)

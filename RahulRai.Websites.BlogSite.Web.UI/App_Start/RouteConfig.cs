@@ -1,12 +1,18 @@
 ﻿#region
 
-using System.Web.Mvc;
-using System.Web.Routing;
+
 
 #endregion
 
 namespace RahulRai.Websites.BlogSite.Web.UI
 {
+    #region
+
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
+    #endregion
+
     public class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)

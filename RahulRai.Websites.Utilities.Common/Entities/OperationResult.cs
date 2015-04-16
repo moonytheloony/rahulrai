@@ -1,4 +1,4 @@
-﻿namespace RahulRai.Websites.Utilities.AzureStorage.Repositories
+﻿namespace RahulRai.Websites.Utilities.Common.Entities
 {
     /// <summary>
     ///     The result of an operation.

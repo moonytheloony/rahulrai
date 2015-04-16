@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CTPECSystemException.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// <summary>
-//   The ctpec system exception.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RahulRai.Websites.Utilities.Common.Exceptions
+﻿namespace RahulRai.Websites.Utilities.Common.Exceptions
 {
     #region
 
@@ -25,7 +16,7 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BlogSystemException"/> class.
+        ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
         public BlogSystemException()
         {
@@ -33,10 +24,10 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BlogSystemException"/> class.
+        ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
         /// <param name="message">
-        /// The message.
+        ///     The message.
         /// </param>
         public BlogSystemException(string message)
             : base(message)
@@ -45,13 +36,13 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BlogSystemException"/> class.
+        ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
         /// <param name="message">
-        /// The message.
+        ///     The message.
         /// </param>
         /// <param name="innerException">
-        /// The inner exception.
+        ///     The inner exception.
         /// </param>
         public BlogSystemException(string message, Exception innerException)
             : base(message, innerException)
@@ -60,13 +51,13 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BlogSystemException"/> class.
+        ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
         /// <param name="serializationInfo">
-        /// The serialization info.
+        ///     The serialization info.
         /// </param>
         /// <param name="streamingContext">
-        /// The streaming context.
+        ///     The streaming context.
         /// </param>
         protected BlogSystemException(SerializationInfo serializationInfo, StreamingContext streamingContext)
             : base(serializationInfo, streamingContext)

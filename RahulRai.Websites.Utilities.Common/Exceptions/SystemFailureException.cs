@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SystemFailureException.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// <summary>
-//   The system failure exception.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RahulRai.Websites.Utilities.Common.Exceptions
+﻿namespace RahulRai.Websites.Utilities.Common.Exceptions
 {
     #region
 
@@ -17,7 +8,7 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
     #endregion
 
     /// <summary>
-    /// The system failure exception.
+    ///     The system failure exception.
     /// </summary>
     [Serializable]
     public class SystemFailureException : BlogSystemException
@@ -25,17 +16,17 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemFailureException"/> class.
+        ///     Initializes a new instance of the <see cref="SystemFailureException" /> class.
         /// </summary>
         public SystemFailureException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemFailureException"/> class.
+        ///     Initializes a new instance of the <see cref="SystemFailureException" /> class.
         /// </summary>
         /// <param name="message">
-        /// The message.
+        ///     The message.
         /// </param>
         public SystemFailureException(string message)
             : base(message)
@@ -44,13 +35,13 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemFailureException"/> class.
+        ///     Initializes a new instance of the <see cref="SystemFailureException" /> class.
         /// </summary>
         /// <param name="message">
-        /// The message.
+        ///     The message.
         /// </param>
         /// <param name="innerException">
-        /// The inner exception.
+        ///     The inner exception.
         /// </param>
         public SystemFailureException(string message, Exception innerException)
             : base(message, innerException)
@@ -59,13 +50,13 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemFailureException"/> class.
+        ///     Initializes a new instance of the <see cref="SystemFailureException" /> class.
         /// </summary>
         /// <param name="serializationInfo">
-        /// The serialization info.
+        ///     The serialization info.
         /// </param>
         /// <param name="streamingContext">
-        /// The streaming context.
+        ///     The streaming context.
         /// </param>
         protected SystemFailureException(SerializationInfo serializationInfo, StreamingContext streamingContext)
             : base(serializationInfo, streamingContext)

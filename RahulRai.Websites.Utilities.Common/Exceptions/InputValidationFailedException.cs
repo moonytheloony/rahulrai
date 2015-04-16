@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputValidationFailedException.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// <summary>
-//   The input validation failed exception.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RahulRai.Websites.Utilities.Common.Exceptions
+﻿namespace RahulRai.Websites.Utilities.Common.Exceptions
 {
     #region
 
@@ -17,23 +8,23 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
     #endregion
 
     /// <summary>
-    /// The input validation failed exception.
+    ///     The input validation failed exception.
     /// </summary>
     [Serializable]
     public class InputValidationFailedException : BlogSystemException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="InputValidationFailedException"/> class.
+        ///     Initializes a new instance of the <see cref="InputValidationFailedException" /> class.
         /// </summary>
         public InputValidationFailedException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InputValidationFailedException"/> class.
+        ///     Initializes a new instance of the <see cref="InputValidationFailedException" /> class.
         /// </summary>
         /// <param name="message">
-        /// The message.
+        ///     The message.
         /// </param>
         public InputValidationFailedException(string message)
             : base(message)
@@ -42,13 +33,13 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InputValidationFailedException"/> class.
+        ///     Initializes a new instance of the <see cref="InputValidationFailedException" /> class.
         /// </summary>
         /// <param name="message">
-        /// The message.
+        ///     The message.
         /// </param>
         /// <param name="innerException">
-        /// The inner exception.
+        ///     The inner exception.
         /// </param>
         public InputValidationFailedException(string message, Exception innerException)
             : base(message, innerException)
@@ -57,13 +48,13 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InputValidationFailedException"/> class.
+        ///     Initializes a new instance of the <see cref="InputValidationFailedException" /> class.
         /// </summary>
         /// <param name="serializationInfo">
-        /// The serialization info.
+        ///     The serialization info.
         /// </param>
         /// <param name="streamingContext">
-        /// The streaming context.
+        ///     The streaming context.
         /// </param>
         protected InputValidationFailedException(SerializationInfo serializationInfo, StreamingContext streamingContext)
             : base(serializationInfo, streamingContext)

@@ -1,14 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TransientEntity.cs" company="Microsoft">
-//   Copyright (c) Glasgow City Council. All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace RahulRai.Websites.Utilities.Common.Entities
+﻿namespace RahulRai.Websites.Utilities.Common.Entities
 {
+    #region
+
     using System.Collections.Generic;
     using System.Linq;
     using Helpers;
     using RegularTypes;
+
+    #endregion
 
     /// <summary>
     ///     Transient entity
@@ -49,14 +48,11 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         /// </value>
         public string Payload
         {
-            get
-            {
-                return this.PayloadParts == null ? null : this.PayloadParts.Combine();
-            }
+            get { return PayloadParts == null ? null : PayloadParts.Combine(); }
 
             set
             {
-                this.PayloadParts = value == null
+                PayloadParts = value == null
                     ? null
                     : value.SplitByLength(KnownTypes.MaxTableStringPropertyLength).ToList();
             }

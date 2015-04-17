@@ -113,7 +113,7 @@
                 return null;
             }
 
-            var specificType = generic.MakeGenericType(new[] {innerType});
+            var specificType = generic.MakeGenericType(new[] { innerType });
             return Activator.CreateInstance(specificType, args);
         }
 
@@ -207,7 +207,7 @@
         /// </returns>
         public static byte[] GetBytes<T>(T objectToConvert)
         {
-            var serializer = new DataContractSerializer(typeof (T));
+            var serializer = new DataContractSerializer(typeof(T));
             byte[] returnBytes;
 
             using (var stream = new MemoryStream())
@@ -269,17 +269,17 @@
 
             if (fileSize >= 0 && fileSize < KnownTypes.MB)
             {
-                size = (decimal) fileSize/KnownTypes.KB;
+                size = (decimal)fileSize / KnownTypes.KB;
                 return size.ToString("0.##", CultureInfo.InvariantCulture) + " KB";
             }
 
             if (fileSize > KnownTypes.KB && fileSize < KnownTypes.GB)
             {
-                size = (decimal) fileSize/KnownTypes.MB;
+                size = (decimal)fileSize / KnownTypes.MB;
                 return size.ToString("0.##", CultureInfo.InvariantCulture) + " MB";
             }
 
-            size = (decimal) fileSize/KnownTypes.GB;
+            size = (decimal)fileSize / KnownTypes.GB;
             return size.ToString("0.##", CultureInfo.InvariantCulture) + " GB";
         }
 
@@ -345,8 +345,8 @@
         public static IList<List<T>> PartitionObjectList<T>(IList<T> collectionToSplit, int chunkSize)
         {
             return
-                collectionToSplit.Select((element, index) => new {Index = index, Value = element})
-                    .GroupBy(element => element.Index/chunkSize)
+                collectionToSplit.Select((element, index) => new { Index = index, Value = element })
+                    .GroupBy(element => element.Index / chunkSize)
                     .Select(element => element.Select(indexedElement => indexedElement.Value).ToList())
                     .ToList();
         }
@@ -365,7 +365,7 @@
             return root != null
                 ? new XElement(
                     root.Name.LocalName,
-                    root.HasElements ? root.Elements().Select(RemoveNamespaceFromXml) : (object) root.Value)
+                    root.HasElements ? root.Elements().Select(RemoveNamespaceFromXml) : (object)root.Value)
                 : null;
         }
 
@@ -497,5 +497,11 @@
         }
 
         #endregion
+
+        public static string FormatTitle(string title)
+        {
+            var cleanString = Regex.Replace(title, @"[^\w\.@-]", KnownTypes.HyphenSeparator, RegexOptions.None);
+            return cleanString;
+        }
     }
 }

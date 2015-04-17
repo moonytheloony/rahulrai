@@ -26,7 +26,7 @@
     ///     Element for entity
     /// </typeparam>
     public class AzureTableStorageRepository<TElement>
-        where TElement : class, new()
+        where TElement : class
     {
         #region Fields
 
@@ -52,12 +52,14 @@
         /// <param name="context">
         ///     The context.
         /// </param>
+        /// <param name="tableName"></param>
         /// <param name="convertToTableEntity">
         ///     The converter from entity to table entity.
         /// </param>
         /// <param name="convertToEntity">
         ///     The converter from table entity to entity.
         /// </param>
+        /// <param name="storageAccountConnectionString"></param>
         public AzureTableStorageRepository(
             string storageAccountConnectionString,
             string tableName,
@@ -226,7 +228,7 @@
         /// <inheritdoc />
         public virtual IList<TElement> Query(string filter, int? takeCount)
         {
-            var tableQuery = new TableQuery {FilterString = filter, TakeCount = takeCount};
+            var tableQuery = new TableQuery { FilterString = filter, TakeCount = takeCount };
             return ActiveTable.ExecuteQuery(tableQuery).Select(convertToEntity).ToList();
         }
 

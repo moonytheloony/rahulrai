@@ -15,35 +15,10 @@
         #region Constants
 
         /// <summary>
-        ///     The about.
-        /// </summary>
-        public const string About = "About";
-
-        /// <summary>
         ///     Valid account name pattern.
         /// </summary>
         public const string AccountValidationPattern =
             "^(([a-z0-9]|[a-z0-9][a-z0-9\\-]*[a-z0-9])\\.)*([a-z]|[a-z][a-z0-9\\-]*[a-z0-9])$";
-
-        /// <summary>
-        ///     The ad user display name
-        /// </summary>
-        public const string AdUserDisplayName = "DisplayName";
-
-        /// <summary>
-        ///     The ad user mail nick name
-        /// </summary>
-        public const string AdUserMailNickname = "MailNickName";
-
-        /// <summary>
-        ///     The application Id claim identifier.
-        /// </summary>
-        public const string AppIdClaimIdentifier = "appid";
-
-        /// <summary>
-        ///     Audit Log
-        /// </summary>
-        public const string AuditLog = "AuditLog";
 
         /// <summary>
         ///     The compiled expression identifier.
@@ -87,168 +62,6 @@
         public const string DataSetCategoryValidationSettingKey = "DataSetCategoryValidationSettingKey";
 
         /// <summary>
-        ///     The data set created date and time.
-        /// </summary>
-        public const string DataSetCreated = "Created";
-
-        /// <summary>
-        ///     The data set description
-        /// </summary>
-        public const string DataSetDescription = "Description";
-
-        /// <summary>
-        ///     The data set description
-        /// </summary>
-        public const string DataSetDescriptionValidationSettingKey = "DataSetDescriptionValidationSettingKey";
-
-        /// <summary>
-        ///     The data set license
-        /// </summary>
-        public const string DataSetLicense = "License";
-
-        /// <summary>
-        ///     The data set license
-        /// </summary>
-        public const string DataSetLicenseValidationSettingKey = "DataSetLicenseValidationSettingKey";
-
-        /// <summary>
-        ///     The data set maintainer contact
-        /// </summary>
-        public const string DataSetMaintainerContact = "MaintainerContact";
-
-        /// <summary>
-        ///     The data set maintainer contact
-        /// </summary>
-        public const string DataSetMaintainerContactValidationSettingKey =
-            "DataSetMaintainerContactValidationSettingKey";
-
-        /// <summary>
-        ///     The data set maintainer name
-        /// </summary>
-        public const string DataSetMaintainerName = "MaintainerName";
-
-        /// <summary>
-        ///     The data set maintainer name
-        /// </summary>
-        public const string DataSetMaintainerNameValidationSettingKey = "DataSetMaintainerNameValidationSettingKey";
-
-        /// <summary>
-        ///     The data set last modification date and time.
-        /// </summary>
-        public const string DataSetModified = "Modified";
-
-        /// <summary>
-        ///     The data set openness rating
-        /// </summary>
-        public const string DataSetOpennessRating = "OpennessRating";
-
-        /// <summary>
-        ///     The data set openness rating
-        /// </summary>
-        public const string DataSetOpennessRatingValidationSettingKey = "DataSetOpennessRatingValidationSettingKey";
-
-        /// <summary>
-        ///     The data set organization identifier.
-        /// </summary>
-        public const string DataSetOrganizationId = "OrganisationId";
-
-        /// <summary>
-        ///     The data set published on behalf of
-        /// </summary>
-        public const string DataSetPublishedOnBehalfOf = "PublishedOnBehalfOf";
-
-        /// <summary>
-        ///     The data set published on behalf of
-        /// </summary>
-        public const string DataSetPublishedOnBehalfOfValidationSettingKey =
-            "DataSetPublishedOnBehalfOfValidationSettingKey";
-
-        /// <summary>
-        ///     The data set quality
-        /// </summary>
-        public const string DataSetQuality = "Quality";
-
-        /// <summary>
-        ///     The data set quality
-        /// </summary>
-        public const string DataSetQualityValidationSettingKey = "DataSetQualityValidationSettingKey";
-
-        /// <summary>
-        ///     The data set standard name
-        /// </summary>
-        public const string DataSetStandardName = "StandardName";
-
-        /// <summary>
-        ///     The data set standard name
-        /// </summary>
-        public const string DataSetStandardNameValidationSettingKey = "DataSetStandardNameValidationSettingKey";
-
-        /// <summary>
-        ///     The data set standard rating
-        /// </summary>
-        public const string DataSetStandardRating = "StandardRating";
-
-        /// <summary>
-        ///     The data set standard rating
-        /// </summary>
-        public const string DataSetStandardRatingValidationSettingKey = "DataSetStandardRatingValidationSettingKey";
-
-        /// <summary>
-        ///     The data set standard version
-        /// </summary>
-        public const string DataSetStandardVersion = "StandardVersion";
-
-        /// <summary>
-        ///     The data set standard version
-        /// </summary>
-        public const string DataSetStandardVersionValidationSettingKey = "DataSetStandardVersionValidationSettingKey";
-
-        /// <summary>
-        ///     The data set tags
-        /// </summary>
-        public const string DataSetTags = "Tags";
-
-        /// <summary>
-        ///     The data set tags
-        /// </summary>
-        public const string DataSetTagsValidationSettingKey = "DataSetTagsValidationSettingKey";
-
-        /// <summary>
-        ///     The data set theme
-        /// </summary>
-        public const string DataSetTheme = "Theme";
-
-        /// <summary>
-        ///     The data set theme
-        /// </summary>
-        public const string DataSetThemeValidationSettingKey = "DataSetThemeValidationSettingKey";
-
-        /// <summary>
-        ///     The data set title
-        /// </summary>
-        public const string DataSetTitle = "Title";
-
-        /// <summary>
-        ///     The data set title
-        /// </summary>
-        public const string DataSetTitleValidationSettingKey = "DataSetTitleValidationSettingKey";
-
-        /// <summary>
-        ///     The data set usage guidance
-        /// </summary>
-        public const string DataSetUsageGuidance = "UsageGuidance";
-
-        /// <summary>
-        ///     The data set usage guidance
-        /// </summary>
-        public const string DataSetUsageGuidanceValidationSettingKey = "DataSetUsageGuidanceValidationSettingKey";
-
-        /// <summary>
-        ///     The data set additional custom metadata
-        /// </summary>
-        public const string DataSetAdditionalAttributes = "DataSetAdditionalAttributes";
-
-        /// <summary>
         ///     The date time format.
         /// </summary>
         public const string DateTimeFormat = "yyyyMMddHHmmss";
@@ -277,16 +90,6 @@
         ///     The entity version id.
         /// </summary>
         public const string EntityVersionId = "EntityVersionId";
-
-        /// <summary>
-        ///     Error Log
-        /// </summary>
-        public const string ErrorLog = "ErrorLog";
-
-        /// <summary>
-        ///     The error string.
-        /// </summary>
-        public const string ErrorString = "Failed to Execute Method - {0} due to this Error - {1}";
 
         /// <summary>
         ///     The file blob relative URL
@@ -434,21 +237,6 @@
         public const string FileTitleValidationSettingKey = "FileTitleValidationSettingKey";
 
         /// <summary>
-        ///     The file type
-        /// </summary>
-        public const string FileType = "Type";
-
-        /// <summary>
-        ///     The file type
-        /// </summary>
-        public const string FileTypeValidationSettingKey = "FileTypeValidationSettingKey";
-
-        /// <summary>
-        ///     The first name.
-        /// </summary>
-        public const string FirstName = "FirstName";
-
-        /// <summary>
         ///     No. of Bytes for a Giga Byte
         /// </summary>
         public const int GB = KB*MB;
@@ -466,17 +254,7 @@
         /// <summary>
         ///     The hyphen separator.
         /// </summary>
-        public const char HyphenSeparator = '-';
-
-        /// <summary>
-        ///     Information Log
-        /// </summary>
-        public const string InformationLog = "InformationLog";
-
-        /// <summary>
-        ///     The information string.
-        /// </summary>
-        public const string InformationString = "Executing Method - {0} with data - {1}";
+        public const string HyphenSeparator = "-";
 
         /// <summary>
         ///     No. of Bytes for a Kilo Byte
@@ -498,10 +276,7 @@
         /// </summary>
         public const char MatchAny = '*';
 
-        /// <summary>
-        ///     The metadata service base URL
-        /// </summary>
-        public const string MetadataServiceBaseUrl = "MetadataServiceBaseUrl";
+
 
         /// <summary>
         ///     Size of metadata
@@ -569,11 +344,6 @@
         public const string QueryOptionalParameterTop = "$top";
 
         /// <summary>
-        ///     The query parameter registered user
-        /// </summary>
-        public const string QueryOptionalParameterIsRegisteredUser = "registered";
-
-        /// <summary>
         ///     The query parameter order by user name
         /// </summary>
         public const string QueryOptionalParameterOrderByUserName = "username";
@@ -624,19 +394,9 @@
         public const string UrlSeparator = "/";
 
         /// <summary>
-        ///     The user name.
-        /// </summary>
-        public const string UserName = "UserName";
-
-        /// <summary>
-        ///     Debug Events
-        /// </summary>
-        public const string DebugEvents = "Debug Events";
-
-        /// <summary>
         ///     Colon and space
         /// </summary>
-        public const string Colon = ": ";
+        public const string Colon = ":";
 
         /// <summary>
         ///     The username claim identifier.
@@ -702,21 +462,6 @@
         public const string XslTransformationFileExtension = "xslt";
 
         /// <summary>
-        ///     Needs approval
-        /// </summary>
-        public const string NeedsApproval = "NeedsApproval";
-
-        /// <summary>
-        ///     The container type main
-        /// </summary>
-        public const string ContainerTypeMain = "main";
-
-        /// <summary>
-        ///     The container type transient
-        /// </summary>
-        public const string ContainerTypeTransient = "transient";
-
-        /// <summary>
         ///     The maximum Azure table string property length (in characters).
         /// </summary>
         public const int MaxTableStringPropertyLength = 16384; // 16 KB
@@ -729,18 +474,6 @@
         ///     The min date time.
         /// </summary>
         public static readonly DateTimeOffset MinDateTime = new DateTimeOffset(1800, 1, 1, 0, 0, 0, TimeSpan.Zero);
-
-        /// <summary>
-        ///     Validation regex for UserName of member user.
-        /// </summary>
-        public static readonly Regex UserNameOfMemberUserRegex = new Regex(
-            @"^[a-zA-Z0-9\-_]{1,16}$",
-            RegexOptions.Compiled);
-
-        /// <summary>
-        ///     Validation regex for UserName of registered user.
-        /// </summary>
-        public static readonly Regex UserNameOfRegisteredUserRegex = new Regex(@"^.{1,255}$", RegexOptions.Compiled);
 
         #endregion
     }

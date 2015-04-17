@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\BlogPost.cs" />
     <Compile Include="Entities\DataFile.cs" />
     <Compile Include="Entities\Document.cs">
       <SubType>Code</SubType>
@@ -99,6 +100,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\OperationResult.cs" />
+    <Compile Include="Entities\TableBlogEntity.cs" />
     <Compile Include="Entities\TransientEntity.cs">
       <SubType>Code</SubType>
     </Compile>

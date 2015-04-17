@@ -6,5 +6,7 @@
     public static class ApplicationConstants
     {
         public static string IndexSubscript = "AutoIndexedElement";
+        public static string BlogKey = "MYBLOG";
+        public static int ContentSplitLength = 5000;
     }
 }

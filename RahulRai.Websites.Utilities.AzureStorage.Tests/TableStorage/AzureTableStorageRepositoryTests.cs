@@ -5,6 +5,7 @@
     using AzureStorage.TableStorage;
     using Common.Entities;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.WindowsAzure.Storage.Table;
 
     [TestClass()]
     public class AzureTableStorageRepositoryTests
@@ -37,7 +38,12 @@
             Assert.IsTrue(result.All(element => element.IsSuccess));
         }
 
-
+        [TestMethod()]
+        public void QueryTest()
+        {
+            string partitionFilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MYBLOG");
+            var result = testObject.Query("PartitionKey eq 'MYBLOG'", 2);
+        }
     }
 }
 

@@ -11,6 +11,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
 
     public class TableBlogEntity
     {
+        public TableBlogEntity() { }
         public string Title { get; set; }
         public IList<string> Body { get; set; }
 
@@ -23,6 +24,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public string EntityTag { get; set; }
 
         public bool IsDraft { get; set; }
+        public bool IsDeleted { get; set; }
 
         public TableBlogEntity(BlogPost post)
         {
@@ -33,6 +35,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
             this.PostedDate = post.PostedDate == DateTime.MinValue ? DateTime.UtcNow : post.PostedDate;
             this.EntityTag = post.EntityTag;
             this.IsDraft = post.IsDraft;
+            this.IsDeleted = post.IsDeleted;
         }
 
         public static BlogPost GetBlogPost(TableBlogEntity entity)
@@ -43,7 +46,8 @@ namespace RahulRai.Websites.Utilities.Common.Entities
                 Body = entity.Body.Combine(),
                 PostedDate = entity.PostedDate,
                 EntityTag = entity.EntityTag,
-                IsDraft = entity.IsDraft
+                IsDraft = entity.IsDraft,
+                IsDeleted = entity.IsDeleted
             };
         }
     }

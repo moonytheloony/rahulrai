@@ -11,6 +11,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
 
     public class BlogPost
     {
+        public BlogPost() { }
         public string Title { get; set; }
         public string Body { get; set; }
 
@@ -34,5 +35,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public string EntityTag { get; set; }
 
         public bool IsDraft { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

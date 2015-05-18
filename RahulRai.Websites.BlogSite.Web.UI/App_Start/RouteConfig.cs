@@ -19,9 +19,21 @@ namespace RahulRai.Websites.BlogSite.Web.UI
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.Add(new Route("metaweblog", new WeblogRouteHandler()));
-            routes.MapRoute("Default", "{controller}/{action}/{id}",
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-                );
+            routes.MapRoute("Default", string.Empty,
+                new
+                {
+                    controller = "Blog",
+                    action = "GetLatestBlogs"
+                });
+            routes.MapRoute("BlogPost", "post/{postId}",
+                new
+                {
+                    controller = "Blog",
+                    action = "GetBlogPost"
+                }, new
+                {
+                    postId = @"^[a-zA-Z0-9\-]$"
+                });
         }
     }
 }

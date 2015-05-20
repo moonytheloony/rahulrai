@@ -3,19 +3,17 @@
     #region
 
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.IO;
-    using System.Linq;
     using System.Web;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
     using Microsoft.WindowsAzure.Storage.RetryPolicies;
-    using RahulRai.Websites.Utilities.Common.Exceptions;
-    using RahulRai.Websites.Utilities.Common.RegularTypes;
-    using RahulRai.Websites.Utilities.Common.Entities;
-    using RahulRai.Websites.Utilities.Common.Helpers;
+    using Common.Exceptions;
+    using Common.RegularTypes;
+    using Common.Entities;
+    using Common.Helpers;
 
     #endregion
 
@@ -102,7 +100,6 @@
                 return FileOperationStatus.Error;
             }
         }
-
 
 
         /// <summary>

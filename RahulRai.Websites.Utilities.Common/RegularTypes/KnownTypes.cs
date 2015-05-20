@@ -3,7 +3,6 @@
     #region
 
     using System;
-    using System.Text.RegularExpressions;
 
     #endregion
 
@@ -275,7 +274,6 @@
         ///     The match any
         /// </summary>
         public const char MatchAny = '*';
-
 
 
         /// <summary>

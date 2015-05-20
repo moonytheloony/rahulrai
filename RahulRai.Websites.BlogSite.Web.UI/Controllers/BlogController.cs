@@ -17,5 +17,10 @@
             var blogList = new List<BlogPost>();
             return View(blogList);
         }
+
+        public ActionResult GetBlogPost()
+        {
+            return View("BlogPost");
+        }
     }
 }

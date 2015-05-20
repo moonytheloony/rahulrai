@@ -1,11 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using CookComputing.XmlRpc;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Web.Security;
-using RahulRai.Websites.Utilities.Common.Entities;
+
+#endregion
 
 public interface IMetaWeblog
 {
@@ -75,7 +73,7 @@ public class MetaWeblogHandler : XmlRpcService, IMetaWeblog
             title = "title",
             dateCreated = DateTime.UtcNow,
             wp_slug = "adsadad",
-            categories = new[] { "cat1", "cat2" },
+            categories = new[] {"cat1", "cat2"},
             postid = "asdad"
         };
     }
@@ -84,22 +82,25 @@ public class MetaWeblogHandler : XmlRpcService, IMetaWeblog
     {
         ValidateUser(username, password);
 
-        return new[] { new
+        return new[]
         {
-            description = "test description",
-            title = "titleee",
-            dateCreated = DateTime.UtcNow,
-            wp_slug = "adsadad",
-            categories = new[] { "cat1", "cat2" },
-            postid = "asdad"
-        } };
+            new
+            {
+                description = "test description",
+                title = "titleee",
+                dateCreated = DateTime.UtcNow,
+                wp_slug = "adsadad",
+                categories = new[] {"cat1", "cat2"},
+                postid = "asdad"
+            }
+        };
     }
 
     object[] IMetaWeblog.GetCategories(string blogid, string username, string password)
     {
         ValidateUser(username, password);
 
-        return new[] { "cat1", "cat2" };
+        return new[] {"cat1", "cat2"};
     }
 
     object IMetaWeblog.NewMediaObject(string blogid, string username, string password, MediaObject media)
@@ -113,9 +114,9 @@ public class MetaWeblogHandler : XmlRpcService, IMetaWeblog
     {
         ValidateUser(username, password);
 
-        return new[] 
-        { 
-            new 
+        return new[]
+        {
+            new
             {
                 blogid = "1",
                 blogName = "myblog",
@@ -133,7 +134,7 @@ public class MetaWeblogHandler : XmlRpcService, IMetaWeblog
 [XmlRpcMissingMapping(MappingAction.Ignore)]
 public struct MediaObject
 {
+    public byte[] bits;
     public string name;
     public string type;
-    public byte[] bits;
 }

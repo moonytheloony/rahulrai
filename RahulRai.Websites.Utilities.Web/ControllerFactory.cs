@@ -1,10 +1,4 @@
-﻿#region
-
-
-
-#endregion
-
-namespace RahulRai.Websites.Utilities.Web
+﻿namespace RahulRai.Websites.Utilities.Web
 {
     #region
 

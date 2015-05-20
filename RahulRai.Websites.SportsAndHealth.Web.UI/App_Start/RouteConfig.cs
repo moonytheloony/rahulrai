@@ -1,10 +1,4 @@
-﻿#region
-
-
-
-#endregion
-
-namespace RahulRai.Websites.SportsAndHealth.Web.UI
+﻿namespace RahulRai.Websites.SportsAndHealth.Web.UI
 {
     #region
 

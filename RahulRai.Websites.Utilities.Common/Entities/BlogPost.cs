@@ -1,34 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RahulRai.Websites.Utilities.Common.Entities
+﻿namespace RahulRai.Websites.Utilities.Common.Entities
 {
+    #region
+
+    using System;
     using Helpers;
     using RegularTypes;
 
+    #endregion
+
     public class BlogPost
     {
-        public BlogPost() { }
         public string Title { get; set; }
         public string Body { get; set; }
 
         public string BlogKey
         {
-            get
-            {
-                return ApplicationConstants.BlogKey;
-            }
+            get { return ApplicationConstants.BlogKey; }
         }
 
         public string BlogId
         {
-            get
-            {
-                return Routines.FormatTitle(Title.ToLowerInvariant());
-            }
+            get { return Routines.FormatTitle(Title.ToLowerInvariant()); }
         }
 
         public DateTime PostedDate { get; set; }

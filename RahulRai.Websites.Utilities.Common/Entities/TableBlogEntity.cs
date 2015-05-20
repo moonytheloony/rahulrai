@@ -1,17 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RahulRai.Websites.Utilities.Common.Entities
+﻿namespace RahulRai.Websites.Utilities.Common.Entities
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Helpers;
     using RegularTypes;
 
+    #endregion
+
     public class TableBlogEntity
     {
-        public TableBlogEntity() { }
+        public TableBlogEntity()
+        {
+        }
+
+        public TableBlogEntity(BlogPost post)
+        {
+            Title = post.Title;
+            Body = post.Body.SplitByLength(ApplicationConstants.ContentSplitLength).ToList();
+            BlogKey = post.BlogKey;
+            BlogId = post.BlogId;
+            PostedDate = post.PostedDate == DateTime.MinValue ? DateTime.UtcNow : post.PostedDate;
+            EntityTag = post.EntityTag;
+            IsDraft = post.IsDraft;
+            IsDeleted = post.IsDeleted;
+        }
+
         public string Title { get; set; }
         public IList<string> Body { get; set; }
 
@@ -25,18 +41,6 @@ namespace RahulRai.Websites.Utilities.Common.Entities
 
         public bool IsDraft { get; set; }
         public bool IsDeleted { get; set; }
-
-        public TableBlogEntity(BlogPost post)
-        {
-            this.Title = post.Title;
-            this.Body = post.Body.SplitByLength(ApplicationConstants.ContentSplitLength).ToList();
-            this.BlogKey = post.BlogKey;
-            this.BlogId = post.BlogId;
-            this.PostedDate = post.PostedDate == DateTime.MinValue ? DateTime.UtcNow : post.PostedDate;
-            this.EntityTag = post.EntityTag;
-            this.IsDraft = post.IsDraft;
-            this.IsDeleted = post.IsDeleted;
-        }
 
         public static BlogPost GetBlogPost(TableBlogEntity entity)
         {

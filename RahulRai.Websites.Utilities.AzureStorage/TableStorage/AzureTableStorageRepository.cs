@@ -228,7 +228,7 @@
         /// <inheritdoc />
         public virtual IList<TElement> Query(string filter, int? takeCount)
         {
-            var tableQuery = new TableQuery { FilterString = filter, TakeCount = takeCount };
+            var tableQuery = new TableQuery {FilterString = filter, TakeCount = takeCount};
             return ActiveTable.ExecuteQuery(tableQuery).Select(convertToEntity).ToList();
         }
 

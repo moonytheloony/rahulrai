@@ -1,10 +1,4 @@
-﻿#region
-
-
-
-#endregion
-
-namespace RahulRai.Websites.BlogSite.Web.UI
+﻿namespace RahulRai.Websites.BlogSite.Web.UI
 {
     #region
 

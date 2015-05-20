@@ -1,10 +1,4 @@
-﻿#region
-
-
-
-#endregion
-
-namespace RahulRai.Websites.BlogSite.Web.UI
+﻿namespace RahulRai.Websites.BlogSite.Web.UI
 {
     #region
 
@@ -19,21 +13,23 @@ namespace RahulRai.Websites.BlogSite.Web.UI
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.Add(new Route("metaweblog", new WeblogRouteHandler()));
+            routes.MapRoute("BlogPost", "post/{postId}",
+                new
+                {
+                    controller = "Blog",
+                    action = "GetBlogPost"
+                });
+                //}, new
+                //{
+                //    postId = @"^[a-zA-Z0-9\-]$"
+                //});
             routes.MapRoute("Default", string.Empty,
                 new
                 {
                     controller = "Blog",
                     action = "GetLatestBlogs"
                 });
-            routes.MapRoute("BlogPost", "post/{postId}",
-                new
-                {
-                    controller = "Blog",
-                    action = "GetBlogPost"
-                }, new
-                {
-                    postId = @"^[a-zA-Z0-9\-]$"
-                });
+
         }
     }
 }

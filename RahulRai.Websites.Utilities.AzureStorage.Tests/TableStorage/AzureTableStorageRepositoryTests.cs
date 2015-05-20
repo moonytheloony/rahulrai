@@ -1,5 +1,7 @@
 ﻿namespace RahulRai.Websites.Utilities.AzureStorage.Tests.TableStorage
 {
+    #region
+
     using System;
     using System.Linq;
     using AzureStorage.TableStorage;
@@ -7,14 +9,16 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.WindowsAzure.Storage.Table;
 
-    [TestClass()]
+    #endregion
+
+    [TestClass]
     public class AzureTableStorageRepositoryTests
     {
         private string connectionString = "";
 
         private AzureTableStorageRepository<TableBlogEntity> testObject;
 
-        [TestInitialize()]
+        [TestInitialize]
         public void AzureTableStorageRepositoryTest()
         {
             testObject = new AzureTableStorageRepository<TableBlogEntity>(
@@ -23,10 +27,10 @@
             testObject.CreateStorageObjectAndSetExecutionContext();
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void InsertOrReplaceTest()
         {
-            var blogpost = new BlogPost()
+            var blogpost = new BlogPost
             {
                 Title = "sampleTitle a multispace title",
                 Body = "samplebody",
@@ -38,12 +42,11 @@
             Assert.IsTrue(result.All(element => element.IsSuccess));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void QueryTest()
         {
-            string partitionFilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MYBLOG");
+            var partitionFilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MYBLOG");
             var result = testObject.Query("PartitionKey eq 'MYBLOG'", 2);
         }
     }
 }
-

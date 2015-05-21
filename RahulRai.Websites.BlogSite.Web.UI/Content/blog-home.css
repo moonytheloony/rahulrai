@@ -14,7 +14,22 @@ footer {
 }
 
 .mylogo {
-    font: bold 30px cursive;
+    font: bolder 30px "Comic Sans MS", cursive, sans-serif;
+}
+
+.borderDiv {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border: 1px solid orangered;
+}
+
+.borderDivSpan {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    font: normal 40px "Comic Sans MS", cursive, sans-serif;
+    color: orangered;
 }
 
 .navbar-fixed-top {

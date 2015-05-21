@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Blog Home - Start Bootstrap Template</title>
+    <title>Rahul on Technology and Things</title>
     <!-- Bootstrap Core CSS -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="~/Content/blog-home.css" rel="stylesheet">
+    <link href="~/Content/Zocial/zocial.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -24,7 +25,7 @@
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <a class="navbar-brand mylogo" href="#">Rahul Rai</a>
+                <a class="navbar-brand mylogo" href="#">rahul rai</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -49,23 +50,49 @@
             @RenderBody()
             <!-- Blog Sidebar Widgets Column -->
             <div class="col-md-4">
-                <div class="">
-                    asdad
+                <div class="text-center">
+                    <img class="img-responsive img-thumbnail" alt="Profile Picture" width="200" height="200"
+                         src="http://placehold.it/100X100" />
+                    <br />
+                    <br />
+                    <a href="#">Get to Know Me</a>
                 </div>
+
+                <hr />
+                <br />
                 <!-- Blog Categories Well -->
                 <div class="well">
-                    <h4>Connect with me</h4>
-
-                    <!-- /.row -->
+                    <div class="borderDiv pull-right"><span class="borderDivSpan">&#9993;</span></div>
+                    <h4>Not Just Here...</h4>
+                    <br />
+                    <p class="text-center">
+                        <a href="#" class="zocial icon facebook">Sign in with Facebook</a>
+                        <a href="#" class="zocial icon linkedin">Sign in with LinkedIn</a>
+                        <a href="#" class="zocial windows icon">Sign in with Windows Live</a>
+                        <a href="#" class="zocial icon github">Fork me on Github</a>
+                        <a href="#" class="zocial email icon">Send a message</a>
+                    </p>
                 </div>
                 <!-- Side Widget Well -->
                 <div class="well">
-                    <h4>Not just a blog</h4>
-                    <hr />
+                    <div class="borderDiv pull-right"><span class="borderDivSpan">&#9829;</span></div>
+                    <h4>Hi! I am Blog...</h4>
+                    <br />
                     <p>
-                        Not only is this blog mostly about cloud, this blog is entirely powered by Microsoft Azure.
-                        Ever wondered how that search box on top is working? That's Azure Search. This blog currently uses Microsoft Azure Web App, Search, Document DB and Microsoft Azure Storage, 
-                        in addition to GIT for source control and deployment.
+                        ...and I am running on <a class="navbar-link" href="http://azure.microsoft.com/">Microsoft Azure</a>!!
+                        <br />
+                        That search box? That's Azure Search.
+                        Microsoft Azure App Service, Search, Document DB, Storage and GIT are my friends. 
+                        I am not running on any CMS, I was custom developed in a few sleepless nights!
+                    </p>
+                </div>
+                <!-- Side Widget Well -->
+                <div class="well">
+                    <div class="borderDiv pull-right"><span class="borderDivSpan">&#9775;</span></div>
+                    <h4>Yin Yang Imbalance</h4>
+                    <br />
+                    <p>
+                        If you find issues in site or content, let me know @@ <a href="mailto:rahulrai@RahulRai.in">rahulrai@@rahulrai.in</a>
                     </p>
                 </div>
             </div>
@@ -74,9 +101,10 @@
         <hr>
         <!-- Footer -->
         <footer>
-            <div class="row">
+            <div class="row text-center">
                 <div class="col-lg-12">
                     <p>Copyright &copy; rahulrai.in @DateTime.Now.Year</p>
+                    <p>Thank you <a href="http://startbootstrap.com/">StartBootstrap.com</a></p>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

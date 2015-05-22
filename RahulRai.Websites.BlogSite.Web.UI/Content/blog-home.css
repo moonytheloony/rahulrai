@@ -19,10 +19,10 @@ footer {
 
 .borderDivSpan {
     display: inline-block;
-    vertical-align: text-top;
+    vertical-align: top;
     line-height: normal;
     font: normal 40px "Comic Sans MS", cursive, sans-serif;
-    color: orangered;
+    color: #428bca;
 }
 
 .navbar-fixed-top {

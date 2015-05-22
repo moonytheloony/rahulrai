@@ -8,5 +8,11 @@
 
     public abstract class BaseController : Controller
     {
+        public void SetTitle(string title)
+        {
+            ViewBag.Title = title;
+        }
+
+
     }
 }

@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\BlogPost.cs" />
+    <Compile Include="Entities\BlogPostPreview.cs" />
     <Compile Include="Entities\DataFile.cs" />
     <Compile Include="Entities\Document.cs">
       <SubType>Code</SubType>

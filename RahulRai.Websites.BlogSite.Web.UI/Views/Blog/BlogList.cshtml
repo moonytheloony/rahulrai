@@ -1,0 +1,42 @@
+﻿@model IEnumerable<RahulRai.Websites.Utilities.Common.Entities.BlogPostPreview>
+<!-- Blog Entries Column -->
+<div class="col-md-8">
+    <h1 class="page-header">
+        Cloud and Tech!
+        <small>easy on mind and eyes :)</small>
+    </h1>
+    @foreach (var blogPost in Model)
+    {
+        <!-- Blog Post -->
+        <h2>
+            <a href="#">Blog Post Title</a>
+        </h2>
+        <p><span class="glyphicon glyphicon-time"></span> Posted on @Model.</p>
+        <p>
+            <span class="glyphicon glyphicon-comment"></span>
+            <a href="posts/wazproxy-an-http-proxy-that-signs-windows-azure-storage-requests#disqus_thread"
+               data-disqus-identifier="posts/wazproxy-an-http-proxy-that-signs-windows-azure-storage-requests"></a>
+        </p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, veritatis, tempora, necessitatibus inventore nisi quam quia repellat ut tempore laborum possimus eum dicta id animi corrupti debitis ipsum officiis rerum.</p>
+        <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+        <hr>
+    }
+    <!-- Pager -->
+    <ul class="pager">
+        <li class="previous">
+            <a href="#">&larr; Older</a>
+        </li>
+        <li class="next">
+            <a href="#">Newer &rarr;</a>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    var disqus_shortname = 'rahulrai';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>

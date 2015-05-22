@@ -14,8 +14,15 @@
         // GET: Blog
         public ActionResult GetLatestBlogs()
         {
-            var blogList = new List<BlogPost>();
-            return View(blogList);
+            SetTitle("Rahul on Technology and Things");
+            var blogList = new List<BlogPostPreview>();
+            return View("BlogList",blogList);
+        }
+
+        public ActionResult GetSearchedBlogs(string searchTerm)
+        {
+            var blogList = new List<BlogPostPreview>();
+            return View("BlogList", blogList);
         }
 
         public ActionResult GetBlogPost()

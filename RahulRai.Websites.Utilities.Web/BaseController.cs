@@ -8,11 +8,17 @@
 
     public abstract class BaseController : Controller
     {
-        public void SetTitle(string title)
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            ViewBag.Title = title;
+            var actionToInvoke = filterContext.ActionDescriptor.ActionName.ToLowerInvariant();
+            switch (actionToInvoke)
+            {
+                case "get":
+                    break;
+                default:
+                    ViewBag.Title = "Rahul on Technology and Things";
+                    break;
+            }
         }
-
-
     }
 }

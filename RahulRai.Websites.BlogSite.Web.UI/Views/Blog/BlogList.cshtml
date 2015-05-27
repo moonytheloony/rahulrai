@@ -13,7 +13,7 @@
         </h2>
         <p><span class="glyphicon glyphicon-time"></span> Posted on @Model.</p>
         <p>
-            <span class="glyphicon glyphicon-comment"></span>
+            <span class="glyphicon glyphicon-comment">Comments</span>
             <a href="posts/wazproxy-an-http-proxy-that-signs-windows-azure-storage-requests#disqus_thread"
                data-disqus-identifier="posts/wazproxy-an-http-proxy-that-signs-windows-azure-storage-requests"></a>
         </p>
@@ -22,19 +22,24 @@
         <hr>
     }
     <!-- Pager -->
+    <hr />
     <ul class="pager">
         <li class="previous">
-            <a href="#">&larr; Older</a>
+            <a href="#"> <i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
+        </li>
+        <li>
+            <a>  <i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archieve</a>
         </li>
         <li class="next">
-            <a href="#">Newer &rarr;</a>
+            <a href="#">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
         </li>
     </ul>
 </div>
 <script type="text/javascript">
     var disqus_shortname = 'rahulrai';
     (function () {
-        var s = document.createElement('script'); s.async = true;
+        var s = document.createElement('script');
+        s.async = true;
         s.type = 'text/javascript';
         s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);

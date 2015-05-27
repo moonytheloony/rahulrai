@@ -54,5 +54,18 @@
                 IsDeleted = entity.IsDeleted
             };
         }
+
+        public static BlogPostPreview GetBlogPostPreview(TableBlogEntity entity)
+        {
+            return new BlogPostPreview
+            {
+                Title = entity.Title,
+                Body = entity.Body.FirstOrDefault(),
+                PostedDate = entity.PostedDate,
+                EntityTag = entity.EntityTag,
+                IsDraft = entity.IsDraft,
+                IsDeleted = entity.IsDeleted
+            };
+        }
     }
 }

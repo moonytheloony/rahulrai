@@ -19,17 +19,16 @@
                     controller = "Blog",
                     action = "GetBlogPost"
                 });
-                //}, new
-                //{
-                //    postId = @"^[a-zA-Z0-9\-]$"
-                //});
+            //}, new
+            //{
+            //    postId = @"^[a-zA-Z0-9\-]$"
+            //});
             routes.MapRoute("Default", string.Empty,
                 new
                 {
                     controller = "Blog",
                     action = "GetLatestBlogs"
                 });
-
         }
     }
 }

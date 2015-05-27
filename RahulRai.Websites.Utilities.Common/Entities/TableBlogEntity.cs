@@ -44,6 +44,11 @@
 
         public static BlogPost GetBlogPost(TableBlogEntity entity)
         {
+            if (null == entity)
+            {
+                return null;
+            }
+
             return new BlogPost
             {
                 Title = entity.Title,
@@ -57,6 +62,11 @@
 
         public static BlogPostPreview GetBlogPostPreview(TableBlogEntity entity)
         {
+            if (null == entity)
+            {
+                return null;
+            }
+
             return new BlogPostPreview
             {
                 Title = entity.Title,

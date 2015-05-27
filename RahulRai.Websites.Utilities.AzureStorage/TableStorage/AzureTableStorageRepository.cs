@@ -112,7 +112,7 @@
         /// <summary>
         ///     Gets or sets the table request options.
         /// </summary>
-        private TableRequestOptions TableRequestOptions { get; set; }
+        public TableRequestOptions TableRequestOptions { get; set; }
 
         #endregion
 
@@ -172,6 +172,11 @@
                 new TableQuery(),
                 TableRequestOptions);
             return result.Select(convertToEntity).ToList();
+        }
+
+        public virtual CloudTable CustomOperation()
+        {
+            return ActiveTable;
         }
 
         /// <summary>

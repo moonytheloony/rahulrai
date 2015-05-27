@@ -10,6 +10,7 @@
 
     public class BlogPost
     {
+        private string blogId;
         public string Title { get; set; }
         public string Body { get; set; }
 
@@ -20,7 +21,12 @@
 
         public string BlogId
         {
-            get { return Routines.FormatTitle(Title.ToLowerInvariant()); }
+            get
+            {
+                return string.IsNullOrWhiteSpace(blogId) ? Routines.FormatTitle(Title.ToLowerInvariant()) : blogId;
+                ;
+            }
+            set { blogId = string.IsNullOrWhiteSpace(value) ? Routines.FormatTitle(Title.ToLowerInvariant()) : value; }
         }
 
         public DateTime PostedDate { get; set; }

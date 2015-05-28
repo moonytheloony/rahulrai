@@ -86,8 +86,8 @@
         /// </returns>
         public static bool CompareCaseInvariant(this string value, string newValue)
         {
-            Contract.Requires<InputValidationFailedException>(!string.IsNullOrEmpty(value), "value");
-            Contract.Requires<InputValidationFailedException>(!string.IsNullOrEmpty(newValue), "newValue");
+            //Contract.Requires<InputValidationFailedException>(!string.IsNullOrEmpty(value), "value");
+            //Contract.Requires<InputValidationFailedException>(!string.IsNullOrEmpty(newValue), "newValue");
             return value.Equals(newValue, StringComparison.OrdinalIgnoreCase);
         }
 

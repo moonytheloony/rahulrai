@@ -66,10 +66,10 @@
             Func<TElement, DynamicTableEntity> convertToTableEntity,
             Func<DynamicTableEntity, TElement> convertToEntity)
         {
-            Contract.Requires<InputValidationFailedException>(
-                !string.IsNullOrWhiteSpace(storageAccountConnectionString), "storageAccountConnectionString");
-            Contract.Requires<InputValidationFailedException>(null != convertToTableEntity, "convertToTableEntity");
-            Contract.Requires<InputValidationFailedException>(null != convertToEntity, "convertToEntity");
+            //Contract.Requires<InputValidationFailedException>(
+            //    !string.IsNullOrWhiteSpace(storageAccountConnectionString), "storageAccountConnectionString");
+            //Contract.Requires<InputValidationFailedException>(null != convertToTableEntity, "convertToTableEntity");
+            //Contract.Requires<InputValidationFailedException>(null != convertToEntity, "convertToEntity");
 
             this.convertToTableEntity = convertToTableEntity;
             this.convertToEntity = convertToEntity;

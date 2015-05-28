@@ -44,7 +44,7 @@
         /// </exception>
         public static TEntity ConvertDynamicEntityToEntity<TEntity>(this DynamicTableEntity entity)
         {
-            Contract.Requires<InputValidationFailedException>(null != entity, "entity");
+            //Contract.Requires<InputValidationFailedException>(null != entity, "entity");
             var targetObject = (TEntity) Activator.CreateInstance(typeof (TEntity));
             var targetObjectType = targetObject.GetType();
             var objectProperties = targetObjectType.GetProperties().ToList();

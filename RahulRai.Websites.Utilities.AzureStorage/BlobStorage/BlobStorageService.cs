@@ -36,8 +36,8 @@
         /// </param>
         public BlobStorageService(string storageAccountConnectionString)
         {
-            Contract.Requires<InputValidationFailedException>(
-                !string.IsNullOrWhiteSpace(storageAccountConnectionString), "storageAccountConnectionString");
+            //Contract.Requires<InputValidationFailedException>(
+            //    !string.IsNullOrWhiteSpace(storageAccountConnectionString), "storageAccountConnectionString");
             BlobClient = CloudStorageAccount.Parse(storageAccountConnectionString).CreateCloudBlobClient();
             BlobClient.DefaultRequestOptions.RetryPolicy =
                 new ExponentialRetry(

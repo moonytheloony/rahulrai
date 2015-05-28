@@ -203,7 +203,7 @@ namespace RahulRai.Websites.Utilities.Web
 
         private static void ValidateUser(string username, string password)
         {
-            var adminName = ConfigurationManager.AppSettings["UserName"];
+            var adminName = ConfigurationManager.AppSettings["PublisherName"];
             var secret = ConfigurationManager.AppSettings["Secret"];
             if (!(string.Equals(username, adminName, StringComparison.OrdinalIgnoreCase) &&
                   string.Equals(password, secret, StringComparison.InvariantCulture)))

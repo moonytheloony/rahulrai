@@ -106,6 +106,8 @@
     <Compile Include="BaseController.cs" />
     <Compile Include="ControllerFactory.cs" />
     <Compile Include="IMetaWeblog.cs" />
+    <Compile Include="MediaObject.cs" />
+    <Compile Include="MediaObjectUrl.cs" />
     <Compile Include="MetaWeblogHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

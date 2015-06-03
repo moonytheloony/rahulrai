@@ -8,10 +8,25 @@
         <meta name="author" content="Rahul Rai">
         <title>@ViewBag.Title</title>
         <!-- Bootstrap Core CSS -->
-        <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
         <!-- Custom CSS -->
-        <link href="~/Content/blog-home.css" rel="stylesheet">
-        <link href="~/Content/Zocial/zocial.css" rel="stylesheet">
+        @Styles.Render("~/styles/SyntaxHighlighter")
+        @Scripts.Render("~/bundles/SyntaxHighlighter")
+        <link href="~/Content/blog-home.css" rel="stylesheet" />
+        <link href="~/Content/Zocial/zocial.css" rel="stylesheet" />
+        <script type="text/javascript">
+            SyntaxHighlighter.config.strings.viewSource = "view my source!!!!";
+            SyntaxHighlighter.config.strings.expandSource = "+ expand source";
+            SyntaxHighlighter.config.strings.help = "Help";
+            SyntaxHighlighter.config.strings.alert = "SyntaxHighlighter\n\n";
+            SyntaxHighlighter.config.strings.noBrush = "Can't find brush for:";
+            SyntaxHighlighter.config.strings.brushNotHtmlScript = "Brush wasn't made for html-script option:";
+            SyntaxHighlighter.config.strings.copyToClipboard = "copy to clipboard";
+            SyntaxHighlighter.config.strings.copyToClipboardConfirmation = "The code is in your clipboard now";
+            SyntaxHighlighter.config.strings.print = "print";
+            SyntaxHighlighter.defaults['toolbar'] = false;
+            SyntaxHighlighter.all();
+        </script>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>

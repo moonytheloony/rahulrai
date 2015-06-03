@@ -19,16 +19,26 @@
             get { return ApplicationConstants.BlogKey; }
         }
 
+        public string BlogFormattedUri
+        {
+            get { return Routines.FormatTitle(Title.ToLowerInvariant()); }
+        }
+
         public string BlogId
         {
             get
             {
-                return string.IsNullOrWhiteSpace(blogId) ? Routines.FormatTitle(Title.ToLowerInvariant()) : blogId;
-                ;
+                if (string.IsNullOrWhiteSpace(blogId))
+                {
+                    blogId = string.Format("{0:D19}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks);
+                }
+
+                return blogId;
             }
-            set { blogId = string.IsNullOrWhiteSpace(value) ? Routines.FormatTitle(Title.ToLowerInvariant()) : value; }
+            set { blogId = value; }
         }
 
+        public string CategoriesCsv { get; set; }
         public DateTime PostedDate { get; set; }
         public string EntityTag { get; set; }
 

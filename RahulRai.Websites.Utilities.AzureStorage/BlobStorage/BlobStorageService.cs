@@ -4,7 +4,6 @@
 
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Web;
     using Microsoft.WindowsAzure.Storage;
@@ -34,10 +33,9 @@
         /// <param name="context">
         ///     The context.
         /// </param>
+        /// <param name="storageAccountConnectionString"></param>
         public BlobStorageService(string storageAccountConnectionString)
         {
-            //Contract.Requires<InputValidationFailedException>(
-            //    !string.IsNullOrWhiteSpace(storageAccountConnectionString), "storageAccountConnectionString");
             BlobClient = CloudStorageAccount.Parse(storageAccountConnectionString).CreateCloudBlobClient();
             BlobClient.DefaultRequestOptions.RetryPolicy =
                 new ExponentialRetry(
@@ -80,7 +78,7 @@
         /// <returns>
         ///     The <see cref="FileOperationStatus" />.
         /// </returns>
-        public FileOperationStatus AddBlobToContainer(string containerName, Stream fileStream, string blobName)
+        public Uri AddBlobToContainer(string containerName, Stream fileStream, string blobName)
         {
             try
             {
@@ -88,16 +86,11 @@
                 var blockBlob = container.GetBlockBlobReference(blobName);
                 blockBlob.Properties.ContentType = MimeMapping.GetMimeMapping(blobName);
                 blockBlob.UploadFromStream(fileStream);
-                return FileOperationStatus.FileCreatedOrUpdated;
+                return blockBlob.Uri;
             }
             catch (StorageException exception)
             {
-                Trace.TraceError(
-                    Routines.FormatStringInvariantCulture(
-                        "File operation failed with the following error {0}",
-                        exception.Message),
-                    null);
-                return FileOperationStatus.Error;
+                throw new BlogSystemException("Failed to add blob to container", exception);
             }
         }
 
@@ -164,33 +157,6 @@
             }
 
             return FileOperationStatus.FileDeleted;
-        }
-
-        /// <summary>
-        ///     The download file.
-        /// </summary>
-        /// <param name="containerName">
-        ///     The folder name.
-        /// </param>
-        /// <param name="blobName">
-        ///     The file name.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="Stream" />.
-        /// </returns>
-        public DataFile DownloadBlob(string containerName, string blobName)
-        {
-            var container = BlobClient.GetContainerReference(containerName);
-            var blockBlob = container.GetBlockBlobReference(blobName);
-            blockBlob.FetchAttributes();
-            var fileContent = new byte[blockBlob.Properties.Length];
-            blockBlob.DownloadToByteArray(fileContent, 0);
-            return new DataFile
-            {
-                FileContent = fileContent,
-                FileEncodingType = blockBlob.Properties.ContentType,
-                FileName = blockBlob.Name
-            };
         }
 
         #endregion

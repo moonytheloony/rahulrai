@@ -5,6 +5,25 @@
         Cloud and Tech!
         <small>easy on mind and eyes :)</small>
     </h1>
+
+    <pre class="brush: csharp;" name="code">object IMetaWeblog.GetPost(string postid, string username, string password)
+{
+    ValidateUser(username, password);
+    var blogPost = metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
+    var blog = TableBlogEntity.GetBlogPost(blogPost);
+    return new
+    {
+        description = blog.Body,
+        title = blog.Title,
+        dateCreated = blog.PostedDate,
+        wp_slug = string.Empty,
+        categories = string.IsNullOrWhiteSpace(blog.CategoriesCsv) ? new string[] { string.Empty } : blog.CategoriesCsv.ToCollection().ToArray(),
+        postid = blog.BlogId
+    };
+}
+</pre>
+
+
     @foreach (var blogPost in Model)
     {
         <!-- Blog Post -->

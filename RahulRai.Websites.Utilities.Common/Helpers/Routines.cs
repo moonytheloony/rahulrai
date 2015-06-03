@@ -4,7 +4,6 @@
 
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -17,7 +16,6 @@
     using System.Threading;
     using System.Web.Script.Serialization;
     using System.Xml.Linq;
-    using Exceptions;
     using RegularTypes;
 
     #endregion
@@ -86,8 +84,6 @@
         /// </returns>
         public static bool CompareCaseInvariant(this string value, string newValue)
         {
-            //Contract.Requires<InputValidationFailedException>(!string.IsNullOrEmpty(value), "value");
-            //Contract.Requires<InputValidationFailedException>(!string.IsNullOrEmpty(newValue), "newValue");
             return value.Equals(newValue, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -412,6 +408,11 @@
         ///     The <see cref="string" />.
         /// </returns>
         public static string ToInvariantCultureString(this int input)
+        {
+            return input.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static string ToInvariantCultureString(this char input)
         {
             return input.ToString(CultureInfo.InvariantCulture);
         }

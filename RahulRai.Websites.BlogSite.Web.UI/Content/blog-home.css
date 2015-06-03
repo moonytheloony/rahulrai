@@ -32,3 +32,8 @@ footer {
 .col-center {
     margin: 10px auto;
 }
+
+code {
+    border-width: 1px;
+    border-color: black;
+}

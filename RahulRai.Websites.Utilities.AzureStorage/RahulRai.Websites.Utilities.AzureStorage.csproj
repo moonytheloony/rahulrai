@@ -14,6 +14,7 @@
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,11 +69,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hyak.Common">
+      <HintPath>..\packages\Hyak.Common.1.0.2\lib\net45\Hyak.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.Common">
       <HintPath>..\packages\Microsoft.Azure.Common.2.0.4\lib\net45\Microsoft.Azure.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.Common.NetFramework">
       <HintPath>..\packages\Microsoft.Azure.Common.2.0.4\lib\net45\Microsoft.Azure.Common.NetFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Search">
+      <HintPath>..\packages\Microsoft.Azure.Search.0.10.0-preview\lib\net40\Microsoft.Azure.Search.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Data.Edm, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -86,6 +93,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Spatial">
+      <HintPath>..\packages\Microsoft.Spatial.6.10.0\lib\portable-net40+sl5+wp8+win8+wpa\Microsoft.Spatial.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -97,9 +107,6 @@
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Management.Storage">
-      <HintPath>..\packages\Microsoft.WindowsAzure.Management.Storage.5.1.1\lib\net40\Microsoft.WindowsAzure.Management.Storage.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage">
       <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
@@ -134,8 +141,9 @@
   <ItemGroup>
     <Compile Include="BlobStorage\BlobStorageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search\AzureSearchService.cs" />
     <Compile Include="TableStorage\AzureTableStorageAssist.cs" />
-    <Compile Include="TableStorage\AzureTableStorageRepository.cs" />
+    <Compile Include="TableStorage\AzureTableStorageService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -4,7 +4,6 @@
 
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -44,7 +43,6 @@
         /// </exception>
         public static TEntity ConvertDynamicEntityToEntity<TEntity>(this DynamicTableEntity entity)
         {
-            //Contract.Requires<InputValidationFailedException>(null != entity, "entity");
             var targetObject = (TEntity) Activator.CreateInstance(typeof (TEntity));
             var targetObjectType = targetObject.GetType();
             var objectProperties = targetObjectType.GetProperties().ToList();

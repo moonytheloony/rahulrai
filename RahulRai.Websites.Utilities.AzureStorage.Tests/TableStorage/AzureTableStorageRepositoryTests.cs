@@ -16,12 +16,12 @@
     {
         private string connectionString = "";
 
-        private AzureTableStorageRepository<TableBlogEntity> testObject;
+        private AzureTableStorageService<TableBlogEntity> testObject;
 
         [TestInitialize]
         public void AzureTableStorageRepositoryTest()
         {
-            testObject = new AzureTableStorageRepository<TableBlogEntity>(
+            testObject = new AzureTableStorageService<TableBlogEntity>(
                 connectionString, "sampleTable", AzureTableStorageAssist.ConvertEntityToDynamicTableEntity,
                 AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
             testObject.CreateStorageObjectAndSetExecutionContext();

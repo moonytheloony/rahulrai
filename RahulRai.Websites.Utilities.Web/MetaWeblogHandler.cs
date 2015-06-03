@@ -4,6 +4,15 @@ namespace RahulRai.Websites.Utilities.Web
 {
     #region
 
+    using System.Collections.Generic;
+
+    #region
+
+    using System.IO;
+    using AzureStorage.BlobStorage;
+
+    #region
+
     using Common.RegularTypes;
     using Microsoft.WindowsAzure.Storage.Table;
 
@@ -11,11 +20,17 @@ namespace RahulRai.Websites.Utilities.Web
 
     using System;
     using System.Configuration;
+    using Common.Helpers;
     using System.Linq;
     using AzureStorage.TableStorage;
     using Common.Entities;
     using Common.Exceptions;
     using CookComputing.XmlRpc;
+    using AzureStorage.Search;
+
+    #endregion
+
+    #endregion
 
     #endregion
 
@@ -25,23 +40,44 @@ namespace RahulRai.Websites.Utilities.Web
 
     public class MetaWeblogHandler : XmlRpcService, IMetaWeblog
     {
+        private readonly string blogResourceContainerName =
+            ConfigurationManager.AppSettings["BlogResourceContainerName"];
+
         private readonly string blogTableName = ConfigurationManager.AppSettings["BlogTableName"];
+
         private readonly string connectionString = ConfigurationManager.AppSettings["StorageAccountConnectionString"];
-        private readonly AzureTableStorageRepository<TableBlogEntity> metaweblogTable;
+        private readonly BlobStorageService mediaStorageService;
+        private readonly AzureTableStorageService<TableBlogEntity> metaweblogTable;
+        private readonly AzureSearchService searchService;
+        private readonly string searchServiceKey = ConfigurationManager.AppSettings["SearchServiceKey"];
+        private readonly string searchServiceName = ConfigurationManager.AppSettings["SearchServiceName"];
 
         public MetaWeblogHandler()
         {
-            if (null != metaweblogTable)
+            if (null == metaweblogTable)
             {
-                return;
+                metaweblogTable = new AzureTableStorageService<TableBlogEntity>(
+                    connectionString,
+                    blogTableName,
+                    AzureTableStorageAssist.ConvertEntityToDynamicTableEntity,
+                    AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
+                metaweblogTable.CreateStorageObjectAndSetExecutionContext();
+            }
+            if (null == mediaStorageService)
+            {
+                mediaStorageService = new BlobStorageService(connectionString);
+                if (FileOperationStatus.FolderCreated !=
+                    mediaStorageService.CreateContainer(blogResourceContainerName, VisibilityType.FilesVisibleToAll))
+                {
+                    throw new BlogSystemException("unable to create container");
+                }
             }
 
-            metaweblogTable = new AzureTableStorageRepository<TableBlogEntity>(
-                connectionString,
-                blogTableName,
-                AzureTableStorageAssist.ConvertEntityToDynamicTableEntity,
-                AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
-            metaweblogTable.CreateStorageObjectAndSetExecutionContext();
+            if (null == searchService)
+            {
+                searchService = new AzureSearchService(searchServiceName, searchServiceKey,
+                    ApplicationConstants.SearchIndex);
+            }
         }
 
         string IMetaWeblog.AddPost(string blogid, string username, string password, dynamic post, bool publish)
@@ -49,19 +85,31 @@ namespace RahulRai.Websites.Utilities.Web
             ValidateUser(username, password);
             var postTitle = post["title"];
             var description = post["description"];
+            var categories = (null == post["categories"] || null == post["categories"] as string[])
+                ? string.Empty
+                : (post["categories"] as string[]).ToCsv();
             var blogPost = new BlogPost
             {
                 Body = description,
                 IsDeleted = false,
                 Title = postTitle,
+                CategoriesCsv = categories,
                 PostedDate = DateTime.UtcNow,
                 IsDraft = !publish
             };
+
             var tablePost = new TableBlogEntity(blogPost);
             metaweblogTable.InsertOrReplace(tablePost);
             var result = metaweblogTable.SaveAll();
             if (result.All(element => element.IsSuccess))
             {
+                //Create search document.
+                searchService.UpsertDataToIndex(new BlogSearch
+                {
+                    BlogId = blogPost.BlogId,
+                    SearchTags = blogPost.CategoriesCsv.ToCollection().ToArray(),
+                    Title = blogPost.Title
+                });
                 return blogPost.BlogId;
             }
 
@@ -73,23 +121,39 @@ namespace RahulRai.Websites.Utilities.Web
             ValidateUser(username, password);
             var postTitle = post["title"];
             var description = post["description"];
+            var categories = (null == post["categories"] || null == post["categories"] as string[])
+                ? string.Empty
+                : (post["categories"] as string[]).ToCsv();
             var blogPost = new BlogPost
             {
                 Body = description,
                 IsDeleted = false,
                 Title = postTitle,
                 PostedDate = DateTime.UtcNow,
-                IsDraft = !publish
+                CategoriesCsv = categories,
+                IsDraft = !publish,
+                BlogId = postid //Persist post id
             };
-            var tablePost = new TableBlogEntity(blogPost) {BlogId = postid};
+            var tablePost = new TableBlogEntity(blogPost);
             metaweblogTable.InsertOrReplace(tablePost);
             var result = metaweblogTable.SaveAll();
-            if (result.All(element => element.IsSuccess))
+            if (!result.All(element => element.IsSuccess))
             {
-                return true;
+                throw new BlogSystemException("Can not update blog post");
             }
 
-            throw new BlogSystemException("Can not update blog post");
+            //Create search document.
+            searchService.UpsertDataToIndex(new BlogSearch
+            {
+                BlogId = blogPost.BlogId,
+                SearchTags =
+                    string.IsNullOrWhiteSpace(blogPost.CategoriesCsv)
+                        ? new[] {string.Empty}
+                        : blogPost.CategoriesCsv.ToCollection().ToArray(),
+                Title = blogPost.Title
+            });
+
+            return true;
         }
 
         bool IMetaWeblog.DeletePost(string key, string postid, string username, string password, bool publish)
@@ -98,6 +162,9 @@ namespace RahulRai.Websites.Utilities.Web
             var blogPost = metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
             blogPost.IsDeleted = true;
             metaweblogTable.Update(blogPost);
+
+            //Delete search document.
+            searchService.DeleteData(postid);
             return true;
         }
 
@@ -112,10 +179,14 @@ namespace RahulRai.Websites.Utilities.Web
                 title = blog.Title,
                 dateCreated = blog.PostedDate,
                 wp_slug = string.Empty,
-                categories = new[] {string.Empty},
+                categories =
+                    string.IsNullOrWhiteSpace(blogPost.CategoriesCsv)
+                        ? new[] {string.Empty}
+                        : blogPost.CategoriesCsv.ToCollection().ToArray(),
                 postid = blog.BlogId
             };
         }
+
 
         object[] IMetaWeblog.GetRecentPosts(string blogid, string username, string password, int numberOfPosts)
         {
@@ -154,7 +225,7 @@ namespace RahulRai.Websites.Utilities.Web
                 dateCreated = element.PostedDate,
                 wp_slug = element.BlogKey,
                 categories = new[] {string.Empty},
-                postid = element.BlogId
+                postid = element.BlogFormattedUri
             }).ToArray();
             // ReSharper restore CoVariantArrayConversion
         }
@@ -162,43 +233,74 @@ namespace RahulRai.Websites.Utilities.Web
         object[] IMetaWeblog.GetCategories(string blogid, string username, string password)
         {
             ValidateUser(username, password);
-            //// Not using categories.
-            return new object[] {string.Empty};
+            ////Get All Blog Search Keys
+            var activeTable = metaweblogTable.CustomOperation();
+            //// Create a projected query to get all categories.
+            var partitionKeyQuery = TableQuery.GenerateFilterCondition(KnownTypes.PartitionKey, QueryComparisons.Equal,
+                ApplicationConstants.BlogKey);
+            var query = new TableQuery().Where(partitionKeyQuery);
+            var result = activeTable.ExecuteQuery(query.Select(new[] {"CategoriesCsv"}),
+                metaweblogTable.TableRequestOptions);
+            if (null == result)
+            {
+                return null;
+            }
+
+            ////Combine all categories.
+            var dynamicTableEntities = result as IList<DynamicTableEntity> ?? result.ToList();
+            var allCategories = string.Join(KnownTypes.CsvSeparator.ToInvariantCultureString(),
+                dynamicTableEntities.Select(element => element["CategoriesCsv"].StringValue)).ToCollection();
+            var categories = allCategories as IList<string> ?? allCategories.ToList();
+            var posts = new XmlRpcStruct[categories.Count()];
+            var counter = 0;
+            foreach (var category in categories)
+            {
+                var rpcstruct = new XmlRpcStruct
+                {
+                    {"categoryid", counter.ToInvariantCultureString()},
+                    {"title", category},
+                    {"description", category}
+                };
+
+                posts[counter++] = rpcstruct;
+            }
+
+            return posts;
         }
 
         object IMetaWeblog.NewMediaObject(string blogid, string username, string password, MediaObject media)
         {
             ValidateUser(username, password);
-
-            return "newurl";
+            var resourceStream = new MemoryStream(media.Bits);
+            return new MediaObjectUrl
+            {
+                Url =
+                    mediaStorageService.AddBlobToContainer(blogResourceContainerName, resourceStream, media.Name)
+                        .ToString()
+            };
         }
 
         object[] IMetaWeblog.GetUsersBlogs(string key, string username, string password)
         {
             ValidateUser(username, password);
-            //Get all blogs
-            var activeTable = metaweblogTable.CustomOperation();
-            //// Create a projected query and order by date posted.
-            var filter = TableQuery.GenerateFilterCondition(KnownTypes.PartitionKey, QueryComparisons.Equal,
-                ApplicationConstants.BlogKey);
-            var result = activeTable.ExecuteQuery(new TableQuery().Where(filter).Select(new[]
+            // There is only one publisher, so this should return a default value.
+            return new object[]
             {
-                KnownTypes.RowKey,
-                "Title",
-                "PostedDate"
-            }), metaweblogTable.TableRequestOptions);
-            var blogEntity =
-                result.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>)
-                    .ToList()
-                    .OrderByDescending(element => element.PostedDate);
-            // ReSharper disable CoVariantArrayConversion Format expected by Live Writer
-            return blogEntity.Select(element => new
-            {
-                blogName = element.Title,
-                url = Context.Request.Url.Scheme + "://" + Context.Request.Url.Authority + "/post/" + element.BlogKey,
-                blogid = element.BlogId
-            }).ToArray();
-            // ReSharper restore CoVariantArrayConversion
+                new
+                {
+                    blogName = "rahulrai",
+                    url = Context.Request.Url.Scheme + "://" + Context.Request.Url.Authority,
+                    blogid = string.Empty
+                }
+            };
+        }
+
+
+        public int NewCategory(string blogid, string username, string password, dynamic category)
+        {
+            ValidateUser(username, password);
+            //// Use categories to index this blog post in search service.
+            return 1;
         }
 
         private static void ValidateUser(string username, string password)
@@ -211,13 +313,5 @@ namespace RahulRai.Websites.Utilities.Web
                 throw new UnauthorizedAccessException(string.Format("Not Allowed U:{0} P:{1}", username, password));
             }
         }
-    }
-
-    [XmlRpcMissingMapping(MappingAction.Ignore)]
-    public struct MediaObject
-    {
-        public byte[] bits;
-        public string name;
-        public string type;
     }
 }

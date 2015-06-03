@@ -1,40 +1,21 @@
-﻿#region
-
-namespace RahulRai.Websites.Utilities.Web
+﻿namespace RahulRai.Websites.Utilities.Web
 {
     #region
 
-    using System.Collections.Generic;
-
-    #region
-
-    using System.IO;
-    using AzureStorage.BlobStorage;
-
-    #region
-
-    using Common.RegularTypes;
-    using Microsoft.WindowsAzure.Storage.Table;
-
-    #region
-
     using System;
+    using System.Collections.Generic;
     using System.Configuration;
-    using Common.Helpers;
+    using System.IO;
     using System.Linq;
+    using AzureStorage.BlobStorage;
+    using AzureStorage.Search;
     using AzureStorage.TableStorage;
     using Common.Entities;
     using Common.Exceptions;
+    using Common.Helpers;
+    using Common.RegularTypes;
     using CookComputing.XmlRpc;
-    using AzureStorage.Search;
-
-    #endregion
-
-    #endregion
-
-    #endregion
-
-    #endregion
+    using Microsoft.WindowsAzure.Storage.Table;
 
     #endregion
 
@@ -44,7 +25,6 @@ namespace RahulRai.Websites.Utilities.Web
             ConfigurationManager.AppSettings["BlogResourceContainerName"];
 
         private readonly string blogTableName = ConfigurationManager.AppSettings["BlogTableName"];
-
         private readonly string connectionString = ConfigurationManager.AppSettings["StorageAccountConnectionString"];
         private readonly BlobStorageService mediaStorageService;
         private readonly AzureTableStorageService<TableBlogEntity> metaweblogTable;
@@ -101,19 +81,23 @@ namespace RahulRai.Websites.Utilities.Web
             var tablePost = new TableBlogEntity(blogPost);
             metaweblogTable.InsertOrReplace(tablePost);
             var result = metaweblogTable.SaveAll();
-            if (result.All(element => element.IsSuccess))
+            if (!result.All(element => element.IsSuccess))
             {
-                //Create search document.
+                throw new BlogSystemException("Can not save blog post");
+            }
+
+            //Create search document if search terms exist.
+            if (!string.IsNullOrWhiteSpace(categories))
+            {
                 searchService.UpsertDataToIndex(new BlogSearch
                 {
                     BlogId = blogPost.BlogId,
                     SearchTags = blogPost.CategoriesCsv.ToCollection().ToArray(),
                     Title = blogPost.Title
                 });
-                return blogPost.BlogId;
             }
 
-            throw new BlogSystemException("Can not save blog post");
+            return blogPost.BlogId;
         }
 
         bool IMetaWeblog.UpdatePost(string postid, string username, string password, dynamic post, bool publish)
@@ -142,7 +126,7 @@ namespace RahulRai.Websites.Utilities.Web
                 throw new BlogSystemException("Can not update blog post");
             }
 
-            //Create search document.
+            //Update search document.
             searchService.UpsertDataToIndex(new BlogSearch
             {
                 BlogId = blogPost.BlogId,
@@ -173,6 +157,11 @@ namespace RahulRai.Websites.Utilities.Web
             ValidateUser(username, password);
             var blogPost = metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
             var blog = TableBlogEntity.GetBlogPost(blogPost);
+            if (null == blog)
+            {
+                return null;
+            }
+
             return new
             {
                 description = blog.Body,
@@ -241,13 +230,14 @@ namespace RahulRai.Websites.Utilities.Web
             var query = new TableQuery().Where(partitionKeyQuery);
             var result = activeTable.ExecuteQuery(query.Select(new[] {"CategoriesCsv"}),
                 metaweblogTable.TableRequestOptions);
-            if (null == result)
+            var resultList = result as IList<DynamicTableEntity> ?? result.ToList();
+            if (!resultList.Any())
             {
                 return null;
             }
 
             ////Combine all categories.
-            var dynamicTableEntities = result as IList<DynamicTableEntity> ?? result.ToList();
+            var dynamicTableEntities = result as IList<DynamicTableEntity> ?? resultList.ToList();
             var allCategories = string.Join(KnownTypes.CsvSeparator.ToInvariantCultureString(),
                 dynamicTableEntities.Select(element => element["CategoriesCsv"].StringValue)).ToCollection();
             var categories = allCategories as IList<string> ?? allCategories.ToList();
@@ -268,15 +258,14 @@ namespace RahulRai.Websites.Utilities.Web
             return posts;
         }
 
-        object IMetaWeblog.NewMediaObject(string blogid, string username, string password, MediaObject media)
+        object IMetaWeblog.NewMediaObject(string blogid, string username, string password, dynamic media)
         {
             ValidateUser(username, password);
-            var resourceStream = new MemoryStream(media.Bits);
-            return new MediaObjectUrl
+            var resourceStream = new MemoryStream(media["bits"]);
+            return new
             {
-                Url =
-                    mediaStorageService.AddBlobToContainer(blogResourceContainerName, resourceStream, media.Name)
-                        .ToString()
+                url = mediaStorageService.AddBlobToContainer(blogResourceContainerName, resourceStream, media["name"])
+                    .ToString()
             };
         }
 

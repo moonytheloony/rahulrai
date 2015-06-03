@@ -26,7 +26,7 @@
         object[] GetRecentPosts(string blogid, string username, string password, int numberOfPosts);
 
         [XmlRpcMethod("metaWeblog.newMediaObject")]
-        object NewMediaObject(string blogid, string username, string password, MediaObject mediaObject);
+        object NewMediaObject(string blogid, string username, string password, dynamic mediaObject);
 
         [XmlRpcMethod("wp.newCategory",
             Description = "Adds a new category to the blog engine.")]

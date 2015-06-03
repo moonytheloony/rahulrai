@@ -7,7 +7,7 @@
     {
         public static string IndexSubscript = "AutoIndexedElement";
         public static string BlogKey = "MYBLOG";
-        public static int ContentSplitLength = 200;
+        public static int ContentSplitLength = 500;
         public static string SearchIndex = "blogs";
     }
 }

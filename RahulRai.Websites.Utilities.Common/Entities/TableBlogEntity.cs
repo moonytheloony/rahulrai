@@ -67,25 +67,5 @@
                 IsDeleted = entity.IsDeleted
             };
         }
-
-        public static BlogPostPreview GetBlogPostPreview(TableBlogEntity entity)
-        {
-            if (null == entity)
-            {
-                return null;
-            }
-
-            return new BlogPostPreview
-            {
-                Title = entity.Title,
-                BlogId = entity.BlogId,
-                Body = entity.Body.FirstOrDefault(),
-                PostedDate = entity.PostedDate,
-                CategoriesCsv = entity.CategoriesCsv,
-                EntityTag = entity.EntityTag,
-                IsDraft = entity.IsDraft,
-                IsDeleted = entity.IsDeleted
-            };
-        }
     }
 }

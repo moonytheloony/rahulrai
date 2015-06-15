@@ -6,24 +6,26 @@
 
 body {
     padding-top: 80px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-    background-color: white;
 }
 
 footer {
-    margin: 50px 0;
+    margin: 0;
+    background-color: #1A1A1A;
 }
 
 .mylogo {
-    font: bolder 30px "Comic Sans MS", cursive, sans-serif;
+    float: left;
+    padding: 15px 15px;
+    font-size: 18px;
+    line-height: 20px;
+    font: bold 30px "Comic Sans MS", cursive, sans-serif;
+    color: #27A7DF;
 }
 
-.borderDivSpan {
-    display: inline-block;
-    vertical-align: top;
-    line-height: normal;
-    font: normal 40px "Comic Sans MS", cursive, sans-serif;
-    color: #428bca;
-}
+    .mylogo:hover,
+    .mylogo:focus {
+        text-decoration: none;
+    }
 
 .navbar-fixed-top {
     height: 70px; /* Whatever you want. */
@@ -36,4 +38,24 @@ footer {
 code {
     border-width: 1px;
     border-color: black;
+}
+
+.navbar-default {
+    background-color: #1A1A1A;
+    border-color: #E7E7E7;
+}
+
+    .navbar-default .navbar-nav > li > a {
+        color: #777777;
+    }
+
+    .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+        background-color: #E7E7E7;
+        color: #555555;
+    }
+
+.footerDiv {
+    padding: 30px;
+    font-size: 15px;
+    color: white;
 }

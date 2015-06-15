@@ -1,59 +1,44 @@
-﻿@model IEnumerable<RahulRai.Websites.Utilities.Common.Entities.BlogPostPreview>
+﻿@model IList<RahulRai.Websites.Utilities.Common.Entities.BlogPost>
 <!-- Blog Entries Column -->
 <div class="col-md-8">
     <h1 class="page-header">
         Cloud and Tech!
         <small>easy on mind and eyes :)</small>
     </h1>
-
-    <pre class="brush: csharp;" name="code">object IMetaWeblog.GetPost(string postid, string username, string password)
-{
-    ValidateUser(username, password);
-    var blogPost = metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
-    var blog = TableBlogEntity.GetBlogPost(blogPost);
-    return new
-    {
-        description = blog.Body,
-        title = blog.Title,
-        dateCreated = blog.PostedDate,
-        wp_slug = string.Empty,
-        categories = string.IsNullOrWhiteSpace(blog.CategoriesCsv) ? new string[] { string.Empty } : blog.CategoriesCsv.ToCollection().ToArray(),
-        postid = blog.BlogId
-    };
-}
-</pre>
-
-
     @foreach (var blogPost in Model)
     {
         <!-- Blog Post -->
         <h2>
-            <a href="#">Blog Post Title</a>
+            <a href="#">@blogPost.Title</a>
         </h2>
-        <p><span class="glyphicon glyphicon-time"></span> Posted on @Model.</p>
         <p>
-            <span class="glyphicon glyphicon-comment">Comments</span>
+            <span class="glyphicon glyphicon-time"></span>
+            @blogPost.PostedDate.ToLocalTime().ToString("f")
+        </p>
+        <p>
+            <span class="glyphicon glyphicon-comment"></span>
+            5 Comments
             <a href="posts/wazproxy-an-http-proxy-that-signs-windows-azure-storage-requests#disqus_thread"
                data-disqus-identifier="posts/wazproxy-an-http-proxy-that-signs-windows-azure-storage-requests"></a>
         </p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, veritatis, tempora, necessitatibus inventore nisi quam quia repellat ut tempore laborum possimus eum dicta id animi corrupti debitis ipsum officiis rerum.</p>
+        <p>@blogPost.Body</p>
         <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
     <hr>
     }
     <!-- Pager -->
-    <hr />
     <ul class="pager">
         <li class="previous">
-            <a href="#"> <i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
+            <a href="@Url.RouteUrl("Default", new {action = "GoPrevious"})"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
         </li>
         <li>
-            <a>  <i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archieve</a>
+            <a href="@Url.RouteUrl("Default", new {action = "GoArchieve"})">  <i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archieve</a>
         </li>
         <li class="next">
-            <a href="#">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
+            <a href="@Url.RouteUrl("Default", new {action = "GoNext"})">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
         </li>
     </ul>
 </div>
+<!-- Enable Disqus -->
 <script type="text/javascript">
     var disqus_shortname = 'rahulrai';
     (function() {

@@ -16,11 +16,12 @@
     public class AzureSearchService : IDisposable
     {
         private readonly SearchIndexClient indexClient;
+        private readonly SearchServiceClient serviceClient;
         private bool disposed;
 
         public AzureSearchService(string searchServiceName, string searchServiceKey, string searchIndex)
         {
-            var serviceClient = new SearchServiceClient(searchServiceName, new SearchCredentials(searchServiceKey));
+            serviceClient = new SearchServiceClient(searchServiceName, new SearchCredentials(searchServiceKey));
             CreateIndexIfNotExists(searchIndex, serviceClient);
             indexClient = serviceClient.Indexes.GetClient(searchIndex);
         }
@@ -41,7 +42,7 @@
             Dispose(false);
         }
 
-        private void CreateIndexIfNotExists(string searchIndex, SearchServiceClient serviceClient)
+        private static void CreateIndexIfNotExists(string searchIndex, ISearchServiceClient serviceClient)
         {
             if (!serviceClient.Indexes.Exists(searchIndex))
             {
@@ -49,7 +50,7 @@
             }
         }
 
-        private static void CreateSearchIndex(string searchIndex, SearchServiceClient serviceClient)
+        private static void CreateSearchIndex(string searchIndex, ISearchServiceClient serviceClient)
         {
             var definition = new Index
             {
@@ -114,7 +115,6 @@
             {
                 var batch = IndexBatch.Create(
                     new IndexAction(IndexActionType.Delete, new Document {{"blogId", idToDelete}}));
-
                 indexClient.Documents.Index(batch);
             }
             catch (IndexBatchException e)
@@ -126,6 +126,14 @@
                     "Failed to index some of the documents: {0}",
                     String.Join(", ", e.IndexResponse.Results.Where(r => !r.Succeeded).Select(r => r.Key)));
                 throw new BlogSystemException("failed on index");
+            }
+        }
+
+        public void DeleteIndex(string indexName)
+        {
+            if (serviceClient.Indexes.Exists(indexName))
+            {
+                serviceClient.Indexes.Delete(indexName);
             }
         }
 

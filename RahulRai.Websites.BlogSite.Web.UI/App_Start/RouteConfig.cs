@@ -19,7 +19,7 @@
                     controller = "Blog",
                     action = "GetBlogPost"
                 });
-            routes.MapRoute("Default", string.Empty,
+            routes.MapRoute("Default", "{controller}/{action}",
                 new
                 {
                     controller = "Blog",

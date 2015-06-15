@@ -141,8 +141,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\BlogPost.cs" />
-    <Compile Include="Entities\BlogPostPreview.cs" />
     <Compile Include="Entities\BlogSearch.cs" />
+    <Compile Include="Entities\ContinuationStack.cs" />
     <Compile Include="Entities\FileOperationStatus.cs">
       <SubType>Code</SubType>
     </Compile>

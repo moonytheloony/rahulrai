@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,6 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RahulRai.Websites.Utilities.AzureStorage\RahulRai.Websites.Utilities.AzureStorage.csproj">
+      <Project>{081071D1-B456-454D-9AF2-44DD90AF14F4}</Project>
+      <Name>RahulRai.Websites.Utilities.AzureStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RahulRai.Websites.Utilities.Common\RahulRai.Websites.Utilities.Common.csproj">
+      <Project>{6CDA73B5-A8EF-47B0-8DBC-81BF8E3DE35A}</Project>
+      <Name>RahulRai.Websites.Utilities.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,7 +5,8 @@
  */
 
 body {
-    padding-top: 80px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    background-color: #525252;
+    padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
 
 footer {
@@ -18,7 +19,7 @@ footer {
     padding: 15px 15px;
     font-size: 18px;
     line-height: 20px;
-    font: bold 30px "Comic Sans MS", cursive, sans-serif;
+    font: normal 30px Verdana, Geneva, sans-serif;
     color: #27A7DF;
 }
 
@@ -55,7 +56,22 @@ code {
     }
 
 .footerDiv {
-    padding: 30px;
+    padding: 20px;
     font-size: 15px;
     color: white;
+}
+
+.contentPane {
+    min-height: 100vh;
+    padding: 50px;
+    background-color: #FFFFFF;
+}
+
+.btn {
+    -ms-border-radius: 0;
+    border-radius: 0;
+}
+
+#disqus_thread {
+    margin-bottom: 10px;
 }

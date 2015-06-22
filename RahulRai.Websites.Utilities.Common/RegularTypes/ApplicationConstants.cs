@@ -10,5 +10,7 @@
         public static int ContentSplitLength = 500;
         public static string SearchIndex = "blogs";
         public static string StackKey = "PageStack";
+        public static string ApplicationResourceRoot = "ApplicationResourceRoot";
+        public static string MyEmail = "MyEmail";
     }
 }

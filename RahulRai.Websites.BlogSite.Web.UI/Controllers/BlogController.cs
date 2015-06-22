@@ -28,60 +28,25 @@
             get
             {
                 var stack = (ContinuationStack) Session[ApplicationConstants.StackKey];
-                if (stack == null)
+                if (stack != null)
                 {
-                    stack = new ContinuationStack();
-                    Session[ApplicationConstants.StackKey] = stack;
+                    return stack;
                 }
 
+                stack = new ContinuationStack();
+                Session[ApplicationConstants.StackKey] = stack;
                 return stack;
             }
         }
 
         public ActionResult GetLatestBlogs()
         {
+            //Session[ApplicationConstants.StackKey] = null;
             //var result = GetPagedBlogPreviews(null);
             //var resultBlogs = result.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
-            //var blogList = resultBlogs.Select(TableBlogEntity.GetBlogPostPreview);
-            //var blogCollection = new BlogPostPreviewCollection()
-            //{
-            //    BlogPostPreviews = blogList.ToList(),
-            //    ContinuationStack = new ContinuationStack()
-            //};
-            //SetPreviousNextPage(result.ContinuationToken);
-            var blogCollection = new List<BlogPost>();
-
-            var continuationStack = new ContinuationStack();
-            continuationStack.AddToken(new TableContinuationToken {NextPartitionKey = "one"});
-            continuationStack.AddToken(new TableContinuationToken {NextPartitionKey = "two"});
-            blogCollection.Add(new BlogPost
-            {
-                BlogId = "1",
-                Body = "some text",
-                IsDraft = false,
-                IsDeleted = false,
-                PostedDate = DateTime.UtcNow,
-                Title = "title1"
-            });
-            blogCollection.Add(new BlogPost
-            {
-                BlogId = "2",
-                Body = "some text2",
-                IsDraft = false,
-                IsDeleted = false,
-                PostedDate = DateTime.UtcNow,
-                Title = "title2"
-            });
-            blogCollection.Add(new BlogPost
-            {
-                BlogId = "3",
-                Body = "some text3",
-                IsDraft = false,
-                IsDeleted = false,
-                PostedDate = DateTime.UtcNow,
-                Title = "title13"
-            });
-            return View("BlogList", blogCollection);
+            //var blogList = resultBlogs.Select(TableBlogEntity.GetBlogPost);
+            //SetPreviousNextPage();
+            return View("BlogList", new List<BlogPost>());
         }
 
         private TableQuerySegment<DynamicTableEntity> GetPagedBlogPreviews(TableContinuationToken token)
@@ -94,10 +59,11 @@
                       && String.Compare(record.RowKey, rowKeyToUse, StringComparison.OrdinalIgnoreCase) > 0
                 select record).Take(pageSize);
             var result = query.AsTableQuery().ExecuteSegmented(token, blogContext.TableRequestOptions);
+            ContinuationStack.AddToken(result.ContinuationToken);
             return result;
         }
 
-        private void SetPreviousNextPage(object continuationToken)
+        private void SetPreviousNextPage()
         {
             throw new NotImplementedException();
         }
@@ -112,15 +78,20 @@
         public ActionResult GoPrevious()
         {
             var segment = ContinuationStack.GetBackToken();
-
-            var blogList = new List<BlogPost>();
+            var entityResult = GetPagedBlogPreviews(segment);
+            var resultBlogs = entityResult.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
+            var blogList = resultBlogs.Select(TableBlogEntity.GetBlogPost);
+            SetPreviousNextPage();
             return View("BlogList", blogList);
         }
 
         public ActionResult GoNext()
         {
             var segment = ContinuationStack.GetForwardToken();
-            var blogList = new List<BlogPost>();
+            var entityResult = GetPagedBlogPreviews(segment);
+            var resultBlogs = entityResult.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
+            var blogList = resultBlogs.Select(TableBlogEntity.GetBlogPost);
+            SetPreviousNextPage();
             return View("BlogList", blogList);
         }
 

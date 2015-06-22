@@ -20,7 +20,7 @@
     public class BlogController : BaseController
     {
         private readonly AzureTableStorageService<TableBlogEntity> blogContext = BlogStoreAccess.Instance.BlogTable;
-        private readonly int pageSize = int.Parse(ConfigurationManager.AppSettings["BlogListPageSize"]);
+        private readonly int pageSize = int.Parse(ConfigurationManager.AppSettings[ApplicationConstants.BlogListPageSize]);
         private readonly string rowKeyToUse = string.Format("{0:D19}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks);
 
         public ContinuationStack ContinuationStack

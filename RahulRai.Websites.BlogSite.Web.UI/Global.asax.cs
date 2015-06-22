@@ -17,6 +17,7 @@
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            RegisterSessionStateProvider.Set();
         }
     }
 }

@@ -11,8 +11,8 @@
 
     internal class Program
     {
-        private static readonly string SearchServiceKey = ConfigurationManager.AppSettings["SearchServiceKey"];
-        private static readonly string SearchServiceName = ConfigurationManager.AppSettings["SearchServiceName"];
+        private static readonly string SearchServiceKey = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+        private static readonly string SearchServiceName = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
         private static AzureSearchService searchService;
 
         private static void Main(string[] args)

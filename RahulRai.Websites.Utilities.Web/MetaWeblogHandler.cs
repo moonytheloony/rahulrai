@@ -22,15 +22,15 @@
     public class MetaWeblogHandler : XmlRpcService, IMetaWeblog
     {
         private readonly string blogResourceContainerName =
-            ConfigurationManager.AppSettings["BlogResourceContainerName"];
+            ConfigurationManager.AppSettings[ApplicationConstants.BlogResourceContainerName];
 
-        private readonly string blogTableName = ConfigurationManager.AppSettings["BlogTableName"];
-        private readonly string connectionString = ConfigurationManager.AppSettings["StorageAccountConnectionString"];
+        private readonly string blogTableName = ConfigurationManager.AppSettings[ApplicationConstants.BlogTableName];
+        private readonly string connectionString = ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
         private readonly BlobStorageService mediaStorageService;
         private readonly AzureTableStorageService<TableBlogEntity> metaweblogTable;
         private readonly AzureSearchService searchService;
-        private readonly string searchServiceKey = ConfigurationManager.AppSettings["SearchServiceKey"];
-        private readonly string searchServiceName = ConfigurationManager.AppSettings["SearchServiceName"];
+        private readonly string searchServiceKey = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+        private readonly string searchServiceName = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
 
         public MetaWeblogHandler()
         {
@@ -294,8 +294,8 @@
 
         private static void ValidateUser(string username, string password)
         {
-            var adminName = ConfigurationManager.AppSettings["PublisherName"];
-            var secret = ConfigurationManager.AppSettings["Secret"];
+            var adminName = ConfigurationManager.AppSettings[ApplicationConstants.PublisherName];
+            var secret = ConfigurationManager.AppSettings[ApplicationConstants.Secret];
             if (!(string.Equals(username, adminName, StringComparison.OrdinalIgnoreCase) &&
                   string.Equals(password, secret, StringComparison.InvariantCulture)))
             {

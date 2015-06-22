@@ -6,6 +6,7 @@
     using System.Configuration;
     using Utilities.AzureStorage.TableStorage;
     using Utilities.Common.Entities;
+    using Utilities.Common.RegularTypes;
 
     #endregion
 
@@ -13,8 +14,8 @@
     {
         private static volatile BlogStoreAccess instance;
         private static readonly object SyncRoot = new Object();
-        private readonly string blogTableName = ConfigurationManager.AppSettings["BlogTableName"];
-        private readonly string connectionString = ConfigurationManager.AppSettings["StorageAccountConnectionString"];
+        private readonly string blogTableName = ConfigurationManager.AppSettings[ApplicationConstants.BlogTableName];
+        private readonly string connectionString = ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
 
         private BlogStoreAccess()
         {

@@ -26,9 +26,7 @@
         /// <summary>
         ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
-        /// <param name="message">
-        ///     The message.
-        /// </param>
+        /// <param name="message">The message.</param>
         public BlogSystemException(string message)
             : base(message)
         {
@@ -38,12 +36,8 @@
         /// <summary>
         ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
-        /// <param name="message">
-        ///     The message.
-        /// </param>
-        /// <param name="innerException">
-        ///     The inner exception.
-        /// </param>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
         public BlogSystemException(string message, Exception innerException)
             : base(message, innerException)
         {
@@ -53,12 +47,8 @@
         /// <summary>
         ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
-        /// <param name="serializationInfo">
-        ///     The serialization info.
-        /// </param>
-        /// <param name="streamingContext">
-        ///     The streaming context.
-        /// </param>
+        /// <param name="serializationInfo">The serialization info.</param>
+        /// <param name="streamingContext">The streaming context.</param>
         protected BlogSystemException(SerializationInfo serializationInfo, StreamingContext streamingContext)
             : base(serializationInfo, streamingContext)
         {

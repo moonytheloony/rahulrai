@@ -5,23 +5,94 @@
     /// </summary>
     public static class ApplicationConstants
     {
+        /// <summary>
+        ///     The index subscript
+        /// </summary>
         public static string IndexSubscript = "AutoIndexedElement";
+
+        /// <summary>
+        ///     The blog key
+        /// </summary>
         public static string BlogKey = "MYBLOG";
+
+        /// <summary>
+        ///     The content split length
+        /// </summary>
         public static int ContentSplitLength = 500;
+
+        /// <summary>
+        ///     The search index
+        /// </summary>
         public static string SearchIndex = "blogs";
+
+        /// <summary>
+        ///     The stack key
+        /// </summary>
         public static string StackKey = "PageStack";
+
+        /// <summary>
+        ///     The application resource root
+        /// </summary>
         public static string ApplicationResourceRoot = "ApplicationResourceRoot";
+
+        /// <summary>
+        ///     My email
+        /// </summary>
         public static string MyEmail = "MyEmail";
+
+        /// <summary>
+        ///     The session state key
+        /// </summary>
         public static string SessionStateKey = "SessionStateKey";
+
+        /// <summary>
+        ///     The session state host
+        /// </summary>
         public static string SessionStateHost = "SessionStateHost";
+
+        /// <summary>
+        ///     The blog table name
+        /// </summary>
         public static string BlogTableName = "BlogTableName";
+
+        /// <summary>
+        ///     The storage account connection string
+        /// </summary>
         public static string StorageAccountConnectionString = "StorageAccountConnectionString";
+
+        /// <summary>
+        ///     The search service key
+        /// </summary>
         public static string SearchServiceKey = "SearchServiceKey";
+
+        /// <summary>
+        ///     The search service name
+        /// </summary>
         public static string SearchServiceName = "SearchServiceName";
+
+        /// <summary>
+        ///     The blog resource container name
+        /// </summary>
         public static string BlogResourceContainerName = "BlogResourceContainerName";
+
+        /// <summary>
+        ///     The blog list page size
+        /// </summary>
         public static string BlogListPageSize = "BlogListPageSize";
+
+        /// <summary>
+        ///     The publisher name
+        /// </summary>
         public static string PublisherName = "PublisherName";
+
+        /// <summary>
+        ///     The secret
+        /// </summary>
         public static string Secret = "Secret";
+
+        /// <summary>
+        ///     The document database connection string
+        /// </summary>
         public static string DocumentDbConnectionString = "DocumentDbConnectionString";
     }
 }

@@ -9,12 +9,32 @@
 
     #endregion
 
+    /// <summary>
+    ///     Class Program.
+    /// </summary>
     internal class Program
     {
-        private static readonly string SearchServiceKey = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
-        private static readonly string SearchServiceName = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+        /// <summary>
+        ///     The search service key
+        /// </summary>
+        private static readonly string SearchServiceKey =
+            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+
+        /// <summary>
+        ///     The search service name
+        /// </summary>
+        private static readonly string SearchServiceName =
+            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+
+        /// <summary>
+        ///     The search service
+        /// </summary>
         private static AzureSearchService searchService;
 
+        /// <summary>
+        ///     Defines the entry point of the application.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
         private static void Main(string[] args)
         {
             Console.WriteLine("Options: \n1. Clear Search (ALL) \n2. Clear Search (Document)");
@@ -44,11 +64,18 @@
             Console.ReadKey();
         }
 
+        /// <summary>
+        ///     Clears the search document.
+        /// </summary>
+        /// <param name="blogId">The blog identifier.</param>
         private static void ClearSearchDocument(string blogId)
         {
             searchService.DeleteData(blogId);
         }
 
+        /// <summary>
+        ///     Clears the search all.
+        /// </summary>
         private static void ClearSearchAll()
         {
             searchService.DeleteIndex(ApplicationConstants.SearchIndex);

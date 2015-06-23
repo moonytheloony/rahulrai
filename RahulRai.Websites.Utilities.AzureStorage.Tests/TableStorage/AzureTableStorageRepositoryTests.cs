@@ -11,13 +11,25 @@
 
     #endregion
 
+    /// <summary>
+    ///     Class AzureTableStorageRepositoryTests.
+    /// </summary>
     [TestClass]
     public class AzureTableStorageRepositoryTests
     {
+        /// <summary>
+        ///     The connection string
+        /// </summary>
         private string connectionString = "";
 
+        /// <summary>
+        ///     The test object
+        /// </summary>
         private AzureTableStorageService<TableBlogEntity> testObject;
 
+        /// <summary>
+        ///     Azures the table storage repository test.
+        /// </summary>
         [TestInitialize]
         public void AzureTableStorageRepositoryTest()
         {
@@ -27,6 +39,9 @@
             testObject.CreateStorageObjectAndSetExecutionContext();
         }
 
+        /// <summary>
+        ///     Inserts the or replace test.
+        /// </summary>
         [TestMethod]
         public void InsertOrReplaceTest()
         {
@@ -42,6 +57,9 @@
             Assert.IsTrue(result.All(element => element.IsSuccess));
         }
 
+        /// <summary>
+        ///     Queries the test.
+        /// </summary>
         [TestMethod]
         public void QueryTest()
         {

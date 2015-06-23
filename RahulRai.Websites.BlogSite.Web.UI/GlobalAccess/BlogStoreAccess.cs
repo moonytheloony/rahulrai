@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.BlogSite.Web.UI.GlobalAccess
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.BlogSite.Web.UI
+// Author           : rahulrai
+// Created          : 05-28-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="BlogStoreAccess.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.BlogSite.Web.UI.GlobalAccess
 {
     #region
 
@@ -10,25 +24,49 @@
 
     #endregion
 
+    /// <summary>
+    ///     Class BlogStoreAccess. This class cannot be inherited.
+    /// </summary>
     public sealed class BlogStoreAccess
     {
-        private static volatile BlogStoreAccess instance;
-        private static readonly object SyncRoot = new Object();
-        private readonly string blogTableName = ConfigurationManager.AppSettings[ApplicationConstants.BlogTableName];
-        private readonly string connectionString = ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
+        /// <summary>
+        ///     The synchronize root
+        /// </summary>
+        private static readonly object SyncRoot = new object();
 
+        /// <summary>
+        ///     The instance
+        /// </summary>
+        private static volatile BlogStoreAccess instance;
+
+        /// <summary>
+        ///     The blog table name
+        /// </summary>
+        private readonly string blogTableName = ConfigurationManager.AppSettings[ApplicationConstants.BlogTableName];
+
+        /// <summary>
+        ///     The connection string
+        /// </summary>
+        private readonly string connectionString =
+            ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
+
+        /// <summary>
+        ///     Prevents a default instance of the <see cref="BlogStoreAccess" /> class from being created.
+        /// </summary>
         private BlogStoreAccess()
         {
-            BlogTable = new AzureTableStorageService<TableBlogEntity>(
-                connectionString,
-                blogTableName,
+            this.BlogTable = new AzureTableStorageService<TableBlogEntity>(
+                this.connectionString,
+                this.blogTableName,
                 AzureTableStorageAssist.ConvertEntityToDynamicTableEntity,
                 AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
-            BlogTable.CreateStorageObjectAndSetExecutionContext();
+            this.BlogTable.CreateStorageObjectAndSetExecutionContext();
         }
 
-        public AzureTableStorageService<TableBlogEntity> BlogTable { get; private set; }
-
+        /// <summary>
+        ///     Gets the instance.
+        /// </summary>
+        /// <value>The instance.</value>
         public static BlogStoreAccess Instance
         {
             get
@@ -49,5 +87,11 @@
                 return instance;
             }
         }
+
+        /// <summary>
+        ///     Gets the blog table.
+        /// </summary>
+        /// <value>The blog table.</value>
+        public AzureTableStorageService<TableBlogEntity> BlogTable { get; private set; }
     }
 }

@@ -19,19 +19,64 @@
 
     #endregion
 
-    public class MetaWeblogHandler : XmlRpcService, IMetaWeblog
+    /// <summary>
+    ///     Class MetaWeblogHandler. This class cannot be inherited.
+    /// </summary>
+    public sealed class MetaWeblogHandler : XmlRpcService, IMetaWeblog, IDisposable
     {
+        /// <summary>
+        ///     The blog resource container name
+        /// </summary>
         private readonly string blogResourceContainerName =
             ConfigurationManager.AppSettings[ApplicationConstants.BlogResourceContainerName];
 
+        /// <summary>
+        ///     The blog table name
+        /// </summary>
         private readonly string blogTableName = ConfigurationManager.AppSettings[ApplicationConstants.BlogTableName];
-        private readonly string connectionString = ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
-        private readonly BlobStorageService mediaStorageService;
-        private readonly AzureTableStorageService<TableBlogEntity> metaweblogTable;
-        private readonly AzureSearchService searchService;
-        private readonly string searchServiceKey = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
-        private readonly string searchServiceName = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
 
+        /// <summary>
+        ///     The connection string
+        /// </summary>
+        private readonly string connectionString =
+            ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
+
+        /// <summary>
+        ///     The media storage service
+        /// </summary>
+        private readonly BlobStorageService mediaStorageService;
+
+        /// <summary>
+        ///     The metaweblog table
+        /// </summary>
+        private readonly AzureTableStorageService<TableBlogEntity> metaweblogTable;
+
+        /// <summary>
+        ///     The search service
+        /// </summary>
+        private readonly AzureSearchService searchService;
+
+        /// <summary>
+        ///     The search service key
+        /// </summary>
+        private readonly string searchServiceKey =
+            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+
+        /// <summary>
+        ///     The search service name
+        /// </summary>
+        private readonly string searchServiceName =
+            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
+
+        /// <summary>
+        ///     The disposed
+        /// </summary>
+        private bool disposed;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MetaWeblogHandler" /> class.
+        /// </summary>
+        /// <exception cref="BlogSystemException">unable to create container</exception>
         public MetaWeblogHandler()
         {
             if (null == metaweblogTable)
@@ -60,6 +105,25 @@
             }
         }
 
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Adds the post.
+        /// </summary>
+        /// <param name="blogid">The blogid.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="post">The post.</param>
+        /// <param name="publish">if set to <c>true</c> [publish].</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="BlogSystemException">Can not save blog post</exception>
         string IMetaWeblog.AddPost(string blogid, string username, string password, dynamic post, bool publish)
         {
             ValidateUser(username, password);
@@ -100,6 +164,16 @@
             return blogPost.BlogId;
         }
 
+        /// <summary>
+        ///     Updates the post.
+        /// </summary>
+        /// <param name="postid">The postid.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="post">The post.</param>
+        /// <param name="publish">if set to <c>true</c> [publish].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="BlogSystemException">Can not update blog post</exception>
         bool IMetaWeblog.UpdatePost(string postid, string username, string password, dynamic post, bool publish)
         {
             ValidateUser(username, password);
@@ -116,7 +190,7 @@
                 PostedDate = DateTime.UtcNow,
                 CategoriesCsv = categories,
                 IsDraft = !publish,
-                BlogId = postid //Persist post id
+                BlogId = postid ////Persist post id
             };
             var tablePost = new TableBlogEntity(blogPost);
             metaweblogTable.InsertOrReplace(tablePost);
@@ -140,6 +214,15 @@
             return true;
         }
 
+        /// <summary>
+        ///     Deletes the post.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="postid">The postid.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="publish">if set to <c>true</c> [publish].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool IMetaWeblog.DeletePost(string key, string postid, string username, string password, bool publish)
         {
             ValidateUser(username, password);
@@ -152,6 +235,13 @@
             return true;
         }
 
+        /// <summary>
+        ///     Gets the post.
+        /// </summary>
+        /// <param name="postid">The postid.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <returns>System.Object.</returns>
         object IMetaWeblog.GetPost(string postid, string username, string password)
         {
             ValidateUser(username, password);
@@ -177,6 +267,14 @@
         }
 
 
+        /// <summary>
+        ///     Gets the recent posts.
+        /// </summary>
+        /// <param name="blogid">The blogid.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="numberOfPosts">The number of posts.</param>
+        /// <returns>System.Object[].</returns>
         object[] IMetaWeblog.GetRecentPosts(string blogid, string username, string password, int numberOfPosts)
         {
             ValidateUser(username, password);
@@ -219,6 +317,13 @@
             // ReSharper restore CoVariantArrayConversion
         }
 
+        /// <summary>
+        ///     Gets the categories.
+        /// </summary>
+        /// <param name="blogid">The blogid.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <returns>System.Object[].</returns>
         object[] IMetaWeblog.GetCategories(string blogid, string username, string password)
         {
             ValidateUser(username, password);
@@ -258,6 +363,14 @@
             return posts;
         }
 
+        /// <summary>
+        ///     News the media object.
+        /// </summary>
+        /// <param name="blogid">The blogid.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="media">The media.</param>
+        /// <returns>System.Object.</returns>
         object IMetaWeblog.NewMediaObject(string blogid, string username, string password, dynamic media)
         {
             ValidateUser(username, password);
@@ -269,6 +382,13 @@
             };
         }
 
+        /// <summary>
+        ///     Gets the users blogs.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <returns>System.Object[].</returns>
         object[] IMetaWeblog.GetUsersBlogs(string key, string username, string password)
         {
             ValidateUser(username, password);
@@ -285,6 +405,14 @@
         }
 
 
+        /// <summary>
+        ///     News the category.
+        /// </summary>
+        /// <param name="blogid">The blogid.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="category">The category.</param>
+        /// <returns>System.Int32.</returns>
         public int NewCategory(string blogid, string username, string password, dynamic category)
         {
             ValidateUser(username, password);
@@ -292,6 +420,12 @@
             return 1;
         }
 
+        /// <summary>
+        ///     Validates the user.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <exception cref="System.UnauthorizedAccessException"></exception>
         private static void ValidateUser(string username, string password)
         {
             var adminName = ConfigurationManager.AppSettings[ApplicationConstants.PublisherName];
@@ -301,6 +435,34 @@
             {
                 throw new UnauthorizedAccessException(string.Format("Not Allowed U:{0} P:{1}", username, password));
             }
+        }
+
+
+        /// <summary>
+        ///     Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        ///     unmanaged resources.
+        /// </param>
+        private void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    searchService.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
+        /// <summary>
+        ///     Finalizes an instance of the <see cref="MetaWeblogHandler" /> class.
+        /// </summary>
+        ~MetaWeblogHandler()
+        {
+            Dispose(false);
         }
     }
 }

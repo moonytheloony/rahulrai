@@ -29,18 +29,17 @@
         /// <summary>
         ///     The convert dynamic entity to entity.
         /// </summary>
-        /// <param name="entity">
-        ///     The entity.
-        /// </param>
-        /// <typeparam name="TEntity">
-        ///     Type of target object.
-        /// </typeparam>
-        /// <returns>
-        ///     The <see cref="TEntity" />.
-        /// </returns>
-        /// <exception cref="InputValidationFailedException">
-        ///     Input is not valid.
+        /// <typeparam name="TEntity">Type of target object.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <returns>The <see cref="TEntity" />.</returns>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.InputValidationFailedException">
+        ///     Count of properties with id postfix is not one
+        ///     or
+        ///     Count of properties with key postfix is not one
+        ///     or
+        ///     Count of properties with entity tag name is not one
         /// </exception>
+        /// <exception cref="InputValidationFailedException">Input is not valid.</exception>
         public static TEntity ConvertDynamicEntityToEntity<TEntity>(this DynamicTableEntity entity)
         {
             var targetObject = (TEntity) Activator.CreateInstance(typeof (TEntity));
@@ -132,18 +131,19 @@
         /// <summary>
         ///     The convert entity to dynamic table entity.
         /// </summary>
-        /// <param name="entity">
-        ///     The entity.
-        /// </param>
-        /// <typeparam name="TEntity">
-        ///     Type of entity to convert.
-        /// </typeparam>
-        /// <returns>
-        ///     The <see cref="DynamicTableEntity" />.
-        /// </returns>
-        /// <exception cref="InputValidationFailedException">
-        ///     Input could not be validated
+        /// <typeparam name="TEntity">Type of entity to convert.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <returns>The <see cref="DynamicTableEntity" />.</returns>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.InputValidationFailedException">
+        ///     Count of properties with id postfix is not one
+        ///     or
+        ///     Count of properties with key postfix is not one
+        ///     or
+        ///     Count of properties with entity tag name is not one
+        ///     or
+        ///     dynamic entity
         /// </exception>
+        /// <exception cref="InputValidationFailedException">Input could not be validated</exception>
         public static DynamicTableEntity ConvertEntityToDynamicTableEntity<TEntity>(this TEntity entity)
         {
             var dynamicEntity = new DynamicTableEntity();
@@ -186,18 +186,10 @@
         /// <summary>
         ///     The fill dynamic entity property bag.
         /// </summary>
-        /// <param name="entity">
-        ///     The entity.
-        /// </param>
-        /// <param name="dynamicEntity">
-        ///     The dynamic entity.
-        /// </param>
-        /// <param name="objectProperties">
-        ///     The object properties.
-        /// </param>
-        /// <typeparam name="TEntity">
-        ///     T Entity
-        /// </typeparam>
+        /// <typeparam name="TEntity">T Entity</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <param name="dynamicEntity">The dynamic entity.</param>
+        /// <param name="objectProperties">The object properties.</param>
         private static void FillDynamicEntityPropertyBag<TEntity>(
             this TEntity entity,
             ref DynamicTableEntity dynamicEntity,
@@ -269,21 +261,11 @@
         /// <summary>
         ///     The populate entity property with dynamic entity value.
         /// </summary>
-        /// <param name="entity">
-        ///     The entity.
-        /// </param>
-        /// <param name="propertyInfo">
-        ///     The property info.
-        /// </param>
-        /// <param name="targetObject">
-        ///     The target object.
-        /// </param>
-        /// <param name="propertyName">
-        ///     The property name.
-        /// </param>
-        /// <typeparam name="TEntity">
-        ///     Entity type of element.
-        /// </typeparam>
+        /// <typeparam name="TEntity">Entity type of element.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <param name="propertyInfo">The property info.</param>
+        /// <param name="targetObject">The target object.</param>
+        /// <param name="propertyName">The property name.</param>
         private static void PopulateEntityPropertyWithDynamicEntityValue<TEntity>(
             DynamicTableEntity entity,
             PropertyInfo propertyInfo,

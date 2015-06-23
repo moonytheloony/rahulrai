@@ -275,7 +275,6 @@
         /// </summary>
         public const char MatchAny = '*';
 
-
         /// <summary>
         ///     Size of metadata
         /// </summary>

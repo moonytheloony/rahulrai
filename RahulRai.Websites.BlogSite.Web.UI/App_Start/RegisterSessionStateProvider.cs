@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.BlogSite.Web.UI
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.BlogSite.Web.UI
+// Author           : rahulrai
+// Created          : 06-22-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="RegisterSessionStateProvider.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.BlogSite.Web.UI
 {
     #region
 
@@ -9,8 +23,14 @@
 
     #endregion
 
+    /// <summary>
+    ///     Class RegisterSessionStateProvider.
+    /// </summary>
     public static class RegisterSessionStateProvider
     {
+        /// <summary>
+        ///     Sets this instance.
+        /// </summary>
         public static void Set()
         {
             var config = WebConfigurationManager.OpenWebConfiguration("~");
@@ -30,6 +50,10 @@
             config.Save();
         }
 
+        /// <summary>
+        ///     Redises the provider settings.
+        /// </summary>
+        /// <returns>ProviderSettings.</returns>
         private static ProviderSettings RedisProviderSettings()
         {
             var providerSetting = new ProviderSettings
@@ -38,9 +62,11 @@
                 Type = "Microsoft.Web.Redis.RedisSessionStateProvider"
             };
             providerSetting.Parameters.Add("port", "6380");
-            providerSetting.Parameters.Add("host",
+            providerSetting.Parameters.Add(
+                "host",
                 ConfigurationManager.AppSettings[ApplicationConstants.SessionStateHost]);
-            providerSetting.Parameters.Add("accessKey",
+            providerSetting.Parameters.Add(
+                "accessKey",
                 ConfigurationManager.AppSettings[ApplicationConstants.SessionStateKey]);
             providerSetting.Parameters.Add("ssl", "true");
             return providerSetting;

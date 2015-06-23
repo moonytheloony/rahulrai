@@ -30,10 +30,7 @@
         /// <summary>
         ///     Initializes a new instance of the <see cref="BlobStorageService" /> class.
         /// </summary>
-        /// <param name="context">
-        ///     The context.
-        /// </param>
-        /// <param name="storageAccountConnectionString"></param>
+        /// <param name="storageAccountConnectionString">The storage account connection string.</param>
         public BlobStorageService(string storageAccountConnectionString)
         {
             BlobClient = CloudStorageAccount.Parse(storageAccountConnectionString).CreateCloudBlobClient();
@@ -57,6 +54,7 @@
         /// <summary>
         ///     Gets or sets the repository client.
         /// </summary>
+        /// <value>The BLOB client.</value>
         private CloudBlobClient BlobClient { get; set; }
 
         #endregion
@@ -66,18 +64,11 @@
         /// <summary>
         ///     The add file to folder.
         /// </summary>
-        /// <param name="containerName">
-        ///     The folder name.
-        /// </param>
-        /// <param name="fileStream">
-        ///     The file stream.
-        /// </param>
-        /// <param name="blobName">
-        ///     The file name.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="FileOperationStatus" />.
-        /// </returns>
+        /// <param name="containerName">The folder name.</param>
+        /// <param name="fileStream">The file stream.</param>
+        /// <param name="blobName">The file name.</param>
+        /// <returns>The <see cref="FileOperationStatus" />.</returns>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">Failed to add blob to container</exception>
         public Uri AddBlobToContainer(string containerName, Stream fileStream, string blobName)
         {
             try
@@ -98,15 +89,9 @@
         /// <summary>
         ///     The create container.
         /// </summary>
-        /// <param name="containerName">
-        ///     The folder name.
-        /// </param>
-        /// <param name="visibilityType">
-        ///     The visibility type.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="FileOperationStatus" />.
-        /// </returns>
+        /// <param name="containerName">The folder name.</param>
+        /// <param name="visibilityType">The visibility type.</param>
+        /// <returns>The <see cref="FileOperationStatus" />.</returns>
         public FileOperationStatus CreateContainer(string containerName, VisibilityType visibilityType)
         {
             try
@@ -129,15 +114,9 @@
         /// <summary>
         ///     The delete file.
         /// </summary>
-        /// <param name="containerName">
-        ///     The folder name.
-        /// </param>
-        /// <param name="blobName">
-        ///     The file name.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="FileOperationStatus" />.
-        /// </returns>
+        /// <param name="containerName">The folder name.</param>
+        /// <param name="blobName">The file name.</param>
+        /// <returns>The <see cref="FileOperationStatus" />.</returns>
         public FileOperationStatus DeleteBlob(string containerName, string blobName)
         {
             try
@@ -166,15 +145,9 @@
         /// <summary>
         ///     The create container with permissions.
         /// </summary>
-        /// <param name="folderName">
-        ///     The folder name.
-        /// </param>
-        /// <param name="visibilityType">
-        ///     The visibility type.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="CloudBlobContainer" />.
-        /// </returns>
+        /// <param name="folderName">The folder name.</param>
+        /// <param name="visibilityType">The visibility type.</param>
+        /// <returns>The <see cref="CloudBlobContainer" />.</returns>
         private CloudBlobContainer CreateContainerWithPermissions(string folderName, VisibilityType visibilityType)
         {
             var containerPermission = new BlobContainerPermissions();

@@ -21,9 +21,7 @@
     /// <summary>
     ///     The azure table storage repository.
     /// </summary>
-    /// <typeparam name="TElement">
-    ///     Element for entity
-    /// </typeparam>
+    /// <typeparam name="TElement">Element for entity</typeparam>
     public class AzureTableStorageService<TElement>
         where TElement : class
     {
@@ -39,6 +37,9 @@
         /// </summary>
         private readonly Func<TElement, DynamicTableEntity> convertToTableEntity;
 
+        /// <summary>
+        ///     The table name
+        /// </summary>
         private readonly string tableName = string.Empty;
 
         #endregion
@@ -48,17 +49,10 @@
         /// <summary>
         ///     Initializes a new instance of the <see cref="AzureTableStorageService{TElement}" /> class.
         /// </summary>
-        /// <param name="context">
-        ///     The context.
-        /// </param>
-        /// <param name="tableName"></param>
-        /// <param name="convertToTableEntity">
-        ///     The converter from entity to table entity.
-        /// </param>
-        /// <param name="convertToEntity">
-        ///     The converter from table entity to entity.
-        /// </param>
-        /// <param name="storageAccountConnectionString"></param>
+        /// <param name="storageAccountConnectionString">The storage account connection string.</param>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="convertToTableEntity">The converter from entity to table entity.</param>
+        /// <param name="convertToEntity">The converter from table entity to entity.</param>
         public AzureTableStorageService(
             string storageAccountConnectionString,
             string tableName,
@@ -91,21 +85,25 @@
         /// <summary>
         ///     Gets or sets the active table.
         /// </summary>
+        /// <value>The active table.</value>
         private CloudTable ActiveTable { get; set; }
 
         /// <summary>
         ///     Gets or sets the cloud table client.
         /// </summary>
+        /// <value>The cloud table client.</value>
         private CloudTableClient CloudTableClient { get; set; }
 
         /// <summary>
         ///     Gets or sets the table operation.
         /// </summary>
+        /// <value>The table operations.</value>
         private TableBatchOperation TableOperations { get; set; }
 
         /// <summary>
         ///     Gets or sets the table request options.
         /// </summary>
+        /// <value>The table request options.</value>
         public TableRequestOptions TableRequestOptions { get; set; }
 
         #endregion
@@ -124,9 +122,7 @@
         /// <summary>
         ///     The delete.
         /// </summary>
-        /// <param name="entity">
-        ///     The entity.
-        /// </param>
+        /// <param name="entity">The entity.</param>
         public virtual void Delete(TElement entity)
         {
             var dynamicEntity = convertToTableEntity(entity);
@@ -144,12 +140,8 @@
         /// <summary>
         ///     The get all.
         /// </summary>
-        /// <param name="key">
-        ///     The key.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="List{T}" />.
-        /// </returns>
+        /// <param name="key">The key.</param>
+        /// <returns>The <see cref="List{T}" />.</returns>
         public virtual IList<TElement> GetAll(string key)
         {
             var query =
@@ -159,6 +151,10 @@
             return result.Select(convertToEntity).ToList();
         }
 
+        /// <summary>
+        ///     Gets all.
+        /// </summary>
+        /// <returns>IList&lt;TElement&gt;.</returns>
         /// <inheritdoc />
         public virtual IList<TElement> GetAll()
         {
@@ -168,6 +164,10 @@
             return result.Select(convertToEntity).ToList();
         }
 
+        /// <summary>
+        ///     Customs the operation.
+        /// </summary>
+        /// <returns>CloudTable.</returns>
         public virtual CloudTable CustomOperation()
         {
             return ActiveTable;
@@ -176,12 +176,8 @@
         /// <summary>
         ///     The get by id.
         /// </summary>
-        /// <param name="key">
-        ///     The key.
-        /// </param>
-        /// <param name="id">
-        ///     The id.
-        /// </param>
+        /// <param name="key">The key.</param>
+        /// <param name="id">The id.</param>
         /// <returns>
         ///     The <see cref="TElement" />.
         ///     Element for entity
@@ -196,15 +192,17 @@
         /// <summary>
         ///     The insert.
         /// </summary>
-        /// <param name="entity">
-        ///     The entity.
-        /// </param>
+        /// <param name="entity">The entity.</param>
         public virtual void Insert(TElement entity)
         {
             var dynamicEntity = convertToTableEntity(entity);
             TableOperations.Add(TableOperation.Insert(dynamicEntity));
         }
 
+        /// <summary>
+        ///     Inserts the or replace.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         /// <inheritdoc />
         public virtual void InsertOrReplace(TElement entity)
         {
@@ -215,15 +213,19 @@
         /// <summary>
         ///     The merge.
         /// </summary>
-        /// <param name="entity">
-        ///     The entity.
-        /// </param>
+        /// <param name="entity">The entity.</param>
         public virtual void Merge(TElement entity)
         {
             var dynamicEntity = convertToTableEntity(entity);
             TableOperations.Add(TableOperation.InsertOrMerge(dynamicEntity));
         }
 
+        /// <summary>
+        ///     Queries the specified filter.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <param name="takeCount">The take count.</param>
+        /// <returns>IList&lt;TElement&gt;.</returns>
         /// <inheritdoc />
         public virtual IList<TElement> Query(string filter, int? takeCount)
         {
@@ -234,9 +236,7 @@
         /// <summary>
         ///     The save.
         /// </summary>
-        /// <returns>
-        ///     The <see cref="bool" />.
-        /// </returns>
+        /// <returns>The <see cref="bool" />.</returns>
         public virtual bool Save()
         {
             try
@@ -251,6 +251,14 @@
             }
         }
 
+        /// <summary>
+        ///     Saves all.
+        /// </summary>
+        /// <returns>IList&lt;OperationResult&gt;.</returns>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">
+        ///     Error executing batch table
+        ///     operation.
+        /// </exception>
         /// <inheritdoc />
         public virtual IList<OperationResult> SaveAll()
         {
@@ -281,9 +289,7 @@
         /// <summary>
         ///     The update.
         /// </summary>
-        /// <param name="entity">
-        ///     The entity.
-        /// </param>
+        /// <param name="entity">The entity.</param>
         public virtual void Update(TElement entity)
         {
             var dynamicEntity = convertToTableEntity(entity);
@@ -297,12 +303,8 @@
         /// <summary>
         ///     Determines whether the HTTP status code represents a success.
         /// </summary>
-        /// <param name="statusCode">
-        ///     The status code.
-        /// </param>
-        /// <returns>
-        ///     If the status code represents a success.
-        /// </returns>
+        /// <param name="statusCode">The status code.</param>
+        /// <returns>If the status code represents a success.</returns>
         private static bool IsSuccessStatusCode(int statusCode)
         {
             return statusCode >= 200 && statusCode < 300;

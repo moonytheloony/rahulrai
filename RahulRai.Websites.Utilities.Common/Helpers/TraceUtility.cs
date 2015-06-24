@@ -35,7 +35,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         /// <summary>
         /// The error format
         /// </summary>
-        private const string ErrorFormat = "Time: {0} Message: {1} Exception: {2}";
+        private const string ErrorFormat = "Time: {0} Message: {1} Exception Message: {2} Exception: {3}";
 
         /// <summary>
         /// Logs the information.
@@ -68,7 +68,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         public static void LogError(Exception exception, string customMessage, params object[] value)
         {
             var formattedValue = string.Format(CultureInfo.InvariantCulture, customMessage, value);
-            Trace.TraceError(ErrorFormat, DateTime.UtcNow, formattedValue, exception.ToString());
+            Trace.TraceError(ErrorFormat, DateTime.UtcNow, formattedValue, exception.Message, exception.ToString());
         }
     }
 }

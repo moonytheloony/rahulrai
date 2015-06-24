@@ -35,7 +35,7 @@ namespace RahulRai.Websites.Utilities.Web
             var initializer = new SetupProperties();
             var viewBag = initializer.InitializeProperties();
             object controller, action;
-            TraceUtility.LogError(filterContext.Exception, "Handled Error");
+            TraceUtility.LogError(filterContext.Exception, filterContext.Exception.Message);
             filterContext.ExceptionHandled = true;
             var controllerName = filterContext.RouteData.Values.TryGetValue("controller", out controller)
                 ? (string)controller

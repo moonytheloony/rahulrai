@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.Utilities.AzureStorage.Search
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.Utilities.AzureStorage
+// Author           : rahulrai
+// Created          : 05-30-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="AzureSearchService.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.Utilities.AzureStorage.Search
 {
     #region
 
@@ -41,9 +55,9 @@
         /// <param name="searchIndex">Index of the search.</param>
         public AzureSearchService(string searchServiceName, string searchServiceKey, string searchIndex)
         {
-            serviceClient = new SearchServiceClient(searchServiceName, new SearchCredentials(searchServiceKey));
-            CreateIndexIfNotExists(searchIndex, serviceClient);
-            indexClient = serviceClient.Indexes.GetClient(searchIndex);
+            this.serviceClient = new SearchServiceClient(searchServiceName, new SearchCredentials(searchServiceKey));
+            CreateIndexIfNotExists(searchIndex, this.serviceClient);
+            this.indexClient = this.serviceClient.Indexes.GetClient(searchIndex);
         }
 
         /// <summary>
@@ -55,33 +69,126 @@
         }
 
         /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
         ///     Finalizes an instance of the <see cref="AzureSearchService" /> class.
         /// </summary>
         ~AzureSearchService()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         /// <summary>
-        ///     Creates the index if not exists.
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        /// <param name="searchIndex">Index of the search.</param>
-        /// <param name="serviceClient">The service client.</param>
-        private static void CreateIndexIfNotExists(string searchIndex, ISearchServiceClient serviceClient)
+        public void Dispose()
         {
-            if (!serviceClient.Indexes.Exists(searchIndex))
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Upserts the index of the data to.
+        /// </summary>
+        /// <param name="blogSearchEntity">The blog search entity.</param>
+        /// <exception cref="BlogSystemException">failed on index</exception>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">failed on index</exception>
+        public void UpsertDataToIndex(BlogSearch blogSearchEntity)
+        {
+            var documents =
+                new[] { blogSearchEntity };
+
+            try
             {
-                CreateSearchIndex(searchIndex, serviceClient);
+                this.indexClient.Documents.Index(IndexBatch.Create(documents.Select(IndexAction.Create)));
             }
+            catch (IndexBatchException e)
+            {
+                // Sometimes when your Search service is under load, indexing will fail for some of the documents in
+                // the batch. Depending on your application, you can take compensating actions like delaying and
+                // retrying. For this simple demo, we just log the failed document keys and continue.
+                Trace.WriteLine(
+                    "Failed to index some of the documents: {0}",
+                    string.Join(", ", e.IndexResponse.Results.Where(r => !r.Succeeded).Select(r => r.Key)));
+                throw new BlogSystemException("failed on index");
+            }
+        }
+
+        /// <summary>
+        ///     Searches the documents.
+        /// </summary>
+        /// <param name="searchText">The search text.</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns>IEnumerable&lt;BlogSearch&gt;.</returns>
+        public IEnumerable<BlogSearch> SearchDocuments(string searchText, string filter = null)
+        {
+            // Execute search based on search text and optional filter
+            var searchParameter = new SearchParameters();
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                searchParameter.Filter = filter;
+            }
+
+            var response = this.indexClient.Documents.Search<BlogSearch>(searchText, searchParameter);
+            return response.Select(result => result.Document);
+        }
+
+        /// <summary>
+        ///     Deletes the data.
+        /// </summary>
+        /// <param name="idToDelete">The identifier to delete.</param>
+        /// <exception cref="BlogSystemException">failed on index</exception>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">failed on index</exception>
+        public void DeleteData(string idToDelete)
+        {
+            try
+            {
+                var batch = IndexBatch.Create(
+                    new IndexAction(IndexActionType.Delete, new Document { { "blogId", idToDelete } }));
+                this.indexClient.Documents.Index(batch);
+            }
+            catch (IndexBatchException e)
+            {
+                // Sometimes when your Search service is under load, indexing will fail for some of the documents in
+                // the batch. Depending on your application, you can take compensating actions like delaying and
+                // retrying. For this simple demo, we just log the failed document keys and continue.
+                Trace.WriteLine(
+                    "Failed to index some of the documents: {0}",
+                    string.Join(", ", e.IndexResponse.Results.Where(r => !r.Succeeded).Select(r => r.Key)));
+                throw new BlogSystemException("failed on index");
+            }
+        }
+
+        /// <summary>
+        ///     Deletes the index.
+        /// </summary>
+        /// <param name="indexName">Name of the index.</param>
+        public void DeleteIndex(string indexName)
+        {
+            if (this.serviceClient.Indexes.Exists(indexName))
+            {
+                this.serviceClient.Indexes.Delete(indexName);
+            }
+        }
+
+        /// <summary>
+        ///     Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        ///     unmanaged resources.
+        /// </param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    this.indexClient.Dispose();
+                    this.serviceClient.Dispose();
+                }
+            }
+
+            this.disposed = true;
         }
 
         /// <summary>
@@ -106,7 +213,11 @@
                         IsFilterable = true
                     },
                     new Field("searchTags", DataType.Collection(DataType.String))
-                    {IsSearchable = true, IsFilterable = true, IsFacetable = true}
+                    {
+                        IsSearchable = true,
+                        IsFilterable = true,
+                        IsFacetable = true
+                    }
                 }
             };
 
@@ -114,106 +225,16 @@
         }
 
         /// <summary>
-        ///     Upserts the index of the data to.
+        ///     Creates the index if not exists.
         /// </summary>
-        /// <param name="blogSearchEntity">The blog search entity.</param>
-        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">failed on index</exception>
-        public void UpsertDataToIndex(BlogSearch blogSearchEntity)
+        /// <param name="searchIndex">Index of the search.</param>
+        /// <param name="serviceClient">The service client.</param>
+        private static void CreateIndexIfNotExists(string searchIndex, ISearchServiceClient serviceClient)
         {
-            var documents =
-                new[] {blogSearchEntity};
-
-            try
+            if (!serviceClient.Indexes.Exists(searchIndex))
             {
-                indexClient.Documents.Index(IndexBatch.Create(documents.Select(IndexAction.Create)));
+                CreateSearchIndex(searchIndex, serviceClient);
             }
-            catch (IndexBatchException e)
-            {
-                // Sometimes when your Search service is under load, indexing will fail for some of the documents in
-                // the batch. Depending on your application, you can take compensating actions like delaying and
-                // retrying. For this simple demo, we just log the failed document keys and continue.
-                Trace.WriteLine(
-                    "Failed to index some of the documents: {0}",
-                    String.Join(", ", e.IndexResponse.Results.Where(r => !r.Succeeded).Select(r => r.Key)));
-                throw new BlogSystemException("failed on index");
-            }
-        }
-
-        /// <summary>
-        ///     Searches the documents.
-        /// </summary>
-        /// <param name="searchText">The search text.</param>
-        /// <param name="filter">The filter.</param>
-        /// <returns>IEnumerable&lt;BlogSearch&gt;.</returns>
-        public IEnumerable<BlogSearch> SearchDocuments(string searchText, string filter = null)
-        {
-            // Execute search based on search text and optional filter
-            var searchParameter = new SearchParameters();
-
-            if (!String.IsNullOrEmpty(filter))
-            {
-                searchParameter.Filter = filter;
-            }
-
-            var response = indexClient.Documents.Search<BlogSearch>(searchText, searchParameter);
-            return response.Select(result => result.Document);
-        }
-
-        /// <summary>
-        ///     Deletes the data.
-        /// </summary>
-        /// <param name="idToDelete">The identifier to delete.</param>
-        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">failed on index</exception>
-        public void DeleteData(string idToDelete)
-        {
-            try
-            {
-                var batch = IndexBatch.Create(
-                    new IndexAction(IndexActionType.Delete, new Document {{"blogId", idToDelete}}));
-                indexClient.Documents.Index(batch);
-            }
-            catch (IndexBatchException e)
-            {
-                // Sometimes when your Search service is under load, indexing will fail for some of the documents in
-                // the batch. Depending on your application, you can take compensating actions like delaying and
-                // retrying. For this simple demo, we just log the failed document keys and continue.
-                Trace.WriteLine(
-                    "Failed to index some of the documents: {0}",
-                    String.Join(", ", e.IndexResponse.Results.Where(r => !r.Succeeded).Select(r => r.Key)));
-                throw new BlogSystemException("failed on index");
-            }
-        }
-
-        /// <summary>
-        ///     Deletes the index.
-        /// </summary>
-        /// <param name="indexName">Name of the index.</param>
-        public void DeleteIndex(string indexName)
-        {
-            if (serviceClient.Indexes.Exists(indexName))
-            {
-                serviceClient.Indexes.Delete(indexName);
-            }
-        }
-
-        /// <summary>
-        ///     Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposing">
-        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
-        ///     unmanaged resources.
-        /// </param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    indexClient.Dispose();
-                    serviceClient.Dispose();
-                }
-            }
-            disposed = true;
         }
     }
 }

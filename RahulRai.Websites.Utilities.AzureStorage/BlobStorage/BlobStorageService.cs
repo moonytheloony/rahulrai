@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.Utilities.AzureStorage
+// Author           : rahulrai
+// Created          : 04-15-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="BlobStorageService.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
 {
     #region
 
@@ -6,13 +20,13 @@
     using System.Diagnostics;
     using System.IO;
     using System.Web;
+    using Common.Entities;
+    using Common.Exceptions;
+    using Common.Helpers;
+    using Common.RegularTypes;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
     using Microsoft.WindowsAzure.Storage.RetryPolicies;
-    using Common.Exceptions;
-    using Common.RegularTypes;
-    using Common.Entities;
-    using Common.Helpers;
 
     #endregion
 
@@ -33,8 +47,8 @@
         /// <param name="storageAccountConnectionString">The storage account connection string.</param>
         public BlobStorageService(string storageAccountConnectionString)
         {
-            BlobClient = CloudStorageAccount.Parse(storageAccountConnectionString).CreateCloudBlobClient();
-            BlobClient.DefaultRequestOptions.RetryPolicy =
+            this.BlobClient = CloudStorageAccount.Parse(storageAccountConnectionString).CreateCloudBlobClient();
+            this.BlobClient.DefaultRequestOptions.RetryPolicy =
                 new ExponentialRetry(
                     TimeSpan.FromSeconds(CustomRetryPolicy.RetryBackOffSeconds),
                     CustomRetryPolicy.MaxRetries);
@@ -68,12 +82,13 @@
         /// <param name="fileStream">The file stream.</param>
         /// <param name="blobName">The file name.</param>
         /// <returns>The <see cref="FileOperationStatus" />.</returns>
+        /// <exception cref="BlogSystemException">Failed to add blob to container</exception>
         /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">Failed to add blob to container</exception>
         public Uri AddBlobToContainer(string containerName, Stream fileStream, string blobName)
         {
             try
             {
-                var container = BlobClient.GetContainerReference(containerName);
+                var container = this.BlobClient.GetContainerReference(containerName);
                 var blockBlob = container.GetBlockBlobReference(blobName);
                 blockBlob.Properties.ContentType = MimeMapping.GetMimeMapping(blobName);
                 blockBlob.UploadFromStream(fileStream);
@@ -85,7 +100,6 @@
             }
         }
 
-
         /// <summary>
         ///     The create container.
         /// </summary>
@@ -96,7 +110,7 @@
         {
             try
             {
-                CreateContainerWithPermissions(containerName, visibilityType);
+                this.CreateContainerWithPermissions(containerName, visibilityType);
                 return FileOperationStatus.FolderCreated;
             }
             catch (StorageException exception)
@@ -110,7 +124,6 @@
             }
         }
 
-
         /// <summary>
         ///     The delete file.
         /// </summary>
@@ -121,7 +134,7 @@
         {
             try
             {
-                var container = BlobClient.GetContainerReference(containerName);
+                var container = this.BlobClient.GetContainerReference(containerName);
                 var blockBlob = container.GetBlockBlobReference(blobName);
                 blockBlob.DeleteIfExists();
             }
@@ -151,7 +164,7 @@
         private CloudBlobContainer CreateContainerWithPermissions(string folderName, VisibilityType visibilityType)
         {
             var containerPermission = new BlobContainerPermissions();
-            var container = BlobClient.GetContainerReference(folderName.ToLowerInvariant());
+            var container = this.BlobClient.GetContainerReference(folderName.ToLowerInvariant());
             container.CreateIfNotExists();
             switch (visibilityType)
             {

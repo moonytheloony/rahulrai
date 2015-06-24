@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.Utilities.Web
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.Utilities.Web
+// Author           : rahulrai
+// Created          : 05-27-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="IMetaWeblog.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.Utilities.Web
 {
     #region
 
@@ -7,14 +21,14 @@
     #endregion
 
     /// <summary>
-    ///     Metaweblog interface
+    /// Metaweblog interface
     /// </summary>
     public interface IMetaWeblog
     {
         #region MetaWeblog API
 
         /// <summary>
-        ///     Adds the post.
+        /// Adds the post.
         /// </summary>
         /// <param name="blogid">The blogid.</param>
         /// <param name="username">The username.</param>
@@ -26,7 +40,7 @@
         string AddPost(string blogid, string username, string password, dynamic post, bool publish);
 
         /// <summary>
-        ///     Updates the post.
+        /// Updates the post.
         /// </summary>
         /// <param name="postid">The postid.</param>
         /// <param name="username">The username.</param>
@@ -38,7 +52,7 @@
         bool UpdatePost(string postid, string username, string password, dynamic post, bool publish);
 
         /// <summary>
-        ///     Gets the post.
+        /// Gets the post.
         /// </summary>
         /// <param name="postid">The postid.</param>
         /// <param name="username">The username.</param>
@@ -48,7 +62,7 @@
         object GetPost(string postid, string username, string password);
 
         /// <summary>
-        ///     Gets the categories.
+        /// Gets the categories.
         /// </summary>
         /// <param name="blogid">The blogid.</param>
         /// <param name="username">The username.</param>
@@ -58,7 +72,7 @@
         object[] GetCategories(string blogid, string username, string password);
 
         /// <summary>
-        ///     Gets the recent posts.
+        /// Gets the recent posts.
         /// </summary>
         /// <param name="blogid">The blogid.</param>
         /// <param name="username">The username.</param>
@@ -69,7 +83,7 @@
         object[] GetRecentPosts(string blogid, string username, string password, int numberOfPosts);
 
         /// <summary>
-        ///     News the media object.
+        /// News the media object.
         /// </summary>
         /// <param name="blogid">The blogid.</param>
         /// <param name="username">The username.</param>
@@ -80,7 +94,7 @@
         object NewMediaObject(string blogid, string username, string password, dynamic mediaObject);
 
         /// <summary>
-        ///     News the category.
+        /// News the category.
         /// </summary>
         /// <param name="blogid">The blogid.</param>
         /// <param name="username">The username.</param>
@@ -96,7 +110,7 @@
         #region Blogger API
 
         /// <summary>
-        ///     Deletes the post.
+        /// Deletes the post.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="postid">The postid.</param>
@@ -109,7 +123,7 @@
         bool DeletePost(string key, string postid, string username, string password, bool publish);
 
         /// <summary>
-        ///     Gets the users blogs.
+        /// Gets the users blogs.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="username">The username.</param>

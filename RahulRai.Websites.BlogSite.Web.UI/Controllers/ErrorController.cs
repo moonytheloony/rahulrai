@@ -44,8 +44,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ViewResult.</returns>
         public ViewResult NotFound()
         {
-            this.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            return this.View("Error");
+            ////this.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            return this.View();
         }
     }
 }

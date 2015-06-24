@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.Utilities.AzureStorage
+// Author           : rahulrai
+// Created          : 04-15-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="AzureTableStorageAssist.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
 {
     #region
 
@@ -20,29 +34,27 @@
     #endregion
 
     /// <summary>
-    ///     The azure table storage assist.
+    /// The azure table storage assist.
     /// </summary>
     public static class AzureTableStorageAssist
     {
         #region Public Methods and Operators
 
         /// <summary>
-        ///     The convert dynamic entity to entity.
+        /// The convert dynamic entity to entity.
         /// </summary>
         /// <typeparam name="TEntity">Type of target object.</typeparam>
         /// <param name="entity">The entity.</param>
         /// <returns>The <see cref="TEntity" />.</returns>
-        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.InputValidationFailedException">
-        ///     Count of properties with id postfix is not one
-        ///     or
-        ///     Count of properties with key postfix is not one
-        ///     or
-        ///     Count of properties with entity tag name is not one
-        /// </exception>
         /// <exception cref="InputValidationFailedException">Input is not valid.</exception>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.InputValidationFailedException">Count of properties with id postfix is not one
+        /// or
+        /// Count of properties with key postfix is not one
+        /// or
+        /// Count of properties with entity tag name is not one</exception>
         public static TEntity ConvertDynamicEntityToEntity<TEntity>(this DynamicTableEntity entity)
         {
-            var targetObject = (TEntity) Activator.CreateInstance(typeof (TEntity));
+            var targetObject = (TEntity)Activator.CreateInstance(typeof(TEntity));
             var targetObjectType = targetObject.GetType();
             var objectProperties = targetObjectType.GetProperties().ToList();
 
@@ -92,7 +104,7 @@
                 if (property.Key.StartsWith(ApplicationConstants.IndexSubscript, StringComparison.OrdinalIgnoreCase))
                 {
                     var splitString = property.Key.Split(
-                        new[] {KnownTypes.Underscore},
+                        new[] { KnownTypes.Underscore },
                         StringSplitOptions.RemoveEmptyEntries);
                     if (null == sortedList)
                     {
@@ -129,21 +141,19 @@
         }
 
         /// <summary>
-        ///     The convert entity to dynamic table entity.
+        /// The convert entity to dynamic table entity.
         /// </summary>
         /// <typeparam name="TEntity">Type of entity to convert.</typeparam>
         /// <param name="entity">The entity.</param>
         /// <returns>The <see cref="DynamicTableEntity" />.</returns>
-        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.InputValidationFailedException">
-        ///     Count of properties with id postfix is not one
-        ///     or
-        ///     Count of properties with key postfix is not one
-        ///     or
-        ///     Count of properties with entity tag name is not one
-        ///     or
-        ///     dynamic entity
-        /// </exception>
         /// <exception cref="InputValidationFailedException">Input could not be validated</exception>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.InputValidationFailedException">Count of properties with id postfix is not one
+        /// or
+        /// Count of properties with key postfix is not one
+        /// or
+        /// Count of properties with entity tag name is not one
+        /// or
+        /// dynamic entity</exception>
         public static DynamicTableEntity ConvertEntityToDynamicTableEntity<TEntity>(this TEntity entity)
         {
             var dynamicEntity = new DynamicTableEntity();
@@ -184,7 +194,7 @@
         #region Methods
 
         /// <summary>
-        ///     The fill dynamic entity property bag.
+        /// The fill dynamic entity property bag.
         /// </summary>
         /// <typeparam name="TEntity">T Entity</typeparam>
         /// <param name="entity">The entity.</param>
@@ -230,7 +240,7 @@
                         ? KnownTypes.MatchAny.ToString(CultureInfo.InvariantCulture)
                         : propertyValue;
                 }
-                else if (propertyType == typeof (IList<string>))
+                else if (propertyType == typeof(IList<string>))
                 {
                     //// Special Case: If input is list of string then spread this list to multiple properties.
                     var dynamicEntities = propertyValue as List<string>;
@@ -259,7 +269,7 @@
         }
 
         /// <summary>
-        ///     The populate entity property with dynamic entity value.
+        /// The populate entity property with dynamic entity value.
         /// </summary>
         /// <typeparam name="TEntity">Entity type of element.</typeparam>
         /// <param name="entity">The entity.</param>

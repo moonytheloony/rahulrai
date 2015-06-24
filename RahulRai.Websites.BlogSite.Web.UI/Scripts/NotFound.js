@@ -1,5 +1,5 @@
 ﻿var tl = new Array(
-"Hate to tell you this, but that page ain\'t here.",
+"Hate to tell you this, but that page isn\'t here.",
 "Seriously. It\'s not.",
 "404 baby. 40-freakin\'-4.",
 "I even tried multi,",

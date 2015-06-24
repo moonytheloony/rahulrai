@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.Utilities.Common.Entities
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.Utilities.Common
+// Author           : rahulrai
+// Created          : 06-03-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="ContinuationStack.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.Utilities.Common.Entities
 {
     #region
 
@@ -22,7 +36,7 @@
         /// </summary>
         public ContinuationStack()
         {
-            stack = new Stack();
+            this.stack = new Stack();
         }
 
         /// <summary>
@@ -31,7 +45,7 @@
         /// <returns><c>true</c> if this instance [can move back]; otherwise, <c>false</c>.</returns>
         public bool CanMoveBack()
         {
-            return stack.Count >= 2;
+            return this.stack.Count >= 2;
         }
 
         /// <summary>
@@ -40,7 +54,7 @@
         /// <returns><c>true</c> if this instance [can move forward]; otherwise, <c>false</c>.</returns>
         public bool CanMoveForward()
         {
-            return GetForwardToken() != null;
+            return this.GetForwardToken() != null;
         }
 
         /// <summary>
@@ -49,19 +63,19 @@
         /// <returns>TableContinuationToken.</returns>
         public TableContinuationToken GetBackToken()
         {
-            if (stack.Count == 0)
+            if (this.stack.Count == 0)
             {
                 return null;
             }
 
-            stack.Pop();
-            stack.Pop();
-            if (stack.Count == 0)
+            this.stack.Pop();
+            this.stack.Pop();
+            if (this.stack.Count == 0)
             {
                 return null;
             }
 
-            return stack.Peek() as TableContinuationToken;
+            return this.stack.Peek() as TableContinuationToken;
         }
 
         /// <summary>
@@ -70,12 +84,12 @@
         /// <returns>TableContinuationToken.</returns>
         public TableContinuationToken GetForwardToken()
         {
-            if (stack.Count == 0)
+            if (this.stack.Count == 0)
             {
                 return null;
             }
 
-            return stack.Peek() as TableContinuationToken;
+            return this.stack.Peek() as TableContinuationToken;
         }
 
         /// <summary>
@@ -84,7 +98,7 @@
         /// <param name="result">The result.</param>
         public void AddToken(TableContinuationToken result)
         {
-            stack.Push(result);
+            this.stack.Push(result);
         }
     }
 }

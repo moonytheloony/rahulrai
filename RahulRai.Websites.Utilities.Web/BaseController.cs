@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.Utilities.Web
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.Utilities.Web
+// Author           : rahulrai
+// Created          : 04-15-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="BaseController.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.Utilities.Web
 {
     #region
 
@@ -9,12 +23,12 @@
     #endregion
 
     /// <summary>
-    ///     Base controller
+    /// Base controller
     /// </summary>
     public abstract class BaseController : Controller
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BaseController" /> class.
+        /// Initializes a new instance of the <see cref="BaseController" /> class.
         /// </summary>
         protected BaseController()
         {
@@ -23,7 +37,7 @@
         }
 
         /// <summary>
-        ///     Called before the action method is invoked.
+        /// Called before the action method is invoked.
         /// </summary>
         /// <param name="filterContext">Information about the current request and action.</param>
         protected override void OnActionExecuting(ActionExecutingContext filterContext)

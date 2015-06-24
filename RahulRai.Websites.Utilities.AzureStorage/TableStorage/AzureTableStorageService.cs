@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.Utilities.AzureStorage
+// Author           : rahulrai
+// Created          : 04-15-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="AzureTableStorageService.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
 {
     #region
 
@@ -19,7 +33,7 @@
     #endregion
 
     /// <summary>
-    ///     The azure table storage repository.
+    /// The azure table storage repository.
     /// </summary>
     /// <typeparam name="TElement">Element for entity</typeparam>
     public class AzureTableStorageService<TElement>
@@ -28,17 +42,17 @@
         #region Fields
 
         /// <summary>
-        ///     The converter from table entity to entity.
+        /// The converter from table entity to entity.
         /// </summary>
         private readonly Func<DynamicTableEntity, TElement> convertToEntity;
 
         /// <summary>
-        ///     The converter from entity to table entity.
+        /// The converter from entity to table entity.
         /// </summary>
         private readonly Func<TElement, DynamicTableEntity> convertToTableEntity;
 
         /// <summary>
-        ///     The table name
+        /// The table name
         /// </summary>
         private readonly string tableName = string.Empty;
 
@@ -47,7 +61,7 @@
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="AzureTableStorageService{TElement}" /> class.
+        /// Initializes a new instance of the <see cref="AzureTableStorageService{TElement}" /> class.
         /// </summary>
         /// <param name="storageAccountConnectionString">The storage account connection string.</param>
         /// <param name="tableName">Name of the table.</param>
@@ -63,19 +77,19 @@
             this.convertToEntity = convertToEntity;
             this.tableName = tableName;
             var storageAccount = CloudStorageAccount.Parse(storageAccountConnectionString);
-            CloudTableClient = storageAccount.CreateCloudTableClient();
-            CloudTableClient.DefaultRequestOptions.RetryPolicy =
+            this.CloudTableClient = storageAccount.CreateCloudTableClient();
+            this.CloudTableClient.DefaultRequestOptions.RetryPolicy =
                 new ExponentialRetry(
                     TimeSpan.FromSeconds(CustomRetryPolicy.RetryBackOffSeconds),
                     CustomRetryPolicy.MaxRetries);
-            TableRequestOptions = new TableRequestOptions
+            this.TableRequestOptions = new TableRequestOptions
             {
                 RetryPolicy =
                     new ExponentialRetry(
                         TimeSpan.FromSeconds(CustomRetryPolicy.RetryBackOffSeconds),
                         CustomRetryPolicy.MaxRetries)
             };
-            TableOperations = new TableBatchOperation();
+            this.TableOperations = new TableBatchOperation();
         }
 
         #endregion
@@ -83,62 +97,62 @@
         #region Properties
 
         /// <summary>
-        ///     Gets or sets the active table.
+        /// Gets or sets the table request options.
+        /// </summary>
+        /// <value>The table request options.</value>
+        public TableRequestOptions TableRequestOptions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the active table.
         /// </summary>
         /// <value>The active table.</value>
         private CloudTable ActiveTable { get; set; }
 
         /// <summary>
-        ///     Gets or sets the cloud table client.
+        /// Gets or sets the cloud table client.
         /// </summary>
         /// <value>The cloud table client.</value>
         private CloudTableClient CloudTableClient { get; set; }
 
         /// <summary>
-        ///     Gets or sets the table operation.
+        /// Gets or sets the table operation.
         /// </summary>
         /// <value>The table operations.</value>
         private TableBatchOperation TableOperations { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the table request options.
-        /// </summary>
-        /// <value>The table request options.</value>
-        public TableRequestOptions TableRequestOptions { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
 
         /// <summary>
-        ///     The create storage object and set execution context.
+        /// The create storage object and set execution context.
         /// </summary>
         public virtual void CreateStorageObjectAndSetExecutionContext()
         {
-            ActiveTable = CloudTableClient.GetTableReference(tableName);
-            ActiveTable.CreateIfNotExists(TableRequestOptions);
+            this.ActiveTable = this.CloudTableClient.GetTableReference(this.tableName);
+            this.ActiveTable.CreateIfNotExists(this.TableRequestOptions);
         }
 
         /// <summary>
-        ///     The delete.
+        /// The delete.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public virtual void Delete(TElement entity)
         {
-            var dynamicEntity = convertToTableEntity(entity);
-            TableOperations.Add(TableOperation.Delete(dynamicEntity));
+            var dynamicEntity = this.convertToTableEntity(entity);
+            this.TableOperations.Add(TableOperation.Delete(dynamicEntity));
         }
 
         /// <summary>
-        ///     The delete storage object.
+        /// The delete storage object.
         /// </summary>
         public void DeleteStorageObject()
         {
-            ActiveTable.DeleteIfExists(TableRequestOptions);
+            this.ActiveTable.DeleteIfExists(this.TableRequestOptions);
         }
 
         /// <summary>
-        ///     The get all.
+        /// The get all.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The <see cref="List{T}" />.</returns>
@@ -147,102 +161,101 @@
             var query =
                 new TableQuery().Where(
                     TableQuery.GenerateFilterCondition(KnownTypes.PartitionKey, QueryComparisons.Equal, key));
-            var result = ActiveTable.ExecuteQuery(query, TableRequestOptions);
-            return result.Select(convertToEntity).ToList();
+            var result = this.ActiveTable.ExecuteQuery(query, this.TableRequestOptions);
+            return result.Select(this.convertToEntity).ToList();
         }
 
         /// <summary>
-        ///     Gets all.
+        /// Gets all.
         /// </summary>
         /// <returns>IList&lt;TElement&gt;.</returns>
-        /// <inheritdoc />
         public virtual IList<TElement> GetAll()
         {
-            var result = ActiveTable.ExecuteQuery(
+            var result = this.ActiveTable.ExecuteQuery(
                 new TableQuery(),
-                TableRequestOptions);
-            return result.Select(convertToEntity).ToList();
+                this.TableRequestOptions);
+            return result.Select(this.convertToEntity).ToList();
         }
 
         /// <summary>
-        ///     Customs the operation.
+        /// Customs the operation.
         /// </summary>
         /// <returns>CloudTable.</returns>
         public virtual CloudTable CustomOperation()
         {
-            return ActiveTable;
+            return this.ActiveTable;
         }
 
         /// <summary>
-        ///     The get by id.
+        /// The get by id.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="id">The id.</param>
-        /// <returns>
-        ///     The <see cref="TElement" />.
-        ///     Element for entity
-        /// </returns>
+        /// <returns>The <see cref="TElement" />.
+        /// Element for entity</returns>
         public virtual TElement GetById(string key, string id)
         {
             var operation = TableOperation.Retrieve(key, id);
-            var result = ActiveTable.Execute(operation, TableRequestOptions).Result as DynamicTableEntity;
-            return result == null ? null : convertToEntity(result);
+            var result = this.ActiveTable.Execute(operation, this.TableRequestOptions).Result as DynamicTableEntity;
+            return result == null ? null : this.convertToEntity(result);
         }
 
         /// <summary>
-        ///     The insert.
+        /// The insert.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public virtual void Insert(TElement entity)
         {
-            var dynamicEntity = convertToTableEntity(entity);
-            TableOperations.Add(TableOperation.Insert(dynamicEntity));
+            var dynamicEntity = this.convertToTableEntity(entity);
+            this.TableOperations.Add(TableOperation.Insert(dynamicEntity));
         }
 
         /// <summary>
-        ///     Inserts the or replace.
+        /// Inserts the or replace.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        /// <inheritdoc />
         public virtual void InsertOrReplace(TElement entity)
         {
-            var dynamicEntity = convertToTableEntity(entity);
-            TableOperations.Add(TableOperation.InsertOrReplace(dynamicEntity));
+            var dynamicEntity = this.convertToTableEntity(entity);
+            this.TableOperations.Add(TableOperation.InsertOrReplace(dynamicEntity));
         }
 
         /// <summary>
-        ///     The merge.
+        /// The merge.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public virtual void Merge(TElement entity)
         {
-            var dynamicEntity = convertToTableEntity(entity);
-            TableOperations.Add(TableOperation.InsertOrMerge(dynamicEntity));
+            var dynamicEntity = this.convertToTableEntity(entity);
+            this.TableOperations.Add(TableOperation.InsertOrMerge(dynamicEntity));
         }
 
         /// <summary>
-        ///     Queries the specified filter.
+        /// Queries the specified filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <param name="takeCount">The take count.</param>
         /// <returns>IList&lt;TElement&gt;.</returns>
-        /// <inheritdoc />
         public virtual IList<TElement> Query(string filter, int? takeCount)
         {
-            var tableQuery = new TableQuery {FilterString = filter, TakeCount = takeCount};
-            return ActiveTable.ExecuteQuery(tableQuery).Select(convertToEntity).ToList();
+            var tableQuery = new TableQuery
+            {
+                FilterString = filter,
+                TakeCount = takeCount
+            };
+            return this.ActiveTable.ExecuteQuery(tableQuery).Select(this.convertToEntity).ToList();
         }
 
         /// <summary>
-        ///     The save.
+        /// The save.
         /// </summary>
         /// <returns>The <see cref="bool" />.</returns>
         public virtual bool Save()
         {
             try
             {
-                var result = ActiveTable.Execute(TableOperations[0], TableRequestOptions);
-                TableOperations = new TableBatchOperation();
+                var result = this.ActiveTable.Execute(this.TableOperations[0], this.TableRequestOptions);
+                this.TableOperations = new TableBatchOperation();
                 return IsSuccessStatusCode(result.HttpStatusCode);
             }
             catch (StorageException exception)
@@ -252,22 +265,19 @@
         }
 
         /// <summary>
-        ///     Saves all.
+        /// Saves all.
         /// </summary>
         /// <returns>IList&lt;OperationResult&gt;.</returns>
-        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">
-        ///     Error executing batch table
-        ///     operation.
-        /// </exception>
-        /// <inheritdoc />
+        /// <exception cref="BlogSystemException">Error executing batch table operation.</exception>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">Error executing batch table operation.</exception>
         public virtual IList<OperationResult> SaveAll()
         {
             try
             {
-                var result = ActiveTable.ExecuteBatch(
-                    TableOperations,
-                    TableRequestOptions);
-                TableOperations = new TableBatchOperation();
+                var result = this.ActiveTable.ExecuteBatch(
+                    this.TableOperations,
+                    this.TableRequestOptions);
+                this.TableOperations = new TableBatchOperation();
                 return
                     result.Select(x => new OperationResult(x.HttpStatusCode, IsSuccessStatusCode(x.HttpStatusCode)))
                         .ToList();
@@ -279,21 +289,21 @@
         }
 
         /// <summary>
-        ///     The set execution context.
+        /// The set execution context.
         /// </summary>
         public virtual void SetExecutionContext()
         {
-            ActiveTable = CloudTableClient.GetTableReference(tableName);
+            this.ActiveTable = this.CloudTableClient.GetTableReference(this.tableName);
         }
 
         /// <summary>
-        ///     The update.
+        /// The update.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public virtual void Update(TElement entity)
         {
-            var dynamicEntity = convertToTableEntity(entity);
-            TableOperations.Add(TableOperation.InsertOrReplace(dynamicEntity));
+            var dynamicEntity = this.convertToTableEntity(entity);
+            this.TableOperations.Add(TableOperation.InsertOrReplace(dynamicEntity));
         }
 
         #endregion
@@ -301,7 +311,7 @@
         #region Methods
 
         /// <summary>
-        ///     Determines whether the HTTP status code represents a success.
+        /// Determines whether the HTTP status code represents a success.
         /// </summary>
         /// <param name="statusCode">The status code.</param>
         /// <returns>If the status code represents a success.</returns>

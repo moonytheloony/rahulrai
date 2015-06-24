@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.Tools.DocumentTool
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.Tools.DocumentTool
+// Author           : rahulrai
+// Created          : 05-28-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="Program.cs" company="Rahul Rai">
+//     Copyright ©  2015 Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.Tools.DocumentTool
 {
     #region
 
@@ -10,29 +24,29 @@
     #endregion
 
     /// <summary>
-    ///     Class Program.
+    /// Class Program.
     /// </summary>
     internal class Program
     {
         /// <summary>
-        ///     The search service key
+        /// The search service key
         /// </summary>
         private static readonly string SearchServiceKey =
             ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
 
         /// <summary>
-        ///     The search service name
+        /// The search service name
         /// </summary>
         private static readonly string SearchServiceName =
             ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
 
         /// <summary>
-        ///     The search service
+        /// The search service
         /// </summary>
         private static AzureSearchService searchService;
 
         /// <summary>
-        ///     Defines the entry point of the application.
+        /// Defines the entry point of the application.
         /// </summary>
         /// <param name="args">The arguments.</param>
         private static void Main(string[] args)
@@ -65,7 +79,7 @@
         }
 
         /// <summary>
-        ///     Clears the search document.
+        /// Clears the search document.
         /// </summary>
         /// <param name="blogId">The blog identifier.</param>
         private static void ClearSearchDocument(string blogId)
@@ -74,7 +88,7 @@
         }
 
         /// <summary>
-        ///     Clears the search all.
+        /// Clears the search all.
         /// </summary>
         private static void ClearSearchAll()
         {

@@ -1,4 +1,18 @@
-﻿namespace RahulRai.Websites.Utilities.Common.Helpers
+﻿// ***********************************************************************
+// Assembly         : RahulRai.Websites.Utilities.Common
+// Author           : rahulrai
+// Created          : 06-18-2015
+//
+// Last Modified By : rahulrai
+// Last Modified On : 06-24-2015
+// ***********************************************************************
+// <copyright file="TraceUtility.cs" company="Rahul Rai">
+//     Copyright (c) Rahul Rai. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace RahulRai.Websites.Utilities.Common.Helpers
 {
     #region
 
@@ -9,22 +23,22 @@
     #endregion
 
     /// <summary>
-    ///     Class TraceUtility.
+    /// Class TraceUtility.
     /// </summary>
     public class TraceUtility
     {
         /// <summary>
-        ///     The information format
+        /// The information format
         /// </summary>
         private const string InformationFormat = "Time: {0} Content: {1}";
 
         /// <summary>
-        ///     The error format
+        /// The error format
         /// </summary>
         private const string ErrorFormat = "Time: {0} Message: {1} Exception: {2}";
 
         /// <summary>
-        ///     Logs the information.
+        /// Logs the information.
         /// </summary>
         /// <param name="information">The information.</param>
         /// <param name="value">The value.</param>
@@ -35,7 +49,7 @@
         }
 
         /// <summary>
-        ///     Logs the warning.
+        /// Logs the warning.
         /// </summary>
         /// <param name="warning">The warning.</param>
         /// <param name="value">The value.</param>
@@ -46,7 +60,7 @@
         }
 
         /// <summary>
-        ///     Logs the error.
+        /// Logs the error.
         /// </summary>
         /// <param name="exception">The exception.</param>
         /// <param name="customMessage">The custom message.</param>

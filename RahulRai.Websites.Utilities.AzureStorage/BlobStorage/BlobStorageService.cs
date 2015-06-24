@@ -86,18 +86,11 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
         /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">Failed to add blob to container</exception>
         public Uri AddBlobToContainer(string containerName, Stream fileStream, string blobName)
         {
-            try
-            {
-                var container = this.BlobClient.GetContainerReference(containerName);
-                var blockBlob = container.GetBlockBlobReference(blobName);
-                blockBlob.Properties.ContentType = MimeMapping.GetMimeMapping(blobName);
-                blockBlob.UploadFromStream(fileStream);
-                return blockBlob.Uri;
-            }
-            catch (StorageException exception)
-            {
-                throw new BlogSystemException("Failed to add blob to container", exception);
-            }
+            var container = this.BlobClient.GetContainerReference(containerName);
+            var blockBlob = container.GetBlockBlobReference(blobName);
+            blockBlob.Properties.ContentType = MimeMapping.GetMimeMapping(blobName);
+            blockBlob.UploadFromStream(fileStream);
+            return blockBlob.Uri;
         }
 
         /// <summary>
@@ -108,20 +101,8 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
         /// <returns>The <see cref="FileOperationStatus" />.</returns>
         public FileOperationStatus CreateContainer(string containerName, VisibilityType visibilityType)
         {
-            try
-            {
-                this.CreateContainerWithPermissions(containerName, visibilityType);
-                return FileOperationStatus.FolderCreated;
-            }
-            catch (StorageException exception)
-            {
-                Trace.TraceError(
-                    Routines.FormatStringInvariantCulture(
-                        "File operation failed with the following error {0}",
-                        exception.Message),
-                    null);
-                return FileOperationStatus.Error;
-            }
+            this.CreateContainerWithPermissions(containerName, visibilityType);
+            return FileOperationStatus.FolderCreated;
         }
 
         /// <summary>
@@ -132,22 +113,9 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
         /// <returns>The <see cref="FileOperationStatus" />.</returns>
         public FileOperationStatus DeleteBlob(string containerName, string blobName)
         {
-            try
-            {
-                var container = this.BlobClient.GetContainerReference(containerName);
-                var blockBlob = container.GetBlockBlobReference(blobName);
-                blockBlob.DeleteIfExists();
-            }
-            catch (StorageException exception)
-            {
-                Trace.TraceError(
-                    Routines.FormatStringInvariantCulture(
-                        "File operation failed with the following error {0}",
-                        exception.Message),
-                    null);
-                return FileOperationStatus.Error;
-            }
-
+            var container = this.BlobClient.GetContainerReference(containerName);
+            var blockBlob = container.GetBlockBlobReference(blobName);
+            blockBlob.DeleteIfExists();
             return FileOperationStatus.FileDeleted;
         }
 

@@ -1,12 +1,12 @@
 ﻿var tl = new Array(
-"Hate to tell you this, but that page isn\'t here.",
+"Hate to tell you this, but that page ain\'t here.",
 "Seriously. It\'s not.",
 "404 baby. 40-freakin\'-4.",
 "I even tried multi,",
 "which is much more than I do for most folks.",
 "Most times, I just zap up a blank page",
 "and give the old 404 rap,",
-"But you, you\'re special.",
+"But you, you\'re special, baby.",
 "And, if I could, I\'d run off right now",
 "and find the page you wanted.",
 "Or, even better, run off with you",
@@ -32,6 +32,12 @@
 "and a beautiful Web surfer to find love",
 "in this crazy, mixed-up world?",
 "You do? I do too!",
+"C\'mon baby, gimme a kiss!",
+"Go on, plant those lips on the screen and smooch me.",
+"It\'s not really the same, since the screen gets all the action",
+"but it\'s good enough for me.",
+"C\'mon, gimme a smooch.",
+"Just one?",
 "OK, OK, I\'m sorry.",
 "Moving too fast. Sorry.",
 "Oh, you don\'t have to go yet!",
@@ -41,7 +47,6 @@
 "But if it\'s OK with you, can I still admire you from a distance?",
 "*sigh*"
 );
-
 var speed = 80;
 var index = 0; text_pos = 0;
 var str_length = tl[0].length;
@@ -62,8 +67,9 @@ function type_text() {
         }
     } else
         setTimeout("type_text()", speed);
+
 }
 function MM_callJS(jsStr) {
     //v2.0
-    return eval(jsStr)
+    return eval(jsStr);
 }

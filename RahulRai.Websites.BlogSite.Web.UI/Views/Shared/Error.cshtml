@@ -1,0 +1,27 @@
+﻿@model HandleErrorInfo
+@{
+    var resourceBasePath = ViewBag.ResourceBasePath;
+}
+<div class="col-lg-8">
+    <div>
+        <h1>KABOOM!!</h1>
+        <p class="lead">Something went wrong</p>
+        <p>Don't worry this didn't go unnoticed. It will be fixed soon!</p>
+        <p><img src=@(resourceBasePath + "failure.jpg") alt="Error Image" /></p>
+    </div>
+    @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+    {
+        <div>
+            <p>
+                <b>Exception:</b> @Model.Exception.Message
+                <br />
+                <b>Controller:</b> @Model.ControllerName
+                <br />
+                <b>Action:</b> @Model.ActionName
+            </p>
+            <div style="overflow: scroll">
+                <pre>@Model.Exception.StackTrace</pre>
+            </div>
+        </div>
+    }
+</div>

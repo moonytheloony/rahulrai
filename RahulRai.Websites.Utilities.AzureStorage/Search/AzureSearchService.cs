@@ -93,23 +93,8 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Search
         /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">failed on index</exception>
         public void UpsertDataToIndex(BlogSearch blogSearchEntity)
         {
-            var documents =
-                new[] { blogSearchEntity };
-
-            try
-            {
-                this.indexClient.Documents.Index(IndexBatch.Create(documents.Select(IndexAction.Create)));
-            }
-            catch (IndexBatchException e)
-            {
-                // Sometimes when your Search service is under load, indexing will fail for some of the documents in
-                // the batch. Depending on your application, you can take compensating actions like delaying and
-                // retrying. For this simple demo, we just log the failed document keys and continue.
-                Trace.WriteLine(
-                    "Failed to index some of the documents: {0}",
-                    string.Join(", ", e.IndexResponse.Results.Where(r => !r.Succeeded).Select(r => r.Key)));
-                throw new BlogSystemException("failed on index");
-            }
+            var documents = new[] { blogSearchEntity };
+            this.indexClient.Documents.Index(IndexBatch.Create(documents.Select(IndexAction.Create)));
         }
 
         /// <summary>
@@ -140,22 +125,9 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Search
         /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">failed on index</exception>
         public void DeleteData(string idToDelete)
         {
-            try
-            {
-                var batch = IndexBatch.Create(
-                    new IndexAction(IndexActionType.Delete, new Document { { "blogId", idToDelete } }));
-                this.indexClient.Documents.Index(batch);
-            }
-            catch (IndexBatchException e)
-            {
-                // Sometimes when your Search service is under load, indexing will fail for some of the documents in
-                // the batch. Depending on your application, you can take compensating actions like delaying and
-                // retrying. For this simple demo, we just log the failed document keys and continue.
-                Trace.WriteLine(
-                    "Failed to index some of the documents: {0}",
-                    string.Join(", ", e.IndexResponse.Results.Where(r => !r.Succeeded).Select(r => r.Key)));
-                throw new BlogSystemException("failed on index");
-            }
+            var batch = IndexBatch.Create(
+                      new IndexAction(IndexActionType.Delete, new Document { { "blogId", idToDelete } }));
+            this.indexClient.Documents.Index(batch);
         }
 
         /// <summary>

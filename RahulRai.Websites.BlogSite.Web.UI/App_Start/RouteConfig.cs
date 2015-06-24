@@ -43,13 +43,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI
                     action = "GetBlogPost"
                 });
             routes.MapRoute(
-                "Error",
-                "Error/{action}",
-                new
-                {
-                    controller = "Error"
-                });
-            routes.MapRoute(
                 "Default",
                 "{controller}/{action}",
                 new

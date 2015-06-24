@@ -106,9 +106,11 @@
   <ItemGroup>
     <Compile Include="BaseController.cs" />
     <Compile Include="ControllerFactory.cs" />
+    <Compile Include="ErrorHandlerAttribute.cs" />
     <Compile Include="IMetaWeblog.cs" />
     <Compile Include="MetaWeblogHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetupProperties.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

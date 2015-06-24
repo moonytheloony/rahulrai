@@ -252,16 +252,9 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         /// <returns>The <see cref="bool" />.</returns>
         public virtual bool Save()
         {
-            try
-            {
-                var result = this.ActiveTable.Execute(this.TableOperations[0], this.TableRequestOptions);
-                this.TableOperations = new TableBatchOperation();
-                return IsSuccessStatusCode(result.HttpStatusCode);
-            }
-            catch (StorageException exception)
-            {
-                return false;
-            }
+            var result = this.ActiveTable.Execute(this.TableOperations[0], this.TableRequestOptions);
+            this.TableOperations = new TableBatchOperation();
+            return IsSuccessStatusCode(result.HttpStatusCode);
         }
 
         /// <summary>
@@ -272,20 +265,13 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">Error executing batch table operation.</exception>
         public virtual IList<OperationResult> SaveAll()
         {
-            try
-            {
-                var result = this.ActiveTable.ExecuteBatch(
+            var result = this.ActiveTable.ExecuteBatch(
                     this.TableOperations,
                     this.TableRequestOptions);
-                this.TableOperations = new TableBatchOperation();
-                return
-                    result.Select(x => new OperationResult(x.HttpStatusCode, IsSuccessStatusCode(x.HttpStatusCode)))
-                        .ToList();
-            }
-            catch (Exception exception)
-            {
-                throw new BlogSystemException("Error executing batch table operation.", exception);
-            }
+            this.TableOperations = new TableBatchOperation();
+            return
+                result.Select(x => new OperationResult(x.HttpStatusCode, IsSuccessStatusCode(x.HttpStatusCode)))
+                    .ToList();
         }
 
         /// <summary>

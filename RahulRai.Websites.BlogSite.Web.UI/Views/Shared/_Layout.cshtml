@@ -15,11 +15,10 @@
             <img src=@(resourceBasePath + "exclamation-mark-red-icon.png") alt="Exclamation" class="iconImage" />
         </a>
     </div>
-    <div class="text-center">
-        <img class="img-responsive img-thumbnail" alt="Profile Picture" width="200" height="200"
-             src="http://placehold.it/200X200" />
+    <div class="text-center profile-userpic">
+        <img class="img-responsive" alt="Profile Picture" src=@(resourceBasePath + "RahulRai.png") />
         <br />
         <br />
-        @Html.RouteLink("Hi, I am Rahul...", "Default", new { controller = "Profile", action = "MyProfile" }, new { @class = "btn btn-primary btn-lg" })
+        @Html.RouteLink("Hi, I am Rahul...", "Default", new { controller = "Profile", action = "MyProfile" }, new { @class = "btn btn-success btn-md" })
     </div>
 </div>

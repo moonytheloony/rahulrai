@@ -17,13 +17,14 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     #region
 
     using System.Web.Mvc;
+    using Utilities.Web;
 
     #endregion
 
     /// <summary>
     /// Class ProfileController.
     /// </summary>
-    public class ProfileController : Controller
+    public class ProfileController : BaseController
     {
         /// <summary>
         /// My profile.

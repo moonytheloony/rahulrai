@@ -78,7 +78,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ActionResult.</returns>
         public ActionResult GetLatestBlogs()
         {
-            throw new Exception("asd");
             ////Session[ApplicationConstants.StackKey] = null;
             ////var result = GetPagedBlogPreviews(null);
             ////var resultBlogs = result.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);

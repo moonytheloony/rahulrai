@@ -36,6 +36,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI
             routes.Add(new Route("metaweblog", new WeblogRouteHandler()));
             routes.MapRoute("BlogPost", "post/{postId}", new { controller = "Blog", action = "GetBlogPost" });
             routes.MapRoute("Error", "Error/{action}", new { controller = "Error" });
+            routes.MapRoute("Profile", "Profile/{action}", new { controller = "Profile" });
             routes.MapRoute("Default", "{controller}/{action}", new { controller = "Blog", action = "GetLatestBlogs" });
         }
     }

@@ -148,6 +148,7 @@
     </Compile>
     <Compile Include="Entities\OperationResult.cs" />
     <Compile Include="Entities\TableBlogEntity.cs" />
+    <Compile Include="Entities\Testimonial.cs" />
     <Compile Include="Exceptions\BlogSystemException.cs" />
     <Compile Include="Exceptions\InputValidationFailedException.cs" />
     <Compile Include="Helpers\Routines.cs" />

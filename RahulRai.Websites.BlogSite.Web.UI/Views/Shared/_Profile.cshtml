@@ -1,0 +1,66 @@
+﻿@using RahulRai.Websites.Utilities.Common.Helpers
+@{
+    Layout = "~/Views/Shared/_LayoutNoContent.cshtml";
+    var resourceBasePath = ViewBag.ResourceBasePath;
+    var myEmail = ViewBag.MyEmail;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="profile-sidebar">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img src=@(resourceBasePath + "RahulRai.png") class="img-responsive" alt="Profile Picture">
+                </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        Rahul Rai
+                    </div>
+                    <div class="profile-usertitle-job">
+                        Architect<br />
+                        Microsoft Technologies
+                    </div>
+                </div>
+                <!-- END SIDEBAR USER TITLE -->
+                <!-- SIDEBAR MENU -->
+                <div class="profile-usermenu">
+                    <ul class="nav">
+                        <li class="@Html.IsSelected(actions: "ProfileContent", controllers: "Profile")">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "ProfileContent"}))">
+                                <i class="glyphicon glyphicon-cog"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(actions: "Testimonials", controllers: "Profile")">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "Testimonials"}))">
+                                <i class="glyphicon glyphicon-thumbs-up"></i>
+                                Testimonials
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(actions: "Resume", controllers: "Profile")">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "Resume"}))">
+                                <i class="glyphicon glyphicon-star"></i>
+                                Resume'
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(actions: "Contact", controllers: "Profile")">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "Contact"}))">
+                                <i class="glyphicon glyphicon-phone"></i>
+                                Contact
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END MENU -->
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="profile-content" id="contentPane">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>

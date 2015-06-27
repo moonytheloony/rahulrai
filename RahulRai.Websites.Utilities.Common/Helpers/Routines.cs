@@ -21,19 +21,20 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
     using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Web.Mvc;
     using RegularTypes;
 
     #endregion
 
     /// <summary>
-    /// Repository of regular utility functions.
+    ///     Repository of regular utility functions.
     /// </summary>
     public static class Routines
     {
         #region Public Methods and Operators
 
         /// <summary>
-        /// The compare case invariant.
+        ///     The compare case invariant.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="newValue">The string to compare to.</param>
@@ -44,7 +45,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// The format string invariant culture.
+        ///     The format string invariant culture.
         /// </summary>
         /// <param name="value">The invoking string.</param>
         /// <param name="arguments">The arguments.</param>
@@ -55,7 +56,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// Strips the HTML formatting.
+        ///     Strips the HTML formatting.
         /// </summary>
         /// <param name="htmlString">The HTML string.</param>
         /// <returns>System.String.</returns>
@@ -66,7 +67,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// The to collection.
+        ///     The to collection.
         /// </summary>
         /// <param name="value">The CSV string.</param>
         /// <returns>The System.Collections.Generic.IEnumerable.System.String</returns>
@@ -81,7 +82,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// The to CSV.
+        ///     The to CSV.
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <returns>The System.String.</returns>
@@ -91,7 +92,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// The to invariant culture string.
+        ///     The to invariant culture string.
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns>The <see cref="string" />.</returns>
@@ -101,7 +102,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// To the invariant culture string.
+        ///     To the invariant culture string.
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns>System.String.</returns>
@@ -111,7 +112,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// The split by length.
+        ///     The split by length.
         /// </summary>
         /// <param name="value">The source string.</param>
         /// <param name="maxLength">The max length.</param>
@@ -125,7 +126,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// The combine.
+        ///     The combine.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The <see cref="string" />.</returns>
@@ -137,7 +138,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         #endregion
 
         /// <summary>
-        /// Formats the title.
+        ///     Formats the title.
         /// </summary>
         /// <param name="title">The title.</param>
         /// <returns>System.String.</returns>
@@ -145,6 +146,45 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         {
             var cleanString = Regex.Replace(title, @"[^\w\.@-]", KnownTypes.HyphenSeparator, RegexOptions.None);
             return cleanString;
+        }
+
+        /// <summary>
+        /// Determines whether the specified controllers is selected.
+        /// </summary>
+        /// <param name="html">The HTML.</param>
+        /// <param name="controllers">The controllers.</param>
+        /// <param name="actions">The actions.</param>
+        /// <param name="cssClass">The CSS class.</param>
+        /// <returns>System.String.</returns>
+        public static string IsSelected(this HtmlHelper html, string controllers = "", string actions = "", string cssClass = "active")
+        {
+            var viewContext = html.ViewContext;
+            var isChildAction = viewContext.Controller.ControllerContext.IsChildAction;
+            if (isChildAction)
+            {
+                viewContext = html.ViewContext.ParentActionViewContext;
+            }
+
+            var routeValues = viewContext.RouteData.Values;
+            var currentAction = routeValues["action"].ToString();
+            var currentController = routeValues["controller"].ToString();
+
+            if (string.IsNullOrEmpty(actions))
+            {
+                actions = currentAction;
+            }
+
+            if (string.IsNullOrEmpty(controllers))
+            {
+                controllers = currentController;
+            }
+
+            var acceptedActions = actions.Trim().Split(',').Distinct().ToArray();
+            var acceptedControllers = controllers.Trim().Split(',').Distinct().ToArray();
+
+            return acceptedActions.Contains(currentAction) && acceptedControllers.Contains(currentController)
+                ? cssClass
+                : string.Empty;
         }
     }
 }

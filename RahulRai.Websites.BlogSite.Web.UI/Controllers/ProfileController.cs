@@ -4,7 +4,7 @@
 // Created          : 06-25-2015
 //
 // Last Modified By : rahulrai
-// Last Modified On : 06-25-2015
+// Last Modified On : 06-28-2015
 // ***********************************************************************
 // <copyright file="ProfileController.cs" company="Rahul Rai">
 //     Copyright (c) Rahul Rai. All rights reserved.
@@ -16,19 +16,18 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 {
     #region
 
-    using System;
     using System.Web.Mvc;
     using Utilities.Web;
 
     #endregion
 
     /// <summary>
-    ///     Class ProfileController.
+    /// Class ProfileController.
     /// </summary>
     public class ProfileController : BaseController
     {
         /// <summary>
-        ///     My profile.
+        /// My profile.
         /// </summary>
         /// <returns>ActionResult.</returns>
         public ActionResult MyProfile()
@@ -37,7 +36,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        ///     Writes a testimonial for me.
+        /// Writes a testimonial for me.
         /// </summary>
         /// <returns>ActionResult.</returns>
         public ActionResult WriteATestimonialForMe()
@@ -46,27 +45,39 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Gets the content of the profile.
+        /// Profiles the content.
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>PartialViewResult.</returns>
-        /// <exception cref="System.IndexOutOfRangeException">id</exception>
-        [HttpGet]
-        public PartialViewResult GetProfileContent(int id)
+        /// <returns>ViewResult.</returns>
+        public ViewResult ProfileContent()
         {
-            switch (id)
-            {
-                case 1:
-                    return this.PartialView("Profile");
-                case 2:
-                    return this.PartialView("Testimonials");
-                case 3:
-                    return this.PartialView("Resume");
-                case 4:
-                    return this.PartialView("Contact");
-                default:
-                    throw new IndexOutOfRangeException("id");
-            }
+            return this.View("Profile");
+        }
+
+        /// <summary>
+        /// Testimonialses this instance.
+        /// </summary>
+        /// <returns>ViewResult.</returns>
+        public ViewResult Testimonials()
+        {
+            return this.View("Testimonials");
+        }
+
+        /// <summary>
+        /// Resumes this instance.
+        /// </summary>
+        /// <returns>ViewResult.</returns>
+        public ViewResult Resume()
+        {
+            return this.View("Resume");
+        }
+
+        /// <summary>
+        /// Contacts this instance.
+        /// </summary>
+        /// <returns>ViewResult.</returns>
+        public ViewResult Contact()
+        {
+            return this.View("Contact");
         }
     }
 }

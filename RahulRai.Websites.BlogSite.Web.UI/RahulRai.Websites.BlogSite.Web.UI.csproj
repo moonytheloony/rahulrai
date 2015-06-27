@@ -241,6 +241,8 @@
     <Content Include="Content\Zocial\zocial-regular-webfont.eot" />
     <Content Include="Content\Zocial\zocial-regular-webfont.ttf" />
     <Content Include="Content\Zocial\zocial-regular-webfont.woff" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\SyntaxHighlighter\shBrushAppleScript.js" />
     <Content Include="Scripts\SyntaxHighlighter\shBrushAS3.js" />
     <Content Include="Scripts\SyntaxHighlighter\shBrushBash.js" />
@@ -310,6 +312,10 @@
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Profile\MyProfile.cshtml" />
     <Content Include="Views\Shared\_LayoutNoContent.cshtml" />
+    <Content Include="Views\Profile\Profile.cshtml" />
+    <Content Include="Views\Profile\Resume.cshtml" />
+    <Content Include="Views\Profile\Testimonials.cshtml" />
+    <Content Include="Views\Profile\Contact.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

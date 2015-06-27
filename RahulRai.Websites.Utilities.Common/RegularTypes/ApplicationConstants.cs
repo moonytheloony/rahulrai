@@ -108,5 +108,10 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// The document database connection string
         /// </summary>
         public static string DocumentDbConnectionString = "DocumentDbConnectionString";
+
+        /// <summary>
+        /// The resume document key
+        /// </summary>
+        public static string ResumeDocumentKey = "ResumeDocumentKey";
     }
 }

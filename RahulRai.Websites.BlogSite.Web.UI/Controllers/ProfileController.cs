@@ -16,18 +16,19 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 {
     #region
 
+    using System;
     using System.Web.Mvc;
     using Utilities.Web;
 
     #endregion
 
     /// <summary>
-    /// Class ProfileController.
+    ///     Class ProfileController.
     /// </summary>
     public class ProfileController : BaseController
     {
         /// <summary>
-        /// My profile.
+        ///     My profile.
         /// </summary>
         /// <returns>ActionResult.</returns>
         public ActionResult MyProfile()
@@ -36,12 +37,36 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Writes a testimonial for me.
+        ///     Writes a testimonial for me.
         /// </summary>
         /// <returns>ActionResult.</returns>
         public ActionResult WriteATestimonialForMe()
         {
             return this.View();
+        }
+
+        /// <summary>
+        /// Gets the content of the profile.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>PartialViewResult.</returns>
+        /// <exception cref="System.IndexOutOfRangeException">id</exception>
+        [HttpGet]
+        public PartialViewResult GetProfileContent(int id)
+        {
+            switch (id)
+            {
+                case 1:
+                    return this.PartialView("Profile");
+                case 2:
+                    return this.PartialView("Testimonials");
+                case 3:
+                    return this.PartialView("Resume");
+                case 4:
+                    return this.PartialView("Contact");
+                default:
+                    throw new IndexOutOfRangeException("id");
+            }
         }
     }
 }

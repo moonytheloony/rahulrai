@@ -28,27 +28,64 @@
                 <div class="profile-usermenu">
                     <ul class="nav">
                         <li class="active">
+
                             <a href="#">
                                 <i class="glyphicon glyphicon-cog"></i>
-                                Profile
+                                @Ajax.RouteLink(
+                                "Profile",
+                                "Profile",
+                                new { action = "GetProfileContent", id = "1" },
+                                new AjaxOptions
+                                {
+                                    HttpMethod = "GET",
+                                    InsertionMode = InsertionMode.Replace,
+                                    UpdateTargetId = "contentPane"
+                                })
                             </a>
                         </li>
                         <li>
                             <a href="#">
                                 <i class="glyphicon glyphicon-thumbs-up"></i>
-                                Testimonials
+                                @Ajax.RouteLink(
+                                "Testimonials",
+                                "Profile",
+                                new { action = "GetProfileContent", id = "2" },
+                                new AjaxOptions
+                                {
+                                    HttpMethod = "GET",
+                                    InsertionMode = InsertionMode.Replace,
+                                    UpdateTargetId = "contentPane"
+                                })
                             </a>
                         </li>
                         <li>
-                            <a href="#" target="_blank">
+                            <a href="#">
                                 <i class="glyphicon glyphicon-user"></i>
-                                Resume'
+                                @Ajax.RouteLink(
+                                "Resume",
+                                "Profile",
+                                new { action = "GetProfileContent", id = "3" },
+                                new AjaxOptions
+                                {
+                                    HttpMethod = "GET",
+                                    InsertionMode = InsertionMode.Replace,
+                                    UpdateTargetId = "contentPane"
+                                })
                             </a>
                         </li>
                         <li>
                             <a href="#">
                                 <i class="glyphicon glyphicon-phone"></i>
-                                Contact
+                                @Ajax.RouteLink(
+                                "Contact",
+                                "Profile",
+                                new { action = "GetProfileContent", id = "4" },
+                                new AjaxOptions
+                                {
+                                    HttpMethod = "GET",
+                                    InsertionMode = InsertionMode.Replace,
+                                    UpdateTargetId = "contentPane"
+                                })
                             </a>
                         </li>
                     </ul>
@@ -57,9 +94,18 @@
             </div>
         </div>
         <div class="col-md-9">
-            <div class="profile-content">
-                I am still working on it :)
+            <div class="profile-content" id="contentPane">
+                @*Partial View Rendered Here*@
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript" language="javascript">
+    $('.nav li a').click(function (e) {
+        var $this = $(this);
+        if (!$this.hasClass('active')) {
+            $this.addClass('active');
+        }
+        e.preventDefault();
+    });
+</script>

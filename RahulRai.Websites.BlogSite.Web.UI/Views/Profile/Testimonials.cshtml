@@ -1,0 +1,29 @@
+﻿@model IEnumerable<RahulRai.Websites.Utilities.Common.Entities.Testimonial>
+
+
+<h1>Coming Soon!!</h1>
+<table class="table">
+    @if (null != Model)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorOrganization)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorComments)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorToken)
+                </td>
+            </tr>
+        }
+    }
+</table>

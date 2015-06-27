@@ -1,0 +1,7 @@
+﻿@using System.Configuration
+@using RahulRai.Websites.Utilities.Common.RegularTypes
+<div class="h_iframe">
+    <!-- a transparent image is preferable -->
+    <img class="ratio" src="http://placehold.it/16x40" alt="placeholder" />
+    <iframe src="https://docs.google.com/viewer?srcid=@ConfigurationManager.AppSettings[ApplicationConstants.ResumeDocumentKey]&pid=explorer&efh=false&a=v&chrome=false&embedded=true" allowfullscreen></iframe>
+</div>

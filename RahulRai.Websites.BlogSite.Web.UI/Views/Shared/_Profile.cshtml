@@ -4,7 +4,7 @@
     var resourceBasePath = ViewBag.ResourceBasePath;
     var myEmail = ViewBag.MyEmail;
 }
-
+<a class="visible-xs" name="menu"></a>
 <div class="container">
     <div class="row">
         <div class="col-md-3">
@@ -29,25 +29,25 @@
                 <div class="profile-usermenu">
                     <ul class="nav">
                         <li class="@Html.IsSelected(actions: "ProfileContent", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "ProfileContent"}))">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "ProfileContent"}))#content">
                                 <i class="glyphicon glyphicon-cog"></i>
                                 Profile
                             </a>
                         </li>
                         <li class="@Html.IsSelected(actions: "Testimonials", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Testimonials"}))">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "Testimonials"}))#content">
                                 <i class="glyphicon glyphicon-thumbs-up"></i>
                                 Testimonials
                             </a>
                         </li>
                         <li class="@Html.IsSelected(actions: "Resume", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Resume"}))">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "Resume"}))#content">
                                 <i class="glyphicon glyphicon-star"></i>
                                 Resume'
                             </a>
                         </li>
                         <li class="@Html.IsSelected(actions: "Contact", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Contact"}))">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "Contact"}))#content">
                                 <i class="glyphicon glyphicon-phone"></i>
                                 Contact
                             </a>
@@ -59,6 +59,8 @@
         </div>
         <div class="col-md-9">
             <div class="profile-content" id="contentPane">
+                <a class="visible-xs" name="content"></a>
+                <a class="visible-xs" href="#menu">Back To Menu</a>
                 @RenderBody()
             </div>
         </div>

@@ -149,7 +149,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// Determines whether the specified controllers is selected.
+        ///     Determines whether the specified controllers is selected.
         /// </summary>
         /// <param name="html">The HTML.</param>
         /// <param name="controllers">The controllers.</param>

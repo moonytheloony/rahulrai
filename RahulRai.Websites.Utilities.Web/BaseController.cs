@@ -23,21 +23,22 @@ namespace RahulRai.Websites.Utilities.Web
     #endregion
 
     /// <summary>
-    /// Base controller
+    ///     Base controller
     /// </summary>
     public abstract class BaseController : Controller
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseController" /> class.
+        ///     Initializes a new instance of the <see cref="BaseController" /> class.
         /// </summary>
         protected BaseController()
         {
-            ViewBag.ResourceBasePath = ConfigurationManager.AppSettings[ApplicationConstants.ApplicationResourceRoot];
-            ViewBag.MyEmail = ConfigurationManager.AppSettings[ApplicationConstants.MyEmail];
+            this.ViewBag.ResourceBasePath =
+                ConfigurationManager.AppSettings[ApplicationConstants.ApplicationResourceRoot];
+            this.ViewBag.MyEmail = ConfigurationManager.AppSettings[ApplicationConstants.MyEmail];
         }
 
         /// <summary>
-        /// Called before the action method is invoked.
+        ///     Called before the action method is invoked.
         /// </summary>
         /// <param name="filterContext">Information about the current request and action.</param>
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -48,7 +49,7 @@ namespace RahulRai.Websites.Utilities.Web
                 case "get":
                     break;
                 default:
-                    ViewBag.Title = "Rahul on Technology and Things";
+                    this.ViewBag.Title = "Rahul on Technology and Things";
                     break;
             }
         }

@@ -23,22 +23,22 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
     #endregion
 
     /// <summary>
-    /// Class TraceUtility.
+    ///     Class TraceUtility.
     /// </summary>
     public class TraceUtility
     {
         /// <summary>
-        /// The information format
+        ///     The information format
         /// </summary>
         private const string InformationFormat = "Time: {0} Content: {1}";
 
         /// <summary>
-        /// The error format
+        ///     The error format
         /// </summary>
         private const string ErrorFormat = "Time: {0} Message: {1} Exception Message: {2} Exception: {3}";
 
         /// <summary>
-        /// Logs the information.
+        ///     Logs the information.
         /// </summary>
         /// <param name="information">The information.</param>
         /// <param name="value">The value.</param>
@@ -49,7 +49,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// Logs the warning.
+        ///     Logs the warning.
         /// </summary>
         /// <param name="warning">The warning.</param>
         /// <param name="value">The value.</param>
@@ -60,12 +60,12 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         }
 
         /// <summary>
-        /// Logs the error.
+        ///     Logs the error.
         /// </summary>
         /// <param name="exception">The exception.</param>
         /// <param name="customMessage">The custom message.</param>
         /// <param name="value">The value.</param>
-        public static void LogError(Exception exception, string customMessage, params object[] value)
+        public static void LogError(Exception exception, string customMessage = "", params object[] value)
         {
             var formattedValue = string.Format(CultureInfo.InvariantCulture, customMessage, value);
             Trace.TraceError(ErrorFormat, DateTime.UtcNow, formattedValue, exception.Message, exception.ToString());

@@ -15,36 +15,36 @@
 namespace RahulRai.Websites.Utilities.Common.Entities
 {
     /// <summary>
-    /// Class Testimonial.
+    ///     Class Testimonial.
     /// </summary>
     public class Testimonial
     {
         /// <summary>
-        /// Gets or sets the author.
+        ///     Gets or sets the author.
         /// </summary>
         /// <value>The author.</value>
         public string Author { get; set; }
 
         /// <summary>
-        /// Gets or sets the author email.
+        ///     Gets or sets the author email.
         /// </summary>
         /// <value>The author email.</value>
         public string AuthorEmail { get; set; }
 
         /// <summary>
-        /// Gets or sets the author organization.
+        ///     Gets or sets the author organization.
         /// </summary>
         /// <value>The author organization.</value>
         public string AuthorOrganization { get; set; }
 
         /// <summary>
-        /// Gets or sets the author comments.
+        ///     Gets or sets the author comments.
         /// </summary>
         /// <value>The author comments.</value>
         public string AuthorComments { get; set; }
 
         /// <summary>
-        /// Gets or sets the author token.
+        ///     Gets or sets the author token.
         /// </summary>
         /// <value>The author token.</value>
         public string AuthorToken { get; set; }

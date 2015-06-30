@@ -42,7 +42,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI
         }
 
         /// <summary>
-        /// Registers the global filters.
+        ///     Registers the global filters.
         /// </summary>
         /// <param name="filters">The filters.</param>
         private static void RegisterGlobalFilters(GlobalFilterCollection filters)

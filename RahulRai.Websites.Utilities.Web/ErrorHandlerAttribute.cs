@@ -22,12 +22,12 @@ namespace RahulRai.Websites.Utilities.Web
     #endregion
 
     /// <summary>
-    /// Class ErrorHandlerAttribute. This class cannot be inherited.
+    ///     Class ErrorHandlerAttribute. This class cannot be inherited.
     /// </summary>
     public sealed class ErrorHandlerAttribute : HandleErrorAttribute
     {
         /// <summary>
-        /// Called when an exception occurs.
+        ///     Called when an exception occurs.
         /// </summary>
         /// <param name="filterContext">The action-filter context.</param>
         public override void OnException(ExceptionContext filterContext)

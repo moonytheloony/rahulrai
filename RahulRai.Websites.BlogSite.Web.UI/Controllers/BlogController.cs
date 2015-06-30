@@ -168,7 +168,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         private void SetPreviousNextPage()
         {
-            return;
         }
     }
 }

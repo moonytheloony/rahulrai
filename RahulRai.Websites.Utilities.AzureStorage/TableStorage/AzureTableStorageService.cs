@@ -33,7 +33,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
     #endregion
 
     /// <summary>
-    /// The azure table storage repository.
+    ///     The azure table storage repository.
     /// </summary>
     /// <typeparam name="TElement">Element for entity</typeparam>
     public class AzureTableStorageService<TElement>
@@ -42,17 +42,17 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         #region Fields
 
         /// <summary>
-        /// The converter from table entity to entity.
+        ///     The converter from table entity to entity.
         /// </summary>
         private readonly Func<DynamicTableEntity, TElement> convertToEntity;
 
         /// <summary>
-        /// The converter from entity to table entity.
+        ///     The converter from entity to table entity.
         /// </summary>
         private readonly Func<TElement, DynamicTableEntity> convertToTableEntity;
 
         /// <summary>
-        /// The table name
+        ///     The table name
         /// </summary>
         private readonly string tableName = string.Empty;
 
@@ -61,7 +61,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AzureTableStorageService{TElement}" /> class.
+        ///     Initializes a new instance of the <see cref="AzureTableStorageService{TElement}" /> class.
         /// </summary>
         /// <param name="storageAccountConnectionString">The storage account connection string.</param>
         /// <param name="tableName">Name of the table.</param>
@@ -97,25 +97,25 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         #region Properties
 
         /// <summary>
-        /// Gets or sets the table request options.
+        ///     Gets or sets the table request options.
         /// </summary>
         /// <value>The table request options.</value>
         public TableRequestOptions TableRequestOptions { get; set; }
 
         /// <summary>
-        /// Gets or sets the active table.
+        ///     Gets or sets the active table.
         /// </summary>
         /// <value>The active table.</value>
         private CloudTable ActiveTable { get; set; }
 
         /// <summary>
-        /// Gets or sets the cloud table client.
+        ///     Gets or sets the cloud table client.
         /// </summary>
         /// <value>The cloud table client.</value>
         private CloudTableClient CloudTableClient { get; set; }
 
         /// <summary>
-        /// Gets or sets the table operation.
+        ///     Gets or sets the table operation.
         /// </summary>
         /// <value>The table operations.</value>
         private TableBatchOperation TableOperations { get; set; }
@@ -125,7 +125,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         #region Public Methods and Operators
 
         /// <summary>
-        /// The create storage object and set execution context.
+        ///     The create storage object and set execution context.
         /// </summary>
         public virtual void CreateStorageObjectAndSetExecutionContext()
         {
@@ -134,7 +134,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// The delete.
+        ///     The delete.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public virtual void Delete(TElement entity)
@@ -144,7 +144,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// The delete storage object.
+        ///     The delete storage object.
         /// </summary>
         public void DeleteStorageObject()
         {
@@ -152,7 +152,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// The get all.
+        ///     The get all.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The <see cref="List{T}" />.</returns>
@@ -166,7 +166,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// Gets all.
+        ///     Gets all.
         /// </summary>
         /// <returns>IList&lt;TElement&gt;.</returns>
         public virtual IList<TElement> GetAll()
@@ -178,7 +178,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// Customs the operation.
+        ///     Customs the operation.
         /// </summary>
         /// <returns>CloudTable.</returns>
         public virtual CloudTable CustomOperation()
@@ -187,12 +187,14 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// The get by id.
+        ///     The get by id.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="id">The id.</param>
-        /// <returns>The <see cref="TElement" />.
-        /// Element for entity</returns>
+        /// <returns>
+        ///     The <see cref="TElement" />.
+        ///     Element for entity
+        /// </returns>
         public virtual TElement GetById(string key, string id)
         {
             var operation = TableOperation.Retrieve(key, id);
@@ -201,7 +203,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// The insert.
+        ///     The insert.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public virtual void Insert(TElement entity)
@@ -211,7 +213,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// Inserts the or replace.
+        ///     Inserts the or replace.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public virtual void InsertOrReplace(TElement entity)
@@ -221,7 +223,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// The merge.
+        ///     The merge.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public virtual void Merge(TElement entity)
@@ -231,7 +233,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// Queries the specified filter.
+        ///     Queries the specified filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <param name="takeCount">The take count.</param>
@@ -247,7 +249,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// The save.
+        ///     The save.
         /// </summary>
         /// <returns>The <see cref="bool" />.</returns>
         public virtual bool Save()
@@ -258,16 +260,19 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// Saves all.
+        ///     Saves all.
         /// </summary>
         /// <returns>IList&lt;OperationResult&gt;.</returns>
         /// <exception cref="BlogSystemException">Error executing batch table operation.</exception>
-        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">Error executing batch table operation.</exception>
+        /// <exception cref="RahulRai.Websites.Utilities.Common.Exceptions.BlogSystemException">
+        ///     Error executing batch table
+        ///     operation.
+        /// </exception>
         public virtual IList<OperationResult> SaveAll()
         {
             var result = this.ActiveTable.ExecuteBatch(
-                    this.TableOperations,
-                    this.TableRequestOptions);
+                this.TableOperations,
+                this.TableRequestOptions);
             this.TableOperations = new TableBatchOperation();
             return
                 result.Select(x => new OperationResult(x.HttpStatusCode, IsSuccessStatusCode(x.HttpStatusCode)))
@@ -275,7 +280,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// The set execution context.
+        ///     The set execution context.
         /// </summary>
         public virtual void SetExecutionContext()
         {
@@ -283,7 +288,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         }
 
         /// <summary>
-        /// The update.
+        ///     The update.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public virtual void Update(TElement entity)
@@ -297,7 +302,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
         #region Methods
 
         /// <summary>
-        /// Determines whether the HTTP status code represents a success.
+        ///     Determines whether the HTTP status code represents a success.
         /// </summary>
         /// <param name="statusCode">The status code.</param>
         /// <returns>If the status code represents a success.</returns>

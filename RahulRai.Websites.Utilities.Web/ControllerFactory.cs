@@ -24,12 +24,12 @@ namespace RahulRai.Websites.Utilities.Web
     #endregion
 
     /// <summary>
-    /// Controller factory
+    ///     Controller factory
     /// </summary>
     public class ControllerFactory : IControllerFactory
     {
         /// <summary>
-        /// Creates the specified controller by using the specified request context.
+        ///     Creates the specified controller by using the specified request context.
         /// </summary>
         /// <param name="requestContext">The request context.</param>
         /// <param name="controllerName">The name of the controller.</param>
@@ -41,7 +41,7 @@ namespace RahulRai.Websites.Utilities.Web
         }
 
         /// <summary>
-        /// Gets the controller's session behavior.
+        ///     Gets the controller's session behavior.
         /// </summary>
         /// <param name="requestContext">The request context.</param>
         /// <param name="controllerName">The name of the controller whose session behavior you want to get.</param>
@@ -53,7 +53,7 @@ namespace RahulRai.Websites.Utilities.Web
         }
 
         /// <summary>
-        /// Releases the specified controller.
+        ///     Releases the specified controller.
         /// </summary>
         /// <param name="controller">The controller.</param>
         public void ReleaseController(IController controller)

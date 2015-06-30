@@ -22,12 +22,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     #endregion
 
     /// <summary>
-    /// Class ErrorController.
+    ///     Class ErrorController.
     /// </summary>
     public class ErrorController : BaseController
     {
         /// <summary>
-        /// Nots the found.
+        ///     Nots the found.
         /// </summary>
         /// <returns>ActionResult.</returns>
         public ActionResult NotFound()
@@ -37,7 +37,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Internals the server.
+        ///     Internals the server.
         /// </summary>
         /// <returns>ActionResult.</returns>
         public ActionResult InternalServer()

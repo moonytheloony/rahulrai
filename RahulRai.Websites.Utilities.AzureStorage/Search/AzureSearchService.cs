@@ -18,7 +18,6 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Search
 
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using Common.Entities;
     using Common.Exceptions;
@@ -126,7 +125,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Search
         public void DeleteData(string idToDelete)
         {
             var batch = IndexBatch.Create(
-                      new IndexAction(IndexActionType.Delete, new Document { { "blogId", idToDelete } }));
+                new IndexAction(IndexActionType.Delete, new Document { { "blogId", idToDelete } }));
             this.indexClient.Documents.Index(batch);
         }
 

@@ -16,7 +16,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.GlobalAccess
 {
     #region
 
-    using System;
     using System.Configuration;
     using Utilities.AzureStorage.TableStorage;
     using Utilities.Common.Entities;

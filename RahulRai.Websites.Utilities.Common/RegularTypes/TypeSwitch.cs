@@ -22,14 +22,14 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
     #endregion
 
     /// <summary>
-    /// The type switch.
+    ///     The type switch.
     /// </summary>
     public class TypeSwitch
     {
         #region Fields
 
         /// <summary>
-        /// The matches.
+        ///     The matches.
         /// </summary>
         private readonly Dictionary<Type, Action> matches = new Dictionary<Type, Action>();
 
@@ -38,7 +38,7 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         #region Public Methods and Operators
 
         /// <summary>
-        /// The case.
+        ///     The case.
         /// </summary>
         /// <typeparam name="T">Type of input</typeparam>
         /// <param name="action">The action.</param>
@@ -50,7 +50,7 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         }
 
         /// <summary>
-        /// The switch.
+        ///     The switch.
         /// </summary>
         /// <param name="value">The target.</param>
         public void Switch(Type value)

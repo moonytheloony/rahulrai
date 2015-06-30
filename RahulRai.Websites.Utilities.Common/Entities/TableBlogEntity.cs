@@ -25,19 +25,19 @@ namespace RahulRai.Websites.Utilities.Common.Entities
     #endregion
 
     /// <summary>
-    /// Class TableBlogEntity.
+    ///     Class TableBlogEntity.
     /// </summary>
     public class TableBlogEntity
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableBlogEntity" /> class.
+        ///     Initializes a new instance of the <see cref="TableBlogEntity" /> class.
         /// </summary>
         public TableBlogEntity()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableBlogEntity" /> class.
+        ///     Initializes a new instance of the <see cref="TableBlogEntity" /> class.
         /// </summary>
         /// <param name="post">The post.</param>
         public TableBlogEntity(BlogPost post)
@@ -55,67 +55,67 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         }
 
         /// <summary>
-        /// Gets or sets the formatted URI.
+        ///     Gets or sets the formatted URI.
         /// </summary>
         /// <value>The formatted URI.</value>
         public string FormattedUri { get; set; }
 
         /// <summary>
-        /// Gets or sets the title.
+        ///     Gets or sets the title.
         /// </summary>
         /// <value>The title.</value>
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets the body.
+        ///     Gets or sets the body.
         /// </summary>
         /// <value>The body.</value>
         public IList<string> Body { get; set; }
 
         /// <summary>
-        /// Gets or sets the blog key.
+        ///     Gets or sets the blog key.
         /// </summary>
         /// <value>The blog key.</value>
         public string BlogKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the blog identifier.
+        ///     Gets or sets the blog identifier.
         /// </summary>
         /// <value>The blog identifier.</value>
         public string BlogId { get; set; }
 
         /// <summary>
-        /// Gets or sets the posted date.
+        ///     Gets or sets the posted date.
         /// </summary>
         /// <value>The posted date.</value>
         public DateTime PostedDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the categories CSV.
+        ///     Gets or sets the categories CSV.
         /// </summary>
         /// <value>The categories CSV.</value>
         public string CategoriesCsv { get; set; }
 
         /// <summary>
-        /// Gets or sets the entity tag.
+        ///     Gets or sets the entity tag.
         /// </summary>
         /// <value>The entity tag.</value>
         public string EntityTag { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is draft.
+        ///     Gets or sets a value indicating whether this instance is draft.
         /// </summary>
         /// <value><c>true</c> if this instance is draft; otherwise, <c>false</c>.</value>
         public bool IsDraft { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is deleted.
+        ///     Gets or sets a value indicating whether this instance is deleted.
         /// </summary>
         /// <value><c>true</c> if this instance is deleted; otherwise, <c>false</c>.</value>
         public bool IsDeleted { get; set; }
 
         /// <summary>
-        /// Gets the blog post.
+        ///     Gets the blog post.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns>BlogPost.</returns>

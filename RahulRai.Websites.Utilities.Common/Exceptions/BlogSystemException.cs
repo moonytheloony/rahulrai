@@ -22,7 +22,7 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
     #endregion
 
     /// <summary>
-    /// The  system exception.
+    ///     The  system exception.
     /// </summary>
     [Serializable]
     public class BlogSystemException : Exception
@@ -30,7 +30,7 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BlogSystemException" /> class.
+        ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
         public BlogSystemException()
         {
@@ -38,7 +38,7 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BlogSystemException" /> class.
+        ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
         /// <param name="message">The message.</param>
         public BlogSystemException(string message)
@@ -48,7 +48,7 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BlogSystemException" /> class.
+        ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
@@ -59,7 +59,7 @@ namespace RahulRai.Websites.Utilities.Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BlogSystemException" /> class.
+        ///     Initializes a new instance of the <see cref="BlogSystemException" /> class.
         /// </summary>
         /// <param name="serializationInfo">The serialization info.</param>
         /// <param name="streamingContext">The streaming context.</param>

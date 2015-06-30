@@ -16,6 +16,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
 {
     #region
 
+    using System;
     using System.Collections;
     using Microsoft.WindowsAzure.Storage.Table;
 
@@ -24,6 +25,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
     /// <summary>
     ///     Class ContinuationStack.
     /// </summary>
+    [Serializable]
     public class ContinuationStack
     {
         /// <summary>

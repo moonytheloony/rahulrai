@@ -26,23 +26,23 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Tests.TableStorage
     #endregion
 
     /// <summary>
-    /// Class AzureTableStorageRepositoryTests.
+    ///     Class AzureTableStorageRepositoryTests.
     /// </summary>
     [TestClass]
     public class AzureTableStorageRepositoryTests
     {
         /// <summary>
-        /// The connection string
+        ///     The connection string
         /// </summary>
-        private string connectionString = string.Empty;
+        private readonly string connectionString = string.Empty;
 
         /// <summary>
-        /// The test object
+        ///     The test object
         /// </summary>
         private AzureTableStorageService<TableBlogEntity> testObject;
 
         /// <summary>
-        /// Azures the table storage repository test.
+        ///     Azures the table storage repository test.
         /// </summary>
         [TestInitialize]
         public void AzureTableStorageRepositoryTest()
@@ -56,7 +56,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Tests.TableStorage
         }
 
         /// <summary>
-        /// Inserts the or replace test.
+        ///     Inserts the or replace test.
         /// </summary>
         [TestMethod]
         public void InsertOrReplaceTest()
@@ -74,7 +74,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Tests.TableStorage
         }
 
         /// <summary>
-        /// Queries the test.
+        ///     Queries the test.
         /// </summary>
         [TestMethod]
         public void QueryTest()

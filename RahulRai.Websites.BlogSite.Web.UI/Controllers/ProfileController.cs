@@ -22,12 +22,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     #endregion
 
     /// <summary>
-    /// Class ProfileController.
+    ///     Class ProfileController.
     /// </summary>
     public class ProfileController : BaseController
     {
         /// <summary>
-        /// My profile.
+        ///     My profile.
         /// </summary>
         /// <returns>ActionResult.</returns>
         public ActionResult MyProfile()
@@ -36,7 +36,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Writes a testimonial for me.
+        ///     Writes a testimonial for me.
         /// </summary>
         /// <returns>ActionResult.</returns>
         public ActionResult WriteATestimonialForMe()
@@ -45,7 +45,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Profiles the content.
+        ///     Profiles the content.
         /// </summary>
         /// <returns>ViewResult.</returns>
         public ViewResult ProfileContent()
@@ -54,7 +54,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Testimonialses this instance.
+        ///     Testimonialses this instance.
         /// </summary>
         /// <returns>ViewResult.</returns>
         public ViewResult Testimonials()
@@ -63,7 +63,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Resumes this instance.
+        ///     Resumes this instance.
         /// </summary>
         /// <returns>ViewResult.</returns>
         public ViewResult Resume()
@@ -72,7 +72,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Contacts this instance.
+        ///     Contacts this instance.
         /// </summary>
         /// <returns>ViewResult.</returns>
         public ViewResult Contact()

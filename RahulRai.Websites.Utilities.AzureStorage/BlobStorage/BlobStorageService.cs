@@ -17,12 +17,10 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
     #region
 
     using System;
-    using System.Diagnostics;
     using System.IO;
     using System.Web;
     using Common.Entities;
     using Common.Exceptions;
-    using Common.Helpers;
     using Common.RegularTypes;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;

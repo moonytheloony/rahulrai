@@ -94,31 +94,48 @@ namespace RahulRai.Websites.Utilities.Web
         /// <exception cref="BlogSystemException">unable to create container</exception>
         public MetaWeblogHandler()
         {
-            if (null == this.metaweblogTable)
+            TraceUtility.LogInformation("Metawebloghander started initializing");
+            try
             {
-                this.metaweblogTable = new AzureTableStorageService<TableBlogEntity>(
-                    this.connectionString,
-                    this.blogTableName,
-                    AzureTableStorageAssist.ConvertEntityToDynamicTableEntity,
-                    AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
-                this.metaweblogTable.CreateStorageObjectAndSetExecutionContext();
-            }
-
-            if (null == this.mediaStorageService)
-            {
-                this.mediaStorageService = new BlobStorageService(this.connectionString);
-                if (FileOperationStatus.FolderCreated != this.mediaStorageService.CreateContainer(this.blogResourceContainerName, VisibilityType.FilesVisibleToAll))
+                if (null == this.metaweblogTable)
                 {
-                    throw new BlogSystemException("unable to create container");
+                    this.metaweblogTable = new AzureTableStorageService<TableBlogEntity>(
+                        this.connectionString,
+                        this.blogTableName,
+                        AzureTableStorageAssist.ConvertEntityToDynamicTableEntity,
+                        AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
+                    this.metaweblogTable.CreateStorageObjectAndSetExecutionContext();
+                    TraceUtility.LogInformation("Blog table created");
+                }
+
+                if (null == this.mediaStorageService)
+                {
+                    this.mediaStorageService = new BlobStorageService(this.connectionString);
+                    if (FileOperationStatus.FolderCreated != this.mediaStorageService.CreateContainer(this.blogResourceContainerName, VisibilityType.FilesVisibleToAll))
+                    {
+                        TraceUtility.LogWarning("Resource container could not be created");
+                        throw new BlogSystemException("unable to create container");
+                    }
+                }
+
+                if (null == this.searchService)
+                {
+                    this.searchService = new AzureSearchService(
+                        this.searchServiceName,
+                        this.searchServiceKey,
+                        ApplicationConstants.SearchIndex);
+                    TraceUtility.LogInformation("Search service initialized");
                 }
             }
-
-            if (null == this.searchService)
+            catch (BlogSystemException)
             {
-                this.searchService = new AzureSearchService(
-                    this.searchServiceName,
-                    this.searchServiceKey,
-                    ApplicationConstants.SearchIndex);
+                //// This is a custom exception. Throw it again.
+                throw;
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("failed to initialize");
             }
         }
 
@@ -137,6 +154,7 @@ namespace RahulRai.Websites.Utilities.Web
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
+            TraceUtility.LogInformation("Disposed all fields");
         }
 
         /// <summary>
@@ -154,6 +172,7 @@ namespace RahulRai.Websites.Utilities.Web
         {
             ValidateUser(username, password);
             var postTitle = post["title"];
+            TraceUtility.LogInformation("Add Post invoked for title {0}", postTitle);
             var description = post["description"];
             var categories = (null == post["categories"] || null == post["categories"] as string[])
                 ? string.Empty
@@ -168,26 +187,50 @@ namespace RahulRai.Websites.Utilities.Web
                 IsDraft = !publish
             };
 
-            var tablePost = new TableBlogEntity(blogPost);
-            this.metaweblogTable.InsertOrReplace(tablePost);
-            var result = this.metaweblogTable.SaveAll();
-            if (!result.All(element => element.IsSuccess))
+            try
             {
-                throw new BlogSystemException("Can not save blog post");
-            }
-
-            ////Create search document if search terms exist.
-            if (!string.IsNullOrWhiteSpace(categories))
-            {
-                this.searchService.UpsertDataToIndex(new BlogSearch
+                var tablePost = new TableBlogEntity(blogPost);
+                this.metaweblogTable.InsertOrReplace(tablePost);
+                var result = this.metaweblogTable.SaveAll();
+                if (!result.All(element => element.IsSuccess))
                 {
-                    BlogId = blogPost.BlogId,
-                    SearchTags = blogPost.CategoriesCsv.ToCollection().ToArray(),
-                    Title = blogPost.Title
-                });
+                    TraceUtility.LogWarning("Could not save blog post with title {0}", postTitle);
+                    throw new BlogSystemException("Can not save blog post");
+                }
+            }
+            catch (BlogSystemException)
+            {
+                //// Already logged. Throw.
+                throw;
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("operation failed");
             }
 
-            return blogPost.BlogId;
+            try
+            {
+                ////Create search document if search terms exist.
+                if (!string.IsNullOrWhiteSpace(categories) && publish)
+                {
+                    this.searchService.UpsertDataToIndex(new BlogSearch
+                    {
+                        BlogId = blogPost.BlogId,
+                        SearchTags = blogPost.CategoriesCsv.ToCollection().ToArray(),
+                        Title = blogPost.Title
+                    });
+
+                    TraceUtility.LogInformation("Blog post has been indexed. Title {0}", postTitle);
+                }
+
+                return blogPost.BlogId;
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception, "Blog indexing failed title {0}. Message {1}", postTitle);
+                throw new BlogSystemException("failed indexing");
+            }
         }
 
         /// <summary>
@@ -205,6 +248,7 @@ namespace RahulRai.Websites.Utilities.Web
         {
             ValidateUser(username, password);
             var postTitle = post["title"];
+            TraceUtility.LogInformation("Update post invoked for {0} ID {1}", postTitle, postid);
             var description = post["description"];
             var categories = (null == post["categories"] || null == post["categories"] as string[])
                 ? string.Empty
@@ -219,24 +263,49 @@ namespace RahulRai.Websites.Utilities.Web
                 IsDraft = !publish,
                 BlogId = postid ////Persist post id
             };
-            var tablePost = new TableBlogEntity(blogPost);
-            this.metaweblogTable.InsertOrReplace(tablePost);
-            var result = this.metaweblogTable.SaveAll();
-            if (!result.All(element => element.IsSuccess))
+
+            try
             {
-                throw new BlogSystemException("Can not update blog post");
+                var tablePost = new TableBlogEntity(blogPost);
+                this.metaweblogTable.InsertOrReplace(tablePost);
+                var result = this.metaweblogTable.SaveAll();
+                if (!result.All(element => element.IsSuccess))
+                {
+                    TraceUtility.LogWarning("Could not update post id {0}", postid);
+                    throw new BlogSystemException("Can not update blog post");
+                }
+            }
+            catch (BlogSystemException)
+            {
+                throw;
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("update failed");
             }
 
-            ////Update search document.
-            this.searchService.UpsertDataToIndex(new BlogSearch
+            try
             {
-                BlogId = blogPost.BlogId,
-                SearchTags =
-                    string.IsNullOrWhiteSpace(blogPost.CategoriesCsv)
-                        ? new[] { string.Empty }
-                        : blogPost.CategoriesCsv.ToCollection().ToArray(),
-                Title = blogPost.Title
-            });
+                ////Update search document. If categories are removed, remove all indexes.
+                if (publish)
+                {
+                    this.searchService.UpsertDataToIndex(new BlogSearch
+                    {
+                        BlogId = blogPost.BlogId,
+                        SearchTags =
+                            string.IsNullOrWhiteSpace(blogPost.CategoriesCsv)
+                                ? new[] { string.Empty }
+                                : blogPost.CategoriesCsv.ToCollection().ToArray(),
+                        Title = blogPost.Title
+                    });
+                }
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("indexing failed");
+            }
 
             return true;
         }
@@ -253,12 +322,30 @@ namespace RahulRai.Websites.Utilities.Web
         bool IMetaWeblog.DeletePost(string key, string postid, string username, string password, bool publish)
         {
             ValidateUser(username, password);
-            var blogPost = this.metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
-            blogPost.IsDeleted = true;
-            this.metaweblogTable.Update(blogPost);
+            try
+            {
+                //// Soft delete.
+                var blogPost = this.metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
+                blogPost.IsDeleted = true;
+                this.metaweblogTable.Update(blogPost);
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("delete failed");
+            }
 
-            ////Delete search document.
-            this.searchService.DeleteData(postid);
+            try
+            {
+                ////Delete search document.
+                this.searchService.DeleteData(postid);
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("index could not be updated");
+            }
+
             return true;
         }
 
@@ -272,25 +359,33 @@ namespace RahulRai.Websites.Utilities.Web
         object IMetaWeblog.GetPost(string postid, string username, string password)
         {
             ValidateUser(username, password);
-            var blogPost = this.metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
-            var blog = TableBlogEntity.GetBlogPost(blogPost);
-            if (null == blog)
+            try
             {
-                return null;
-            }
+                var blogPost = this.metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
+                var blog = TableBlogEntity.GetBlogPost(blogPost);
+                if (null == blog)
+                {
+                    return null;
+                }
 
-            return new
+                return new
+                {
+                    description = blog.Body,
+                    title = blog.Title,
+                    dateCreated = blog.PostedDate,
+                    wp_slug = string.Empty,
+                    categories =
+                        string.IsNullOrWhiteSpace(blogPost.CategoriesCsv)
+                            ? new[] { string.Empty }
+                            : blogPost.CategoriesCsv.ToCollection().ToArray(),
+                    postid = blog.BlogId
+                };
+            }
+            catch (Exception exception)
             {
-                description = blog.Body,
-                title = blog.Title,
-                dateCreated = blog.PostedDate,
-                wp_slug = string.Empty,
-                categories =
-                    string.IsNullOrWhiteSpace(blogPost.CategoriesCsv)
-                        ? new[] { string.Empty }
-                        : blogPost.CategoriesCsv.ToCollection().ToArray(),
-                postid = blog.BlogId
-            };
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("error getting post");
+            }
         }
 
         /// <summary>
@@ -314,18 +409,18 @@ namespace RahulRai.Websites.Utilities.Web
             var query = new TableQuery().Where(completeQuery);
             var result = activeTable.ExecuteQuery(
                 query.Select(
-                new[]
-                {
-                    KnownTypes.RowKey,
-                    KnownTypes.PartitionKey,
-                    KnownTypes.Timestamp,
-                    "AutoIndexedElement_0_Body",
-                    "PostedDate",
-                    "Title",
-                    "IsDeleted",
-                    "IsDraft"
-                }),
-            this.metaweblogTable.TableRequestOptions);
+                    new[]
+                    {
+                        KnownTypes.RowKey,
+                        KnownTypes.PartitionKey,
+                        KnownTypes.Timestamp,
+                        "AutoIndexedElement_0_Body",
+                        "PostedDate",
+                        "Title",
+                        "IsDeleted",
+                        "IsDraft"
+                    }),
+                this.metaweblogTable.TableRequestOptions);
             var resultBlogs =
                 result.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>)
                     .ToList()
@@ -372,7 +467,10 @@ namespace RahulRai.Websites.Utilities.Web
 
             ////Combine all categories.
             var dynamicTableEntities = result as IList<DynamicTableEntity> ?? resultList.ToList();
-            var allCategories = string.Join(KnownTypes.CsvSeparator.ToInvariantCultureString(), dynamicTableEntities.Select(element => element["CategoriesCsv"].StringValue)).ToCollection();
+            var allCategories =
+                string.Join(
+                KnownTypes.CsvSeparator.ToInvariantCultureString(),
+                dynamicTableEntities.Select(element => element["CategoriesCsv"].StringValue)).ToCollection();
             var categories = allCategories as IList<string> ?? allCategories.ToList();
             var posts = new XmlRpcStruct[categories.Count()];
             var counter = 0;
@@ -407,9 +505,9 @@ namespace RahulRai.Websites.Utilities.Web
             {
                 url =
                     this.mediaStorageService.AddBlobToContainer(
-                    this.blogResourceContainerName,
-                    resourceStream,
-                    media["name"]).ToString()
+                        this.blogResourceContainerName,
+                        resourceStream,
+                        media["name"]).ToString()
             };
         }
 
@@ -458,11 +556,13 @@ namespace RahulRai.Websites.Utilities.Web
         /// <exception cref="System.UnauthorizedAccessException">Not authorized</exception>
         private static void ValidateUser(string username, string password)
         {
+            TraceUtility.LogInformation("Started validation of user");
             var adminName = ConfigurationManager.AppSettings[ApplicationConstants.PublisherName];
             var secret = ConfigurationManager.AppSettings[ApplicationConstants.Secret];
             if (!(string.Equals(username, adminName, StringComparison.OrdinalIgnoreCase) &&
                   string.Equals(password, secret, StringComparison.InvariantCulture)))
             {
+                TraceUtility.LogWarning("User name and password do not match records");
                 throw new UnauthorizedAccessException(string.Format("Not Allowed U:{0} P:{1}", username, password));
             }
         }

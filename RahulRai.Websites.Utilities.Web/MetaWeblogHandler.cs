@@ -30,6 +30,7 @@ namespace RahulRai.Websites.Utilities.Web
     using Common.RegularTypes;
     using CookComputing.XmlRpc;
     using Microsoft.WindowsAzure.Storage.Table;
+    using Microsoft.WindowsAzure.Storage.Table.Queryable;
 
     #endregion
 
@@ -324,6 +325,7 @@ namespace RahulRai.Websites.Utilities.Web
             ValidateUser(username, password);
             try
             {
+                TraceUtility.LogInformation("Delete post invoked for {0}", postid);
                 //// Soft delete.
                 var blogPost = this.metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
                 blogPost.IsDeleted = true;
@@ -337,6 +339,7 @@ namespace RahulRai.Websites.Utilities.Web
 
             try
             {
+                TraceUtility.LogInformation("Delete post search index for {0}", postid);
                 ////Delete search document.
                 this.searchService.DeleteData(postid);
             }
@@ -361,6 +364,7 @@ namespace RahulRai.Websites.Utilities.Web
             ValidateUser(username, password);
             try
             {
+                TraceUtility.LogInformation("Get post invoked for {0}", postid);
                 var blogPost = this.metaweblogTable.GetById(ApplicationConstants.BlogKey, postid);
                 var blog = TableBlogEntity.GetBlogPost(blogPost);
                 if (null == blog)
@@ -399,45 +403,36 @@ namespace RahulRai.Websites.Utilities.Web
         object[] IMetaWeblog.GetRecentPosts(string blogid, string username, string password, int numberOfPosts)
         {
             ValidateUser(username, password);
-            var activeTable = this.metaweblogTable.CustomOperation();
-            //// Create a projected query and order by date posted.
-            var partitionKey = TableQuery.GenerateFilterCondition(KnownTypes.PartitionKey, QueryComparisons.Equal, ApplicationConstants.BlogKey);
-            var rowKey = TableQuery.GenerateFilterCondition(KnownTypes.RowKey, QueryComparisons.Equal, blogid);
-            var notDeleted = TableQuery.GenerateFilterCondition("IsDeleted", QueryComparisons.Equal, false.ToString());
-            var querySegment = TableQuery.CombineFilters(partitionKey, TableOperators.And, rowKey);
-            var completeQuery = TableQuery.CombineFilters(querySegment, TableOperators.And, notDeleted);
-            var query = new TableQuery().Where(completeQuery);
-            var result = activeTable.ExecuteQuery(
-                query.Select(
-                    new[]
-                    {
-                        KnownTypes.RowKey,
-                        KnownTypes.PartitionKey,
-                        KnownTypes.Timestamp,
-                        "AutoIndexedElement_0_Body",
-                        "PostedDate",
-                        "Title",
-                        "IsDeleted",
-                        "IsDraft"
-                    }),
-                this.metaweblogTable.TableRequestOptions);
-            var resultBlogs =
-                result.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>)
-                    .ToList()
-                    .OrderByDescending(element => element.PostedDate)
-                    .Take(numberOfPosts);
-            var blogEntity = resultBlogs.Select(TableBlogEntity.GetBlogPost);
-            // ReSharper disable CoVariantArrayConversion This format is required by Live Writer
-            return blogEntity.Select(element => new
+            try
             {
-                description = element.Body,
-                title = element.Title,
-                dateCreated = element.PostedDate,
-                wp_slug = element.BlogKey,
-                categories = new[] { string.Empty },
-                postid = element.BlogFormattedUri
-            }).ToArray();
-            // ReSharper restore CoVariantArrayConversion
+                TraceUtility.LogInformation("Get recent posts invoked for {0}", blogid);
+                var activeTable = this.metaweblogTable.CustomOperation();
+                var rowKeyToUse = string.Format("{0:D19}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks);
+                var query = (from record in activeTable.CreateQuery<TableBlogEntity>()
+                             where record.PartitionKey == ApplicationConstants.BlogKey
+                                   && record.IsDraft == false
+                                   && record.IsDeleted == false
+                                   && string.Compare(record.RowKey, rowKeyToUse, StringComparison.OrdinalIgnoreCase) > 0
+                             select record).Take(numberOfPosts);
+                var result = query.AsTableQuery().ExecuteSegmented(null, this.metaweblogTable.TableRequestOptions);
+                var blogEntity = result.Select(TableBlogEntity.GetBlogPost);
+                // ReSharper disable CoVariantArrayConversion This format is required by Live Writer
+                return blogEntity.Select(element => new
+                {
+                    description = element.Body,
+                    title = element.Title,
+                    dateCreated = element.PostedDate,
+                    wp_slug = element.BlogKey,
+                    categories = new[] { string.Empty },
+                    postid = element.BlogFormattedUri
+                }).ToArray();
+                // ReSharper restore CoVariantArrayConversion
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("error getting recent posts");
+            }
         }
 
         /// <summary>
@@ -450,43 +445,52 @@ namespace RahulRai.Websites.Utilities.Web
         object[] IMetaWeblog.GetCategories(string blogid, string username, string password)
         {
             ValidateUser(username, password);
-            ////Get All Blog Search Keys
-            var activeTable = this.metaweblogTable.CustomOperation();
-            //// Create a projected query to get all categories.
-            var partitionKeyQuery = TableQuery.GenerateFilterCondition(
-                KnownTypes.PartitionKey,
-                QueryComparisons.Equal,
-                ApplicationConstants.BlogKey);
-            var query = new TableQuery().Where(partitionKeyQuery);
-            var result = activeTable.ExecuteQuery(query.Select(new[] { "CategoriesCsv" }), this.metaweblogTable.TableRequestOptions);
-            var resultList = result as IList<DynamicTableEntity> ?? result.ToList();
-            if (!resultList.Any())
+            try
             {
-                return null;
-            }
+                TraceUtility.LogInformation("Get categories");
+                ////Get All Blog Search Keys
+                var activeTable = this.metaweblogTable.CustomOperation();
+                //// Create a projected query to get all categories.
+                var partitionKeyQuery = TableQuery.GenerateFilterCondition(
+                    KnownTypes.PartitionKey,
+                    QueryComparisons.Equal,
+                    ApplicationConstants.BlogKey);
+                var query = new TableQuery().Where(partitionKeyQuery);
+                var result = activeTable.ExecuteQuery(query.Select(new[] { "CategoriesCsv" }), this.metaweblogTable.TableRequestOptions);
+                var resultList = result as IList<DynamicTableEntity> ?? result.ToList();
+                if (!resultList.Any())
+                {
+                    return null;
+                }
 
-            ////Combine all categories.
-            var dynamicTableEntities = result as IList<DynamicTableEntity> ?? resultList.ToList();
-            var allCategories =
-                string.Join(
-                KnownTypes.CsvSeparator.ToInvariantCultureString(),
-                dynamicTableEntities.Select(element => element["CategoriesCsv"].StringValue)).ToCollection();
-            var categories = allCategories as IList<string> ?? allCategories.ToList();
-            var posts = new XmlRpcStruct[categories.Count()];
-            var counter = 0;
-            foreach (var category in categories)
-            {
-                var rpcstruct = new XmlRpcStruct
+                ////Combine all categories.
+                var dynamicTableEntities = result as IList<DynamicTableEntity> ?? resultList.ToList();
+                var allCategories =
+                    string.Join(
+                    KnownTypes.CsvSeparator.ToInvariantCultureString(),
+                    dynamicTableEntities.Select(element => element["CategoriesCsv"].StringValue)).ToCollection();
+                var categories = allCategories as IList<string> ?? allCategories.ToList();
+                var posts = new XmlRpcStruct[categories.Count()];
+                var counter = 0;
+                foreach (var category in categories)
+                {
+                    var rpcstruct = new XmlRpcStruct
                 {
                     { "categoryid", counter.ToInvariantCultureString() },
                     { "title", category },
                     { "description", category }
                 };
 
-                posts[counter++] = rpcstruct;
-            }
+                    posts[counter++] = rpcstruct;
+                }
 
-            return posts;
+                return posts;
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("error getting categories");
+            }
         }
 
         /// <summary>
@@ -500,15 +504,24 @@ namespace RahulRai.Websites.Utilities.Web
         object IMetaWeblog.NewMediaObject(string blogid, string username, string password, dynamic media)
         {
             ValidateUser(username, password);
-            var resourceStream = new MemoryStream(media["bits"]);
-            return new
+            try
             {
-                url =
-                    this.mediaStorageService.AddBlobToContainer(
-                        this.blogResourceContainerName,
-                        resourceStream,
-                        media["name"]).ToString()
-            };
+                TraceUtility.LogInformation("Adding image to blog {0}. Image Name {1}", blogid, media["name"]);
+                var resourceStream = new MemoryStream(media["bits"]);
+                return new
+                {
+                    url =
+                        this.mediaStorageService.AddBlobToContainer(
+                            this.blogResourceContainerName,
+                            resourceStream,
+                            media["name"]).ToString()
+                };
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("error adding image to blog");
+            }
         }
 
         /// <summary>
@@ -521,16 +534,24 @@ namespace RahulRai.Websites.Utilities.Web
         object[] IMetaWeblog.GetUsersBlogs(string key, string username, string password)
         {
             ValidateUser(username, password);
-            //// There is only one publisher, so this should return a default value.
-            return new object[]
+            try
             {
-                new
+                //// There is only one publisher, so this should return a default value.
+                return new object[]
                 {
-                    blogName = "rahulrai",
-                    url = this.Context.Request.Url.Scheme + "://" + this.Context.Request.Url.Authority,
-                    blogid = string.Empty
-                }
-            };
+                    new
+                    {
+                        blogName = "rahulrai",
+                        url = this.Context.Request.Url.Scheme + "://" + this.Context.Request.Url.Authority,
+                        blogid = string.Empty
+                    }
+                };
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                throw new BlogSystemException("Getting user blogs");
+            }
         }
 
         /// <summary>
@@ -559,12 +580,14 @@ namespace RahulRai.Websites.Utilities.Web
             TraceUtility.LogInformation("Started validation of user");
             var adminName = ConfigurationManager.AppSettings[ApplicationConstants.PublisherName];
             var secret = ConfigurationManager.AppSettings[ApplicationConstants.Secret];
-            if (!(string.Equals(username, adminName, StringComparison.OrdinalIgnoreCase) &&
-                  string.Equals(password, secret, StringComparison.InvariantCulture)))
+            if (string.Equals(username, adminName, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(password, secret, StringComparison.InvariantCulture))
             {
-                TraceUtility.LogWarning("User name and password do not match records");
-                throw new UnauthorizedAccessException(string.Format("Not Allowed U:{0} P:{1}", username, password));
+                return;
             }
+
+            TraceUtility.LogWarning("User name and password do not match records");
+            throw new UnauthorizedAccessException(string.Format("Not Allowed U:{0} P:{1}", username, password));
         }
 
         /// <summary>

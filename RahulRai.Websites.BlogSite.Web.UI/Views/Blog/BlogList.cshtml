@@ -23,29 +23,32 @@
         </p>
         <p>@blogPost.Body</p>
         <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-    <hr>
+        <hr>
     }
     <!-- Pager -->
-    <div class="container-fluid">
-        <div class="row">
-            <ul class="pager">
-                <li class="previous col-xs-4">
-                    <a href="@Url.RouteUrl("Default", new { action = "GoPrevious" })"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
-                </li>
-                <li class="col-xs-4">
-                    <a href="@Url.RouteUrl("Default", new { action = "GoArchive" })"><i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archive</a>
-                </li>
-                <li class="next col-xs-4">
-                    <a href="@Url.RouteUrl("Default", new { action = "GoNext" })">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
-                </li>
-            </ul>
+    @if (ViewBag.Previous || ViewBag.Next)
+    {
+        <div class="container-fluid">
+            <div class="row">
+                <ul class="pager">
+                    <li class=@(ViewBag.Previous? "previous col-xs-4" : "disabled previous col-xs-4")>
+                        <a href="@Url.RouteUrl("Default", new { action = "GoPrevious" })"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
+                    </li>
+                    <li class="col-xs-4">
+                        <a href="@Url.RouteUrl("Default", new { action = "GoArchive" })"><i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archive</a>
+                    </li>
+                    <li class=@(ViewBag.Next ? "next col-xs-4" : "disabled next col-xs-4")>
+                        <a href="@Url.RouteUrl("Default", new { action = "GoNext" })">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
+    }
 </div>
 <!-- Enable Disqus -->
 <script type="text/javascript">
     var disqus_shortname = 'rahulrai';
-    (function() {
+    (function () {
         var s = document.createElement('script');
         s.async = true;
         s.type = 'text/javascript';

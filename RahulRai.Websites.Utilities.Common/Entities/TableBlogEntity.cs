@@ -19,7 +19,9 @@ namespace RahulRai.Websites.Utilities.Common.Entities
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.UI.WebControls;
     using Helpers;
+    using Microsoft.WindowsAzure.Storage.Table;
     using RegularTypes;
 
     #endregion
@@ -27,7 +29,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
     /// <summary>
     ///     Class TableBlogEntity.
     /// </summary>
-    public class TableBlogEntity
+    public class TableBlogEntity : TableEntity
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="TableBlogEntity" /> class.

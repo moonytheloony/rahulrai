@@ -4,7 +4,7 @@
 // Created          : 04-15-2015
 //
 // Last Modified By : rahulrai
-// Last Modified On : 06-24-2015
+// Last Modified On : 07-01-2015
 // ***********************************************************************
 // <copyright file="BlogController.cs" company="Rahul Rai">
 //     Copyright (c) Rahul Rai. All rights reserved.
@@ -16,14 +16,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 {
     #region
 
-    using System;
     using System.Collections.Generic;
     using System.Configuration;
-    using System.Linq;
     using System.Web.Mvc;
     using GlobalAccess;
-    using Microsoft.WindowsAzure.Storage.Table;
-    using Microsoft.WindowsAzure.Storage.Table.Queryable;
+    using Services;
     using Utilities.AzureStorage.TableStorage;
     using Utilities.Common.Entities;
     using Utilities.Common.RegularTypes;
@@ -48,9 +45,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
             int.Parse(ConfigurationManager.AppSettings[ApplicationConstants.BlogListPageSize]);
 
         /// <summary>
-        ///     The row key to use
+        ///     The blog service
         /// </summary>
-        private readonly string rowKeyToUse = string.Format("{0:D19}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks);
+        private BlogService blogService;
 
         /// <summary>
         ///     Gets the continuation stack.
@@ -60,13 +57,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         {
             get
             {
-                var stack = (ContinuationStack)this.Session[ApplicationConstants.StackKey];
-                if (stack != null)
+                if (this.Session[ApplicationConstants.StackKey] != null)
                 {
-                    return stack;
+                    return this.Session[ApplicationConstants.StackKey] as ContinuationStack;
                 }
 
-                stack = new ContinuationStack();
+                var stack = new ContinuationStack();
                 this.Session[ApplicationConstants.StackKey] = stack;
                 return stack;
             }
@@ -78,12 +74,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ActionResult.</returns>
         public ActionResult GetLatestBlogs()
         {
-            ////Session[ApplicationConstants.StackKey] = null;
-            ////var result = GetPagedBlogPreviews(null);
-            ////var resultBlogs = result.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
-            ////var blogList = resultBlogs.Select(TableBlogEntity.GetBlogPost);
-            ////SetPreviousNextPage();
-            return this.View("BlogList", new List<BlogPost>());
+            var blogPosts = this.blogService.GetLatestBlogs();
+            this.SetPreviousNextPage();
+            return this.View("BlogList", blogPosts);
         }
 
         /// <summary>
@@ -103,10 +96,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ActionResult.</returns>
         public ActionResult GoPrevious()
         {
-            var segment = this.ContinuationStack.GetBackToken();
-            var entityResult = this.GetPagedBlogPreviews(segment);
-            var resultBlogs = entityResult.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
-            var blogList = resultBlogs.Select(TableBlogEntity.GetBlogPost);
+            var blogList = this.blogService.GoToPreviousBlogList();
             this.SetPreviousNextPage();
             return this.View("BlogList", blogList);
         }
@@ -117,10 +107,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ActionResult.</returns>
         public ActionResult GoNext()
         {
-            var segment = this.ContinuationStack.GetForwardToken();
-            var entityResult = this.GetPagedBlogPreviews(segment);
-            var resultBlogs = entityResult.Select(AzureTableStorageAssist.ConvertDynamicEntityToEntity<TableBlogEntity>);
-            var blogList = resultBlogs.Select(TableBlogEntity.GetBlogPost);
+            var blogList = this.blogService.GoToNextBlogList();
             this.SetPreviousNextPage();
             return this.View("BlogList", blogList);
         }
@@ -145,22 +132,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        ///     Gets the paged blog previews.
+        ///     Initializes the action.
         /// </summary>
-        /// <param name="token">The token.</param>
-        /// <returns>TableQuerySegment&lt;DynamicTableEntity&gt;.</returns>
-        private TableQuerySegment<DynamicTableEntity> GetPagedBlogPreviews(TableContinuationToken token)
+        protected override void InitializeAction()
         {
-            var activeTable = this.blogContext.CustomOperation();
-            var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
-                         where record.PartitionKey == ApplicationConstants.BlogKey
-                               && record["IsDraft"].BooleanValue == false
-                               && record["IsDeleted"].BooleanValue == false
-                               && string.Compare(record.RowKey, this.rowKeyToUse, StringComparison.OrdinalIgnoreCase) > 0
-                         select record).Take(this.pageSize);
-            var result = query.AsTableQuery().ExecuteSegmented(token, this.blogContext.TableRequestOptions);
-            this.ContinuationStack.AddToken(result.ContinuationToken);
-            return result;
+            this.blogService = new BlogService(this.ContinuationStack, this.Session, this.blogContext, this.pageSize);
         }
 
         /// <summary>
@@ -168,6 +144,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         private void SetPreviousNextPage()
         {
+            this.ViewBag.Previous = this.ContinuationStack.CanMoveBack();
+            this.ViewBag.Next = this.ContinuationStack.CanMoveForward();
         }
     }
 }

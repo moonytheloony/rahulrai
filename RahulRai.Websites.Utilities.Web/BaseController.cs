@@ -35,6 +35,8 @@ namespace RahulRai.Websites.Utilities.Web
             this.ViewBag.ResourceBasePath =
                 ConfigurationManager.AppSettings[ApplicationConstants.ApplicationResourceRoot];
             this.ViewBag.MyEmail = ConfigurationManager.AppSettings[ApplicationConstants.MyEmail];
+            this.ViewBag.Previous = false;
+            this.ViewBag.Next = false;
         }
 
         /// <summary>
@@ -52,6 +54,15 @@ namespace RahulRai.Websites.Utilities.Web
                     this.ViewBag.Title = "Rahul on Technology and Things";
                     break;
             }
+
+            this.InitializeAction();
+        }
+
+        /// <summary>
+        /// Initializes the action.
+        /// </summary>
+        protected virtual void InitializeAction()
+        {
         }
     }
 }

@@ -37,6 +37,8 @@ namespace RahulRai.Websites.Utilities.Web
             this.ViewBag.MyEmail = ConfigurationManager.AppSettings[ApplicationConstants.MyEmail];
             this.ViewBag.Previous = false;
             this.ViewBag.Next = false;
+            this.ViewBag.PreviousPageNumber = 0;
+            this.ViewBag.NextPageNumber = 0;
         }
 
         /// <summary>

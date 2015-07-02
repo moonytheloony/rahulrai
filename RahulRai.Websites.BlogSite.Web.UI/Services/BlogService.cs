@@ -72,38 +72,29 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// <returns>List&lt;BlogPost&gt;.</returns>
         public List<BlogPost> GetLatestBlogs()
         {
-            var result = this.GetPagedBlogPreviews(null);
+            var result = this.GetPagedBlogPreviews(null, true);
             return result.Select(TableBlogEntity.GetBlogPost).ToList();
         }
 
         /// <summary>
-        ///     Goes to previous blog list.
+        /// Gets the blogs for page.
         /// </summary>
+        /// <param name="pageNumber">The page number.</param>
         /// <returns>List&lt;BlogPost&gt;.</returns>
-        public List<BlogPost> GoToPreviousBlogList()
+        public List<BlogPost> GetBlogsForPage(int pageNumber)
         {
-            var segment = UserContinuationStack.ContinuationStack.GetBackToken();
-            var resultBlogs = this.GetPagedBlogPreviews(segment);
+            var segment = UserPageDictionary.PageDictionary.GetPageContinuationToken(pageNumber);
+            var resultBlogs = this.GetPagedBlogPreviews(segment, !UserPageDictionary.PageDictionary.CanMoveForward());
             return resultBlogs.Select(TableBlogEntity.GetBlogPost).ToList();
         }
 
         /// <summary>
-        ///     Goes to next blog list.
-        /// </summary>
-        /// <returns>List&lt;BlogPost&gt;.</returns>
-        public List<BlogPost> GoToNextBlogList()
-        {
-            var segment = UserContinuationStack.ContinuationStack.GetForwardToken();
-            var entityResult = this.GetPagedBlogPreviews(segment);
-            return entityResult.Select(TableBlogEntity.GetBlogPost).ToList();
-        }
-
-        /// <summary>
-        ///     Gets the paged blog previews.
+        /// Gets the paged blog previews.
         /// </summary>
         /// <param name="token">The token.</param>
+        /// <param name="shouldAddPage">if set to <c>true</c> [should add page].</param>
         /// <returns>IEnumerable&lt;TableBlogEntity&gt;.</returns>
-        private IEnumerable<TableBlogEntity> GetPagedBlogPreviews(TableContinuationToken token)
+        private IEnumerable<TableBlogEntity> GetPagedBlogPreviews(TableContinuationToken token, bool shouldAddPage)
         {
             var activeTable = this.blogContext.CustomOperation();
             var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
@@ -113,7 +104,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
                                && string.Compare(record.RowKey, this.rowKeyToUse, StringComparison.OrdinalIgnoreCase) > 0
                          select record).Take(this.pageSize);
             var result = query.AsTableQuery().ExecuteSegmented(token, this.blogContext.TableRequestOptions);
-            UserContinuationStack.ContinuationStack.AddToken(result.ContinuationToken);
+            if (shouldAddPage && null != result.ContinuationToken)
+            {
+                UserPageDictionary.PageDictionary.AddPage(result.ContinuationToken);
+            }
+
             return result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>());
         }
 
@@ -137,7 +132,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             foreach (var rowkey in rowKeyList)
             {
                 var rowFilter = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, rowkey);
-                rowKeyFilterCondition = string.IsNullOrWhiteSpace(rowKeyFilterCondition) ? rowFilter : TableQuery.CombineFilters(rowKeyFilterCondition, TableOperators.Or, rowFilter);
+                rowKeyFilterCondition = string.IsNullOrWhiteSpace(rowKeyFilterCondition)
+                    ? rowFilter
+                    : TableQuery.CombineFilters(rowKeyFilterCondition, TableOperators.Or, rowFilter);
             }
 
             var activeTable = this.blogContext.CustomOperation();
@@ -148,10 +145,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
                             partitionKeyFilter,
                             TableOperators.And,
                             rowKeyFilterCondition),
-                         TableOperators.And,
-                         isDraftCondition),
+                        TableOperators.And,
+                        isDraftCondition),
                     TableOperators.And,
-                   isDeletedCondition)).Take(this.searchRecordsSize);
+                    isDeletedCondition)).Take(this.searchRecordsSize);
             var result = combinedQuery.AsTableQuery().ExecuteSegmented(null, this.blogContext.TableRequestOptions);
             return result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>());
         }

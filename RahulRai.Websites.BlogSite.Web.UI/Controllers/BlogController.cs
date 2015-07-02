@@ -16,7 +16,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 {
     #region
 
-    using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Web.Mvc;
@@ -24,7 +23,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using Services;
     using Utilities.AzureStorage.TableStorage;
     using Utilities.Common.Entities;
-    using Utilities.Common.Exceptions;
     using Utilities.Common.RegularTypes;
     using Utilities.Web;
 
@@ -47,7 +45,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
             int.Parse(ConfigurationManager.AppSettings[ApplicationConstants.BlogListPageSize]);
 
         /// <summary>
-        /// The search records
+        ///     The search records
         /// </summary>
         private readonly int searchRecordsSize =
             int.Parse(ConfigurationManager.AppSettings[ApplicationConstants.SearchRecordsSize]);
@@ -63,9 +61,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ActionResult.</returns>
         public ActionResult GetLatestBlogs()
         {
-            UserContinuationStack.ContinuationStack = null;
+            UserPageDictionary.PageDictionary = null;
             var blogPosts = this.blogService.GetLatestBlogs();
-            this.SetPreviousNextPage();
+            this.SetPreviousNextPage(0);
             return this.View("BlogList", blogPosts);
         }
 
@@ -81,34 +79,19 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Navigations the specified collection.
+        /// Pages the specified identifier.
         /// </summary>
-        /// <param name="collection">The collection.</param>
+        /// <param name="id">The identifier.</param>
         /// <returns>ActionResult.</returns>
-        /// <exception cref="BlogSystemException">invalid form input</exception>
-        [HttpPost]
-        public ActionResult Navigation(FormCollection collection)
+        public ActionResult Page(int id)
         {
-            var postedValue = string.Empty;
-            List<BlogPost> blogList;
-            if (collection != null && collection["postField"] != null)
+            if (id > UserPageDictionary.PageDictionary.MaximumPageNumber || id < 0)
             {
-                postedValue = collection["postField"];
+                this.RedirectToAction("GetLatestBlogs");
             }
 
-            switch (postedValue.ToLowerInvariant())
-            {
-                case "next":
-                    blogList = this.blogService.GoToNextBlogList();
-                    break;
-                case "previous":
-                    blogList = this.blogService.GoToPreviousBlogList();
-                    break;
-                default:
-                    throw new BlogSystemException("invalid form input");
-            }
-
-            this.SetPreviousNextPage();
+            var blogList = this.blogService.GetBlogsForPage(id);
+            this.SetPreviousNextPage(id);
             return this.View("BlogList", blogList);
         }
 
@@ -140,12 +123,34 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        ///     Sets the previous next page.
+        /// Sets the previous next page.
         /// </summary>
-        private void SetPreviousNextPage()
+        /// <param name="currentPageNumber">The current page number.</param>
+        private void SetPreviousNextPage(int currentPageNumber)
         {
-            this.ViewBag.Previous = UserContinuationStack.ContinuationStack.CanMoveBack();
-            this.ViewBag.Next = UserContinuationStack.ContinuationStack.CanMoveForward();
+            this.ViewBag.PreviousPageNumber = 0;
+            this.ViewBag.NextPageNumber = 0;
+            if (UserPageDictionary.PageDictionary.CanMoveBack())
+            {
+                this.ViewBag.Previous = true;
+                this.ViewBag.PreviousPageNumber = currentPageNumber - 1;
+            }
+            else
+            {
+                this.ViewBag.Previous = false;
+                this.ViewBag.PreviousPageNumber = 0;
+            }
+
+            if (UserPageDictionary.PageDictionary.CanMoveForward())
+            {
+                this.ViewBag.Next = true;
+                this.ViewBag.NextPageNumber = currentPageNumber + 1;
+            }
+            else
+            {
+                this.ViewBag.Next = false;
+                this.ViewBag.NextPageNumber = currentPageNumber;
+            }
         }
     }
 }

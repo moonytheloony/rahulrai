@@ -176,6 +176,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\OperationResult.cs" />
+    <Compile Include="Entities\Page.cs" />
+    <Compile Include="Entities\PageDictionary.cs" />
     <Compile Include="Entities\TableBlogEntity.cs" />
     <Compile Include="Entities\Testimonial.cs" />
     <Compile Include="Exceptions\BlogSystemException.cs" />

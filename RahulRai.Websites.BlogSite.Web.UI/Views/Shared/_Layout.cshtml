@@ -11,7 +11,7 @@
         <br />
     </div>
     <div class="text-right hidden-xs">
-        <a href="mailto:@myEmail?subject=Issue in site" title="Report Issues">
+        <a href="mailto:@myEmail?subject=Issue in rahulrai.in" data-toggle="tooltip" title="Log site issues">
             <img src=@(resourceBasePath + "exclamation-mark-red-icon.png") alt="Exclamation" class="iconImage img-responsive" />
         </a>
     </div>
@@ -19,6 +19,9 @@
         <img class="img-responsive" alt="Profile Picture" src=@(resourceBasePath + "RahulRai.png") />
         <br />
         <br />
-        @Html.RouteLink("Hi, I am Rahul...", "Default", new { controller = "Profile", action = "ProfileContent" }, new { @class = "btn btn-success btn-sm" })
+        @Html.RouteLink("Hi, I'm Rahul...", "Default", new { controller = "Profile", action = "ProfileContent" }, new { @class = "btn btn-success btn-default", data_toggle="tooltip", title="About Me" })
+    </div>
+    <div class="visible-xs">
+        <br />
     </div>
 </div>

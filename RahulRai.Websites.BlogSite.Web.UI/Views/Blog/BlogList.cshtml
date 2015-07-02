@@ -2,10 +2,51 @@
 @model IList<RahulRai.Websites.Utilities.Common.Entities.BlogPost>
 <!-- Blog Entries Column -->
 <div class="col-md-8">
-    <h1 class="page-header">
-        Cloud and Technology!
-        <small>easy on mind and eyes :)</small>
-    </h1>
+    <div>
+        <div class="row">
+            <div class="col-md-4">
+                <h1>
+                    My Notes on
+                </h1>
+            </div>
+            <div class="col-md-8 text-left">
+                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#myCarousel" data-slide-to="1"></li>
+                        <li data-target="#myCarousel" data-slide-to="2"></li>
+                        <li data-target="#myCarousel" data-slide-to="3"></li>
+                    </ol>
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <h1>
+                                Cloud
+                            </h1>
+                        </div>
+                        <div class="item">
+                            <h1>
+                                Coding
+                            </h1>
+                        </div>
+                        <div class="item">
+                            <h1>
+                                Technology
+                            </h1>
+                        </div>
+                        <div class="item">
+                            <h1>
+                                Alien Attacks!
+                            </h1>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
     @foreach (var blogPost in Model)
     {
         <!-- Blog Post -->
@@ -37,51 +78,21 @@
             <div class="row">
                 <ul class="pager">
                     <li class="@(ViewBag.Previous? "previous col-xs-4" : "disabled previous col-xs-4")">
-                        <a href="#" id="Previous"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
+                        <a href="@(ViewBag.Previous ? Url.RouteUrl("Default", new { action = "Page", id = ViewBag.PreviousPageNumber }) : "#")"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
                     </li>
                     <li class="col-xs-4">
-                        <a href="@Url.RouteUrl("Default", new { action = "GoArchive" })"><i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archive</a>
+                        <a href="@Url.RouteUrl("Default", new { action = "Archive" })"><i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archive</a>
                     </li>
                     <li class="@(ViewBag.Next ? "next col-xs-4" : "disabled next col-xs-4")">
-                        <a href="#" id="Next">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
+                        <a href="@(ViewBag.Next ? Url.RouteUrl("Default", new { action = "Page", id = ViewBag.NextPageNumber }) : "#")">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
                     </li>
                 </ul>
             </div>
         </div>
     }
-    @using (Html.BeginRouteForm("Default", new { action = "GetLatestBlogs" }))
-    {
-        @:<input type="hidden" id="postField" name="postField" />
-    }
 </div>
-<script type="text/javascript">
-
-</script>
-
 <!-- Enable Disqus -->
 <script type="text/javascript">
-    //Post Form Data
-    $("#Next").click(function (e) {
-        if ("@ViewBag.Next" != "True") {
-            return;
-        }
-
-        e.preventDefault();
-        var postField = $("input#postField:first");
-        postField.val("next");
-        postField[0].form.submit();
-    });
-    $("#Previous").click(function (e) {
-        if ("@ViewBag.Previous" != "True") {
-            return;
-        }
-
-        e.preventDefault();
-        var postField = $("input#postField:first");
-        postField.val("previous");
-        postField[0].form.submit();
-    });
-
     //Iniailize Disqus
     var disqus_shortname = 'rahulrai';
     (function () {

@@ -9,6 +9,15 @@
 <p><span class="glyphicon glyphicon-time"></span> Updated on June 30, 2015 at 9:00 PM</p>
 <hr>
 <p>Coming Soon!!</p>
+<p>
+    <div class="circle circle-border">
+        <div class="circle-inner">
+            <div class="inner-text">
+                RR
+            </div>
+        </div>
+    </div>
+</p>
 <table class="table">
     @if (null != Model)
     {
@@ -16,7 +25,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Author)
+                    @Html.DisplayFor(modelItem => item.AuthorFirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorLastName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.AuthorEmail)

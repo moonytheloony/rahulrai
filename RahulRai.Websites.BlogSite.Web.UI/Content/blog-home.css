@@ -64,8 +64,7 @@ code {
 
 .contentPane {
     min-height: 100vh;
-    padding-left: 25px;
-    padding-top: 25px;
+    padding: 25px;
     background-color: #FFFFFF;
 }
 
@@ -107,6 +106,7 @@ img {
     border-color: #ffffff;
     -webkit-border-radius: 50% !important;
     -moz-border-radius: 50% !important;
+    -ms-border-radius: 50% !important;
     border-radius: 50% !important;
 }
 
@@ -192,3 +192,53 @@ img {
         height: 100%;
         border: 1px solid #000000;
     }
+
+/*Round Badges*/
+.circle {
+    margin-left: auto;
+    margin-right: auto;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    width: 10%;
+    position: relative;
+    background-color: #27a7df;
+}
+
+.circle-border {
+    border: 1px solid #27A7DF;
+}
+
+.circle-solid {
+    background-color: #27A7DF;
+}
+
+.circle:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+
+.circle-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+}
+
+.inner-text {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.inner-text {
+    height: 3vw;
+    line-height: 3vw;
+    font-size: 2vw;
+    color: #ffffff;
+}

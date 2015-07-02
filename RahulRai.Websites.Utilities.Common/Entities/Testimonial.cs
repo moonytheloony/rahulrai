@@ -23,7 +23,13 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         ///     Gets or sets the author.
         /// </summary>
         /// <value>The author.</value>
-        public string Author { get; set; }
+        public string AuthorFirstName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last name of the author.
+        /// </summary>
+        /// <value>The last name of the author.</value>
+        public string AuthorLastName { get; set; }
 
         /// <summary>
         ///     Gets or sets the author email.

@@ -40,9 +40,9 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public static string SearchIndex = "blogs";
 
         /// <summary>
-        ///     The stack key
+        ///     The page key
         /// </summary>
-        public static string StackKey = "PageStack";
+        public static string PageKey = "PageKey";
 
         /// <summary>
         ///     The application resource root

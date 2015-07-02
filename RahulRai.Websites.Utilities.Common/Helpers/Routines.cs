@@ -21,6 +21,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
     using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Threading;
     using System.Web.Mvc;
     using RegularTypes;
 
@@ -132,7 +133,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         /// <returns>The <see cref="string" />.</returns>
         public static string Combine(this IList<string> value)
         {
-            return string.Join(string.Empty, value);
+            return null == value ? string.Empty : string.Join(string.Empty, value);
         }
 
         #endregion
@@ -185,6 +186,17 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
             return acceptedActions.Contains(currentAction) && acceptedControllers.Contains(currentController)
                 ? cssClass
                 : string.Empty;
+        }
+
+        /// <summary>
+        /// Generates the preview.
+        /// </summary>
+        /// <param name="blogBody">The blog body.</param>
+        /// <returns>System.String.</returns>
+        public static string GeneratePreview(string blogBody)
+        {
+            var formattedValue = StripHtmlFormatting(blogBody);
+            return string.Format("{0}...", formattedValue.Length > 300 ? formattedValue.Substring(0, 300) : formattedValue);
         }
     }
 }

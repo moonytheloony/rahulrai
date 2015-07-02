@@ -61,13 +61,13 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
             var objectProperties = targetObjectType.GetProperties().ToList();
 
             //// There should not be more than one property with ID suffix
-            if (objectProperties.Count(element => element.Name.EndsWith("id", StringComparison.OrdinalIgnoreCase)) != 1)
+            if (objectProperties.Count(element => element.Name.EndsWith("rowkey", StringComparison.OrdinalIgnoreCase)) != 1)
             {
                 throw new InputValidationFailedException("Count of properties with id postfix is not one");
             }
 
             //// There should not be more than one property with key suffix
-            if (objectProperties.Count(element => element.Name.EndsWith("key", StringComparison.OrdinalIgnoreCase)) != 1)
+            if (objectProperties.Count(element => element.Name.EndsWith("partitionkey", StringComparison.OrdinalIgnoreCase)) != 1)
             {
                 throw new InputValidationFailedException("Count of properties with key postfix is not one");
             }
@@ -84,11 +84,11 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
                 var propertyName = propertyInfo.Name;
 
                 //// Set Id property as row key
-                if (propertyName.EndsWith("id", StringComparison.OrdinalIgnoreCase))
+                if (propertyName.EndsWith("rowkey", StringComparison.OrdinalIgnoreCase))
                 {
                     propertyInfo.SetValue(targetObject, entity.RowKey);
                 }
-                else if (propertyName.EndsWith("key", StringComparison.OrdinalIgnoreCase))
+                else if (propertyName.EndsWith("partitionkey", StringComparison.OrdinalIgnoreCase))
                 {
                     propertyInfo.SetValue(targetObject, entity.PartitionKey);
                 }
@@ -166,18 +166,18 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
             var objectProperties = sourceEntity.GetProperties().ToList();
 
             //// There should not be more than one property with ID suffix
-            if (objectProperties.Count(element => element.Name.EndsWith("id", StringComparison.OrdinalIgnoreCase)) != 1)
+            if (objectProperties.Count(element => element.Name.EndsWith("rowkey", StringComparison.OrdinalIgnoreCase)) != 1)
             {
                 throw new InputValidationFailedException("Count of properties with id postfix is not one");
             }
 
             //// There should not be more than one property with key suffix
-            if (objectProperties.Count(element => element.Name.EndsWith("key", StringComparison.OrdinalIgnoreCase)) != 1)
+            if (objectProperties.Count(element => element.Name.EndsWith("partitionkey", StringComparison.OrdinalIgnoreCase)) != 1)
             {
                 throw new InputValidationFailedException("Count of properties with key postfix is not one");
             }
 
-            //// There shoud be one peroperty with name entity tag
+            //// There should be one property with name entity tag
             if (objectProperties.Count(element => element.Name.CompareCaseInvariant("entitytag")) != 1)
             {
                 throw new InputValidationFailedException("Count of properties with entity tag name is not one");
@@ -230,11 +230,11 @@ namespace RahulRai.Websites.Utilities.AzureStorage.TableStorage
                     continue;
                 }
 
-                if (propertyName.EndsWith("id", StringComparison.OrdinalIgnoreCase))
+                if (propertyName.EndsWith("rowkey", StringComparison.OrdinalIgnoreCase))
                 {
                     dynamicEntity.RowKey = propertyValue;
                 }
-                else if (propertyName.EndsWith("key", StringComparison.OrdinalIgnoreCase))
+                else if (propertyName.EndsWith("partitionkey", StringComparison.OrdinalIgnoreCase))
                 {
                     dynamicEntity.PartitionKey = propertyValue;
                 }

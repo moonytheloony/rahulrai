@@ -16,6 +16,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 {
     #region
 
+    using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Web.Mvc;
@@ -23,6 +24,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using Services;
     using Utilities.AzureStorage.TableStorage;
     using Utilities.Common.Entities;
+    using Utilities.Common.Exceptions;
     using Utilities.Common.RegularTypes;
     using Utilities.Web;
 
@@ -45,28 +47,15 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
             int.Parse(ConfigurationManager.AppSettings[ApplicationConstants.BlogListPageSize]);
 
         /// <summary>
+        /// The search records
+        /// </summary>
+        private readonly int searchRecordsSize =
+            int.Parse(ConfigurationManager.AppSettings[ApplicationConstants.SearchRecordsSize]);
+
+        /// <summary>
         ///     The blog service
         /// </summary>
         private BlogService blogService;
-
-        /// <summary>
-        ///     Gets the continuation stack.
-        /// </summary>
-        /// <value>The continuation stack.</value>
-        public ContinuationStack ContinuationStack
-        {
-            get
-            {
-                if (this.Session[ApplicationConstants.StackKey] != null)
-                {
-                    return this.Session[ApplicationConstants.StackKey] as ContinuationStack;
-                }
-
-                var stack = new ContinuationStack();
-                this.Session[ApplicationConstants.StackKey] = stack;
-                return stack;
-            }
-        }
 
         /// <summary>
         ///     Gets the latest blogs.
@@ -74,6 +63,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ActionResult.</returns>
         public ActionResult GetLatestBlogs()
         {
+            UserContinuationStack.ContinuationStack = null;
             var blogPosts = this.blogService.GetLatestBlogs();
             this.SetPreviousNextPage();
             return this.View("BlogList", blogPosts);
@@ -91,23 +81,33 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        ///     Goes the previous.
+        /// Navigations the specified collection.
         /// </summary>
+        /// <param name="collection">The collection.</param>
         /// <returns>ActionResult.</returns>
-        public ActionResult GoPrevious()
+        /// <exception cref="BlogSystemException">invalid form input</exception>
+        [HttpPost]
+        public ActionResult Navigation(FormCollection collection)
         {
-            var blogList = this.blogService.GoToPreviousBlogList();
-            this.SetPreviousNextPage();
-            return this.View("BlogList", blogList);
-        }
+            var postedValue = string.Empty;
+            List<BlogPost> blogList;
+            if (collection != null && collection["postField"] != null)
+            {
+                postedValue = collection["postField"];
+            }
 
-        /// <summary>
-        ///     Goes the next.
-        /// </summary>
-        /// <returns>ActionResult.</returns>
-        public ActionResult GoNext()
-        {
-            var blogList = this.blogService.GoToNextBlogList();
+            switch (postedValue.ToLowerInvariant())
+            {
+                case "next":
+                    blogList = this.blogService.GoToNextBlogList();
+                    break;
+                case "previous":
+                    blogList = this.blogService.GoToPreviousBlogList();
+                    break;
+                default:
+                    throw new BlogSystemException("invalid form input");
+            }
+
             this.SetPreviousNextPage();
             return this.View("BlogList", blogList);
         }
@@ -125,7 +125,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         ///     Goes the archive.
         /// </summary>
         /// <returns>ActionResult.</returns>
-        public ActionResult GoArchive()
+        public ActionResult Archive()
         {
             var blogList = new List<BlogPost>();
             return this.View("BlogList", blogList);
@@ -136,7 +136,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         protected override void InitializeAction()
         {
-            this.blogService = new BlogService(this.ContinuationStack, this.Session, this.blogContext, this.pageSize);
+            this.blogService = new BlogService(this.blogContext, this.pageSize, this.searchRecordsSize);
         }
 
         /// <summary>
@@ -144,8 +144,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         private void SetPreviousNextPage()
         {
-            this.ViewBag.Previous = this.ContinuationStack.CanMoveBack();
-            this.ViewBag.Next = this.ContinuationStack.CanMoveForward();
+            this.ViewBag.Previous = UserContinuationStack.ContinuationStack.CanMoveBack();
+            this.ViewBag.Next = UserContinuationStack.ContinuationStack.CanMoveForward();
         }
     }
 }

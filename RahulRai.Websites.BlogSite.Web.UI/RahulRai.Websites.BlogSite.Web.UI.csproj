@@ -1673,6 +1673,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalAccess\BlogStoreAccess.cs" />
+    <Compile Include="GlobalAccess\UserContinuationStack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BlogService.cs" />
   </ItemGroup>
@@ -1693,6 +1694,7 @@
     <Content Include="Views\Profile\Resume.cshtml" />
     <Content Include="Views\Profile\Testimonials.cshtml" />
     <Content Include="Views\Profile\Contact.cshtml" />
+    <Content Include="Views\Blog\SearchResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

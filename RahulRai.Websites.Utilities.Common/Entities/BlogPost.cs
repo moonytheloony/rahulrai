@@ -91,6 +91,12 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public string CategoriesCsv { get; set; }
 
         /// <summary>
+        /// Gets or sets the special mention.
+        /// </summary>
+        /// <value>The special mention.</value>
+        public string SpecialMention { get; set; }
+
+        /// <summary>
         ///     Gets or sets the posted date.
         /// </summary>
         /// <value>The posted date.</value>

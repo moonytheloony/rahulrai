@@ -113,5 +113,10 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         ///     The resume document key
         /// </summary>
         public static string ResumeDocumentKey = "ResumeDocumentKey";
+
+        /// <summary>
+        /// The search records size
+        /// </summary>
+        public static string SearchRecordsSize = "SearchRecordSize";
     }
 }

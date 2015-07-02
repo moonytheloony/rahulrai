@@ -119,14 +119,16 @@ namespace RahulRai.Websites.Utilities.Web
                     }
                 }
 
-                if (null == this.searchService)
+                if (null != this.searchService)
                 {
-                    this.searchService = new AzureSearchService(
-                        this.searchServiceName,
-                        this.searchServiceKey,
-                        ApplicationConstants.SearchIndex);
-                    TraceUtility.LogInformation("Search service initialized");
+                    return;
                 }
+
+                this.searchService = new AzureSearchService(
+                    this.searchServiceName,
+                    this.searchServiceKey,
+                    ApplicationConstants.SearchIndex);
+                TraceUtility.LogInformation("Search service initialized");
             }
             catch (BlogSystemException)
             {
@@ -213,18 +215,19 @@ namespace RahulRai.Websites.Utilities.Web
             try
             {
                 ////Create search document if search terms exist.
-                if (!string.IsNullOrWhiteSpace(categories) && publish)
+                if (string.IsNullOrWhiteSpace(categories) || !publish)
                 {
-                    this.searchService.UpsertDataToIndex(new BlogSearch
-                    {
-                        BlogId = blogPost.BlogId,
-                        SearchTags = blogPost.CategoriesCsv.ToCollection().ToArray(),
-                        Title = blogPost.Title
-                    });
-
-                    TraceUtility.LogInformation("Blog post has been indexed. Title {0}", postTitle);
+                    return blogPost.BlogId;
                 }
 
+                this.searchService.UpsertDataToIndex(new BlogSearch
+                {
+                    BlogId = blogPost.BlogId,
+                    SearchTags = blogPost.CategoriesCsv.ToCollection().ToArray(),
+                    Title = blogPost.Title
+                });
+
+                TraceUtility.LogInformation("Blog post has been indexed. Title {0}", postTitle);
                 return blogPost.BlogId;
             }
             catch (Exception exception)
@@ -408,14 +411,14 @@ namespace RahulRai.Websites.Utilities.Web
                 TraceUtility.LogInformation("Get recent posts invoked for {0}", blogid);
                 var activeTable = this.metaweblogTable.CustomOperation();
                 var rowKeyToUse = string.Format("{0:D19}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks);
-                var query = (from record in activeTable.CreateQuery<TableBlogEntity>()
+                var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
                              where record.PartitionKey == ApplicationConstants.BlogKey
-                                   && record.IsDraft == false
-                                   && record.IsDeleted == false
+                                   && record.Properties["IsDraft"].BooleanValue == false
+                                   && record.Properties["IsDeleted"].BooleanValue == false
                                    && string.Compare(record.RowKey, rowKeyToUse, StringComparison.OrdinalIgnoreCase) > 0
                              select record).Take(numberOfPosts);
                 var result = query.AsTableQuery().ExecuteSegmented(null, this.metaweblogTable.TableRequestOptions);
-                var blogEntity = result.Select(TableBlogEntity.GetBlogPost);
+                var blogEntity = result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>()).Select(TableBlogEntity.GetBlogPost);
                 // ReSharper disable CoVariantArrayConversion This format is required by Live Writer
                 return blogEntity.Select(element => new
                 {

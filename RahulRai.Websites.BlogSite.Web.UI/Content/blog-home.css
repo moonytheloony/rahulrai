@@ -64,7 +64,8 @@ code {
 
 .contentPane {
     min-height: 100vh;
-    padding: 50px;
+    padding-left: 25px;
+    padding-top: 25px;
     background-color: #FFFFFF;
 }
 

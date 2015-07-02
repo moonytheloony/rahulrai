@@ -48,8 +48,11 @@ namespace RahulRai.Websites.Utilities.Common.Entities
             this.Body = post.Body.SplitByLength(ApplicationConstants.ContentSplitLength).ToList();
             this.FormattedUri = post.BlogFormattedUri;
             this.BlogKey = post.BlogKey;
+            this.PartitionKey = post.BlogKey;
             this.BlogId = post.BlogId;
+            this.RowKey = post.BlogId;
             this.CategoriesCsv = post.CategoriesCsv;
+            this.SpecialMention = post.SpecialMention;
             this.PostedDate = post.PostedDate == DateTime.MinValue ? DateTime.UtcNow : post.PostedDate;
             this.EntityTag = post.EntityTag;
             this.IsDraft = post.IsDraft;
@@ -99,6 +102,12 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public string CategoriesCsv { get; set; }
 
         /// <summary>
+        /// Gets or sets the special mention.
+        /// </summary>
+        /// <value>The special mention.</value>
+        public string SpecialMention { get; set; }
+
+        /// <summary>
         ///     Gets or sets the entity tag.
         /// </summary>
         /// <value>The entity tag.</value>
@@ -136,6 +145,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
                 PostedDate = entity.PostedDate,
                 EntityTag = entity.EntityTag,
                 CategoriesCsv = entity.CategoriesCsv,
+                SpecialMention = entity.SpecialMention,
                 IsDraft = entity.IsDraft,
                 IsDeleted = entity.IsDeleted
             };

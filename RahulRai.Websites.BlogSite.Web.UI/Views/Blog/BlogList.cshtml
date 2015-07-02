@@ -1,29 +1,34 @@
-﻿@model IList<RahulRai.Websites.Utilities.Common.Entities.BlogPost>
+﻿@using RahulRai.Websites.Utilities.Common.Helpers
+@model IList<RahulRai.Websites.Utilities.Common.Entities.BlogPost>
 <!-- Blog Entries Column -->
 <div class="col-md-8">
     <h1 class="page-header">
-        Cloud and Tech!
+        Cloud and Technology!
         <small>easy on mind and eyes :)</small>
     </h1>
     @foreach (var blogPost in Model)
     {
         <!-- Blog Post -->
-        <h2>
-            <a href="#">@blogPost.Title</a>
-        </h2>
-        <p>
-            <span class="glyphicon glyphicon-time"></span>
-            @blogPost.PostedDate.ToLocalTime().ToString("f")
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-comment"></span>
-            5 Comments
-            <a href="posts/wazproxy-an-http-proxy-that-signs-windows-azure-storage-requests#disqus_thread"
-               data-disqus-identifier="posts/wazproxy-an-http-proxy-that-signs-windows-azure-storage-requests"></a>
-        </p>
-        <p>@blogPost.Body</p>
+        <h3>
+            <a href="posts/@blogPost.BlogFormattedUri">@blogPost.Title</a>
+        </h3>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-6 text-left">
+                    <span class="glyphicon glyphicon-time"></span>
+                    @blogPost.PostedDate.ToLocalTime().ToString("f")
+                </div>
+                <div class="col-xs-6 text-right">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <a href="posts/@blogPost.BlogFormattedUri#disqus_thread"
+                       data-disqus-identifier="/@blogPost.BlogFormattedUri"></a>
+                </div>
+            </div>
+        </div>
+        <br />
+        <p>@Routines.GeneratePreview(blogPost.Body)</p>
         <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-        <hr>
+        <hr />
     }
     <!-- Pager -->
     @if (ViewBag.Previous || ViewBag.Next)
@@ -31,22 +36,53 @@
         <div class="container-fluid">
             <div class="row">
                 <ul class="pager">
-                    <li class=@(ViewBag.Previous? "previous col-xs-4" : "disabled previous col-xs-4")>
-                        <a href="@Url.RouteUrl("Default", new { action = "GoPrevious" })"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
+                    <li class="@(ViewBag.Previous? "previous col-xs-4" : "disabled previous col-xs-4")">
+                        <a href="#" id="Previous"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
                     </li>
                     <li class="col-xs-4">
                         <a href="@Url.RouteUrl("Default", new { action = "GoArchive" })"><i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archive</a>
                     </li>
-                    <li class=@(ViewBag.Next ? "next col-xs-4" : "disabled next col-xs-4")>
-                        <a href="@Url.RouteUrl("Default", new { action = "GoNext" })">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
+                    <li class="@(ViewBag.Next ? "next col-xs-4" : "disabled next col-xs-4")">
+                        <a href="#" id="Next">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
                     </li>
                 </ul>
             </div>
         </div>
     }
+    @using (Html.BeginRouteForm("Default", new { action = "GetLatestBlogs" }))
+    {
+        @:<input type="hidden" id="postField" name="postField" />
+    }
 </div>
+<script type="text/javascript">
+
+</script>
+
 <!-- Enable Disqus -->
 <script type="text/javascript">
+    //Post Form Data
+    $("#Next").click(function (e) {
+        if ("@ViewBag.Next" != "True") {
+            return;
+        }
+
+        e.preventDefault();
+        var postField = $("input#postField:first");
+        postField.val("next");
+        postField[0].form.submit();
+    });
+    $("#Previous").click(function (e) {
+        if ("@ViewBag.Previous" != "True") {
+            return;
+        }
+
+        e.preventDefault();
+        var postField = $("input#postField:first");
+        postField.val("previous");
+        postField[0].form.submit();
+    });
+
+    //Iniailize Disqus
     var disqus_shortname = 'rahulrai';
     (function () {
         var s = document.createElement('script');

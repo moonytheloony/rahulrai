@@ -55,9 +55,9 @@
                     @blogPost.PostedDate.ToLocalTime().ToString("f")
                 </div>
                 <div class="col-xs-6 text-right">
-                    <span class="glyphicon glyphicon-comment"></span>
+                    <span class="glyphicon glyphicon-star comment"></span>
                     <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })#disqus_thread"
-                       data-disqus-identifier="/@blogPost.BlogFormattedUri"></a>
+                       data-disqus-identifier="/post/@blogPost.BlogFormattedUri" class="comment"></a>
                 </div>
             </div>
         </div>

@@ -29,8 +29,13 @@ footer {
         text-decoration: none;
     }
 
+/*Comment Marker*/
+.comment {
+    color: #428BCA;
+}
+
 .navbar-fixed-top {
-    height: 70px; /* Whatever you want. */
+    height: 70px;
 }
 
 .col-center {
@@ -57,7 +62,7 @@ code {
     }
 
 .footerDiv {
-    padding: 20px 20px 0px 20px;
+    padding: 20px 20px 0 20px;
     font-size: 15px;
     color: white;
 }

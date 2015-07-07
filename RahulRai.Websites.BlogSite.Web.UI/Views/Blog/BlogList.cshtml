@@ -2,47 +2,42 @@
 @model IList<RahulRai.Websites.Utilities.Common.Entities.BlogPost>
 <!-- Blog Entries Column -->
 <div class="col-md-8">
-    <div>
-        <div class="row">
-            <div class="col-md-4">
+    <div class="visible-xs">
+        <h1>
+            Thoughts on Everything
+        </h1>
+    </div>
+    <div id="myCarousel" class="carousel hidden-xs" data-interval="2000" data-ride="carousel">
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
                 <h1>
-                    My Notes on
+                    Thoughts on Cloud
                 </h1>
             </div>
-            <div class="col-md-8 text-left">
-                <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#myCarousel" data-slide-to="1"></li>
-                        <li data-target="#myCarousel" data-slide-to="2"></li>
-                        <li data-target="#myCarousel" data-slide-to="3"></li>
-                    </ol>
-                    <!-- Wrapper for slides -->
-                    <div class="carousel-inner" role="listbox">
-                        <div class="item active">
-                            <h1>
-                                Cloud
-                            </h1>
-                        </div>
-                        <div class="item">
-                            <h1>
-                                Coding
-                            </h1>
-                        </div>
-                        <div class="item">
-                            <h1>
-                                Technology
-                            </h1>
-                        </div>
-                        <div class="item">
-                            <h1>
-                                Alien Attacks!
-                            </h1>
-                        </div>
-                    </div>
-
-                </div>
+            <div class="item">
+                <h1>
+                    Thoughts on Coding
+                </h1>
+            </div>
+            <div class="item">
+                <h1>
+                    Thoughts on Technology
+                </h1>
+            </div>
+            <div class="item">
+                <h1>
+                    Thoughts on Architecture
+                </h1>
+            </div>
+            <div class="item">
+                <h1>
+                    Thoughts on Cluster Funks
+                </h1>
+            </div>
+            <div class="item">
+                <h1>
+                    Thoughts on Zen Mails
+                </h1>
             </div>
         </div>
     </div>
@@ -51,7 +46,7 @@
     {
         <!-- Blog Post -->
         <h3>
-            <a href="posts/@blogPost.BlogFormattedUri">@blogPost.Title</a>
+            <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">@blogPost.Title</a>
         </h3>
         <div class="container-fluid">
             <div class="row">
@@ -61,7 +56,7 @@
                 </div>
                 <div class="col-xs-6 text-right">
                     <span class="glyphicon glyphicon-comment"></span>
-                    <a href="posts/@blogPost.BlogFormattedUri#disqus_thread"
+                    <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })#disqus_thread"
                        data-disqus-identifier="/@blogPost.BlogFormattedUri"></a>
                 </div>
             </div>

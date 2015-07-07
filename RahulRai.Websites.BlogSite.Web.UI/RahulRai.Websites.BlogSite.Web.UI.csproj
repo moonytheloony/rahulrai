@@ -1674,6 +1674,7 @@
     </Compile>
     <Compile Include="GlobalAccess\BlogStoreAccess.cs" />
     <Compile Include="GlobalAccess\UserPageDictionary.cs" />
+    <Compile Include="Models\PassKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BlogService.cs" />
   </ItemGroup>
@@ -1704,7 +1705,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RahulRai.Websites.Utilities.AzureStorage\RahulRai.Websites.Utilities.AzureStorage.csproj">

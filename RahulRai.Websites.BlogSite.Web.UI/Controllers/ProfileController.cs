@@ -16,7 +16,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 {
     #region
 
+    using System;
+    using System.Configuration;
     using System.Web.Mvc;
+    using Models;
+    using Utilities.Common.RegularTypes;
     using Utilities.Web;
 
     #endregion
@@ -54,7 +58,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        ///     Testimonialses this instance.
+        ///     Testimonials this instance.
         /// </summary>
         /// <returns>ViewResult.</returns>
         public ViewResult Testimonials()
@@ -66,9 +70,31 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         ///     Resumes this instance.
         /// </summary>
         /// <returns>ViewResult.</returns>
+        [AcceptVerbs(HttpVerbs.Get)]
         public ViewResult Resume()
         {
-            return this.View("Resume");
+            return this.View("Resume", new PassKey());
+        }
+
+        /// <summary>
+        /// Resumes the specified key data.
+        /// </summary>
+        /// <param name="keyData">The key data.</param>
+        /// <returns>ViewResult.</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ViewResult Resume(PassKey keyData)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("Resume", new PassKey());
+            }
+
+            if (keyData != null && keyData.Key != null)
+            {
+                this.ViewBag.IsValid = keyData.Key.Trim().Equals(ConfigurationManager.AppSettings[ApplicationConstants.ViewerToken], StringComparison.OrdinalIgnoreCase);
+            }
+
+            return this.View("Resume", new PassKey());
         }
 
         /// <summary>

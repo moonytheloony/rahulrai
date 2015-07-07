@@ -115,8 +115,18 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public static string ResumeDocumentKey = "ResumeDocumentKey";
 
         /// <summary>
-        /// The search records size
+        ///     The search records size
         /// </summary>
         public static string SearchRecordsSize = "SearchRecordSize";
+
+        /// <summary>
+        /// The viewer token
+        /// </summary>
+        public static string ViewerToken = "ViewerToken";
+
+        /// <summary>
+        /// The testimonial token
+        /// </summary>
+        public static string TestimonialToken = "TestimonialToken";
     }
 }

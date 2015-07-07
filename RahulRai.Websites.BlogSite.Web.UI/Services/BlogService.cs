@@ -89,6 +89,30 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
+        /// Gets the blog post.
+        /// </summary>
+        /// <param name="postId">The post identifier.</param>
+        /// <returns>BlogPost.</returns>
+        public BlogPost GetBlogPost(string postId)
+        {
+            var activeTable = this.blogContext.CustomOperation();
+            var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
+                         where record.PartitionKey == ApplicationConstants.BlogKey
+                               && record.Properties["IsDeleted"].BooleanValue == false
+                               && record.Properties["FormattedUri"].StringValue.Equals(postId, StringComparison.OrdinalIgnoreCase)
+                         select record).Take(this.pageSize);
+            var result = query.AsTableQuery().ExecuteSegmented(null, this.blogContext.TableRequestOptions);
+            if (!result.Any())
+            {
+                return null;
+            }
+
+            return
+                TableBlogEntity.GetBlogPost(
+                    result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>()).FirstOrDefault());
+        }
+
+        /// <summary>
         /// Gets the paged blog previews.
         /// </summary>
         /// <param name="token">The token.</param>

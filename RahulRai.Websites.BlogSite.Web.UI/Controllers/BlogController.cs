@@ -18,6 +18,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Web;
     using System.Web.Mvc;
     using GlobalAccess;
     using Services;
@@ -96,12 +97,24 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        ///     Gets the blog post.
+        /// Gets the blog post.
         /// </summary>
+        /// <param name="postId">The post identifier.</param>
         /// <returns>ActionResult.</returns>
-        public ActionResult GetBlogPost()
+        public ActionResult GetBlogPost(string postId)
         {
-            return this.View("BlogPost");
+            if (string.IsNullOrWhiteSpace(postId))
+            {
+                return new HttpNotFoundResult("no post specified");
+            }
+
+            var blogPost = this.blogService.GetBlogPost(postId);
+            if (null == blogPost)
+            {
+                return new HttpNotFoundResult("article does not exist");
+            }
+
+            return this.View("BlogPost", blogPost);
         }
 
         /// <summary>

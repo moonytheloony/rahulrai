@@ -63,7 +63,7 @@
         </div>
         <br />
         <p>@Routines.GeneratePreview(blogPost.Body)</p>
-        <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a class="btn btn-primary" href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
         <hr />
     }
     <!-- Pager -->

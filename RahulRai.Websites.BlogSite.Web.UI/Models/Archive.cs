@@ -6,7 +6,7 @@
 // Last Modified By : rahulrai
 // Last Modified On : 07-07-2015
 // ***********************************************************************
-// <copyright file="PassKey.cs" company="Rahul Rai">
+// <copyright file="Archive.cs" company="Rahul Rai">
 //     Copyright (c) Rahul Rai. All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -16,23 +16,30 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Models
 {
     #region
 
-    using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
+    using Utilities.Common.Entities;
 
     #endregion
 
     /// <summary>
-    /// Class PassKey.
+    /// Archive class.
     /// </summary>
-    public class PassKey
+    public class Archive
     {
         /// <summary>
-        /// Gets or sets the key.
+        /// Gets or sets the year.
         /// </summary>
-        /// <value>The key.</value>
-        [Required(ErrorMessage = "Please Enter Code.")]
-        [StringLength(10, ErrorMessage = "Supported key length is 4 to 10 characters.", MinimumLength = 4)]
-        [RegularExpression("([a-zA-Z]+)", ErrorMessage = "Only alphabets are allowed.")]
-        [Display(Name = "Your Pass Key")]
-        public string Key { get; set; }
+        /// <value>
+        /// The year.
+        /// </value>
+        public int Year { get; set; }
+
+        /// <summary>
+        /// Gets or sets the month groups.
+        /// </summary>
+        /// <value>
+        /// The month groups.
+        /// </value>
+        public IEnumerable<MonthGroup> MonthGroups { get; set; }
     }
 }

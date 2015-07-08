@@ -1,8 +1,7 @@
 ﻿@using RahulRai.Websites.Utilities.Common.Helpers
 @model IList<RahulRai.Websites.Utilities.Common.Entities.BlogPost>
 <!-- Blog Entries Column -->
-<div class="col-md-8">
-    <div class="visible-xs">
+@*<div class="visible-xs">
         <h1>
             Thoughts on Everything
         </h1>
@@ -40,52 +39,50 @@
                 </h1>
             </div>
         </div>
-    </div>
-    <hr />
-    @foreach (var blogPost in Model)
-    {
+    </div>*@
+@foreach (var blogPost in Model)
+{
         <!-- Blog Post -->
-        <h3>
-            <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">@blogPost.Title</a>
-        </h3>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-6 text-left">
-                    <span class="glyphicon glyphicon-time"></span>
-                    @blogPost.PostedDate.ToLocalTime().ToString("f")
-                </div>
-                <div class="col-xs-6 text-right">
-                    <span class="glyphicon glyphicon-star comment"></span>
-                    <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })#disqus_thread"
-                       data-disqus-identifier="/post/@blogPost.BlogFormattedUri" class="comment"></a>
-                </div>
+    <h3>
+        <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">@blogPost.Title</a>
+    </h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-6 text-left">
+                <span class="glyphicon glyphicon-time"></span>
+                @blogPost.PostedDate.ToLocalTime().ToString("f")
+            </div>
+            <div class="col-xs-6 text-right">
+                <span class="glyphicon glyphicon-star comment"></span>
+                <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })#disqus_thread"
+                   data-disqus-identifier="/post/@blogPost.BlogFormattedUri" class="comment"></a>
             </div>
         </div>
-        <br />
-        <p>@Routines.GeneratePreview(blogPost.Body)</p>
-        <a class="btn btn-primary" href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-        <hr />
-    }
-    <!-- Pager -->
-    @if (ViewBag.Previous || ViewBag.Next)
-    {
-        <div class="container-fluid">
-            <div class="row">
-                <ul class="pager">
-                    <li class="@(ViewBag.Previous? "previous col-xs-4" : "disabled previous col-xs-4")">
-                        <a href="@(ViewBag.Previous ? Url.RouteUrl("Default", new { action = "Page", id = ViewBag.PreviousPageNumber }) : "#")"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
-                    </li>
-                    <li class="col-xs-4">
-                        <a href="@Url.RouteUrl("Default", new { action = "Archive" })"><i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archive</a>
-                    </li>
-                    <li class="@(ViewBag.Next ? "next col-xs-4" : "disabled next col-xs-4")">
-                        <a href="@(ViewBag.Next ? Url.RouteUrl("Default", new { action = "Page", id = ViewBag.NextPageNumber }) : "#")">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
-                    </li>
-                </ul>
-            </div>
+    </div>
+    <br />
+    <p>@Routines.GeneratePreview(blogPost.Body)</p>
+    <a class="btn btn-primary" href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+    <hr />
+}
+<!-- Pager -->
+@if (ViewBag.Previous || ViewBag.Next)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <ul class="pager">
+                <li class="@(ViewBag.Previous? "previous col-xs-4" : "disabled previous col-xs-4")">
+                    <a href="@(ViewBag.Previous ? Url.RouteUrl("Default", new { action = "Page", id = ViewBag.PreviousPageNumber }) : "#")"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
+                </li>
+                <li class="col-xs-4">
+                    <a href="@Url.RouteUrl("Default", new { action = "Archive" })"><i class="glyphicon glyphicon-folder-open" href="#"></i>&nbsp;&nbsp;Archive</a>
+                </li>
+                <li class="@(ViewBag.Next ? "next col-xs-4" : "disabled next col-xs-4")">
+                    <a href="@(ViewBag.Next ? Url.RouteUrl("Default", new { action = "Page", id = ViewBag.NextPageNumber }) : "#")">Next&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right" href="#"></i></a>
+                </li>
+            </ul>
         </div>
-    }
-</div>
+    </div>
+}
 <!-- Enable Disqus -->
 <script type="text/javascript">
     //Iniailize Disqus

@@ -1674,6 +1674,8 @@
     </Compile>
     <Compile Include="GlobalAccess\BlogStoreAccess.cs" />
     <Compile Include="GlobalAccess\UserPageDictionary.cs" />
+    <Compile Include="Models\Archive.cs" />
+    <Compile Include="Models\MonthGroup.cs" />
     <Compile Include="Models\PassKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BlogService.cs" />
@@ -1696,6 +1698,7 @@
     <Content Include="Views\Profile\Testimonials.cshtml" />
     <Content Include="Views\Profile\Contact.cshtml" />
     <Content Include="Views\Blog\SearchResult.cshtml" />
+    <Content Include="Views\Blog\Archive.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -77,7 +77,16 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        /// Gets the blogs for page.
+        /// Gets the blog archive.
+        /// </summary>
+        /// <returns>List of blogs</returns>
+        public IList<BlogPost> GetBlogArchive()
+        {
+            return this.BlogArchive(null, true);
+        }
+
+        /// <summary>
+        ///     Gets the blogs for page.
         /// </summary>
         /// <param name="pageNumber">The page number.</param>
         /// <returns>List&lt;BlogPost&gt;.</returns>
@@ -89,7 +98,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        /// Gets the blog post.
+        ///     Gets the blog post.
         /// </summary>
         /// <param name="postId">The post identifier.</param>
         /// <returns>BlogPost.</returns>
@@ -99,7 +108,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
                          where record.PartitionKey == ApplicationConstants.BlogKey
                                && record.Properties["IsDeleted"].BooleanValue == false
-                               && record.Properties["FormattedUri"].StringValue.Equals(postId, StringComparison.OrdinalIgnoreCase)
+                               &&
+                               record.Properties["FormattedUri"].StringValue.Equals(postId, StringComparison.OrdinalIgnoreCase)
                          select record).Take(this.pageSize);
             var result = query.AsTableQuery().ExecuteSegmented(null, this.blogContext.TableRequestOptions);
             if (!result.Any())
@@ -113,7 +123,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        /// Gets the paged blog previews.
+        ///     Gets the paged blog previews.
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="shouldAddPage">if set to <c>true</c> [should add page].</param>
@@ -134,6 +144,36 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             }
 
             return result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>());
+        }
+
+        /// <summary>
+        /// Blogs the archive.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="shouldAddPage">if set to <c>true</c> [should add page].</param>
+        /// <returns>List of blogs</returns>
+        private IList<BlogPost> BlogArchive(TableContinuationToken token, bool shouldAddPage)
+        {
+            var activeTable = this.blogContext.CustomOperation();
+            var query = new TableQuery<DynamicTableEntity>().Where(
+                TableQuery.CombineFilters(
+                    TableQuery.GenerateFilterConditionForBool("IsDraft", QueryComparisons.Equal, false),
+                    TableOperators.And,
+                    TableQuery.GenerateFilterConditionForBool("IsDeleted", QueryComparisons.Equal, false)))
+                .Select(new[] { "Title", "PostedDate" });
+            EntityResolver<BlogPost> resolver = (pk, rk, ts, props, etag) => new BlogPost
+            {
+                Title = props["Title"].StringValue,
+                PostedDate = props["PostedDate"].DateTime ?? DateTime.MinValue,
+                BlogId = rk
+            };
+            var result = activeTable.ExecuteQuerySegmented(query, resolver, token, this.blogContext.TableRequestOptions);
+            if (shouldAddPage && null != result.ContinuationToken)
+            {
+                UserPageDictionary.PageDictionary.AddPage(result.ContinuationToken);
+            }
+
+            return result.Results;
         }
 
         /// <summary>

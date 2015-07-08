@@ -173,7 +173,7 @@ img {
 
 /* Profile Content */
 .profile-content {
-    padding: 20px;
+    padding: 0px 10px 10px 0px;
     background: #ffffff;
     min-height: 100vh;
 }

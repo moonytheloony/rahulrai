@@ -1,0 +1,31 @@
+﻿@using System.Globalization
+@model IEnumerable<RahulRai.Websites.BlogSite.Web.UI.Models.Archive>
+@foreach (var archivePost in Model)
+{
+    <div class="container">
+        @foreach (var monthGroup in archivePost.MonthGroups)
+        {
+            <div class="row">
+                <div class="col-xs-12 text-left">
+                    <h3>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(monthGroup.Month) @archivePost.Year</h3>
+                </div>
+                <hr />
+            </div>
+            <div class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+                    <ul class="list-unstyled">
+                        @foreach (var blogPost in monthGroup.Posts)
+                        {
+                            <li>
+                                <span class="glyphicon glyphicon-bookmark comment"></span>
+                                <a href="/post/@blogPost.BlogFormattedUri">@blogPost.Title</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+}

@@ -3,25 +3,101 @@
     var resourceBasePath = ViewBag.ResourceBasePath;
     var myEmail = ViewBag.MyEmail;
 }
-
-@RenderBody()
-<!-- Blog Sidebar Column -->
-<div class="col-md-4">
-    <div class="visible-xs">
-        <br />
+<a class="visible-xs" name="menu"></a>
+<div class="row">
+    <div class="col-md-3">
+        <div class="profile-sidebar">
+            <br />
+            <!-- SIDEBAR USERPIC -->
+            <div class="profile-userpic">
+                <img src=@(resourceBasePath + "RahulRai.png") class="img-responsive" alt="Profile Picture">
+            </div>
+            <!-- END SIDEBAR USERPIC -->
+            <!-- SIDEBAR USER TITLE -->
+            <div class="profile-usertitle">
+                <div class="profile-usertitle-name">
+                    Rahul Rai
+                </div>
+                <div class="profile-usertitle-job">
+                    Architect<br />
+                    Microsoft Technologies
+                </div>
+            </div>
+            <!-- END SIDEBAR USER TITLE -->
+            <!-- SIDEBAR MENU -->
+            <div class="profile-usermenu">
+                <ul class="nav">
+                    <li>
+                        <a href="@(Url.RouteUrl("Default", new { controller = "Profile", action = "ProfileContent" }))">
+                            <i class="glyphicon glyphicon-cog"></i>
+                            Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Archive" })">
+                            <i class="glyphicon glyphicon-folder-open"></i>
+                            Archive
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:@myEmail?subject=Issue in rahulrai.in">
+                            <i class="glyphicon glyphicon-pushpin"></i>
+                            Log Site Issues
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- END MENU -->
+            <!--Carousel-->
+            <br />
+            <br />
+            <div class="container-fluid text-center text-info col-center">
+                <div id="myCarousel" class="carousel slide hidden-xs" data-interval="2000" data-ride="carousel">
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <h4>
+                                Thoughts on Cloud
+                            </h4>
+                        </div>
+                        <div class="item">
+                            <h4>
+                                Thoughts on Coding
+                            </h4>
+                        </div>
+                        <div class="item">
+                            <h4>
+                                Thoughts on Technology
+                            </h4>
+                        </div>
+                        <div class="item">
+                            <h4>
+                                Thoughts on Architecture
+                            </h4>
+                        </div>
+                        <div class="item">
+                            <h4>
+                                Thoughts on Cluster Funks
+                            </h4>
+                        </div>
+                        <div class="item">
+                            <h4>
+                                Thoughts on Zen Mails
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/Carousel-->
+        </div>
     </div>
-    <div class="text-right hidden-xs">
-        <a href="mailto:@myEmail?subject=Issue in rahulrai.in" data-toggle="tooltip" title="Log site issues">
-            <img src=@(resourceBasePath + "exclamation-mark-red-icon.png") alt="Exclamation" class="iconImage img-responsive" />
-        </a>
-    </div>
-    <div class="text-center profile-userpic">
-        <img class="img-responsive" alt="Profile Picture" src=@(resourceBasePath + "RahulRai.png") />
-        <br />
-        <br />
-        @Html.RouteLink("Hi, I'm Rahul...", "Default", new { controller = "Profile", action = "ProfileContent" }, new { @class = "btn btn-success btn-default", data_toggle = "tooltip", title = "About Me" })
-    </div>
-    <div class="visible-xs">
-        <br />
+    <div class="col-md-9">
+        <div class="profile-content" id="contentPane">
+            <a class="visible-xs" name="content"></a>
+            @RenderBody()
+            <div class="visible-xs text-right">
+                <br />
+                <a href="#menu">Back To Menu</a>
+            </div>
+        </div>
     </div>
 </div>

@@ -40,13 +40,12 @@
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                @Html.RouteLink("Rahul Rai", "Default", new { controller = "Blog", action = "GetLatestBlogs" }, new { @class = "mylogo" })
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <div class="col-sm-4 col-md-4 pull-right col-center">
+            <div class="row">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    @Html.RouteLink("Rahul Rai", "Default", new { controller = "Blog", action = "GetLatestBlogs" }, new { @class = "mylogo" })
+                </div>
+                <div class="col-sm-4 col-md-4 pull-right col-center hidden-xs">
                     <form class="navbar-form" role="search">
                         <div class="input-group text-right">
                             <input type="text" class="form-control" placeholder="Where's that blog?" name="srch-term" id="srch-term">
@@ -56,8 +55,8 @@
                         </div>
                     </form>
                 </div>
+                <!-- /.container -->
             </div>
-            <!-- /.container -->
         </div>
     </nav>
     <div>

@@ -18,9 +18,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using GlobalAccess;
+    using Models;
     using Services;
     using Utilities.AzureStorage.TableStorage;
     using Utilities.Common.Entities;
@@ -123,8 +125,19 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ActionResult.</returns>
         public ActionResult Archive()
         {
-            var blogList = new List<BlogPost>();
-            return this.View("BlogList", blogList);
+            var blogList = this.blogService.GetBlogArchive();
+            //// Group results by month and year.
+            var groupedBlogPosts = from post in blogList
+                                   group post by post.PostedDate.Year into yearGroup
+                                   select new Archive
+                                       {
+                                           Year = yearGroup.Key,
+                                           MonthGroups =
+                                               from yearPost in yearGroup
+                                               group yearPost by yearPost.PostedDate.Month into monthGroup
+                                               select new MonthGroup { Month = monthGroup.Key, Posts = monthGroup.ToList() }
+                                       };
+            return this.View(groupedBlogPosts);
         }
 
         /// <summary>

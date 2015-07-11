@@ -129,14 +129,18 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
             //// Group results by month and year.
             var groupedBlogPosts = from post in blogList
                                    group post by post.PostedDate.Year into yearGroup
+                                   let postYear = yearGroup.Key
+                                   orderby postYear descending 
                                    select new Archive
-                                       {
-                                           Year = yearGroup.Key,
-                                           MonthGroups =
-                                               from yearPost in yearGroup
-                                               group yearPost by yearPost.PostedDate.Month into monthGroup
-                                               select new MonthGroup { Month = monthGroup.Key, Posts = monthGroup.ToList() }
-                                       };
+                                        {
+                                            Year = postYear,
+                                            MonthGroups =
+                                                from yearPost in yearGroup
+                                                group yearPost by yearPost.PostedDate.Month into monthGroup
+                                                let postMonth = monthGroup.Key
+                                                orderby postMonth descending 
+                                                select new MonthGroup { Month = postMonth, Posts = monthGroup.ToList() }
+                                        };
             return this.View(groupedBlogPosts);
         }
 

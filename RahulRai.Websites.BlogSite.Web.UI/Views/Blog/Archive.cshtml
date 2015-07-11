@@ -2,30 +2,36 @@
 @model IEnumerable<RahulRai.Websites.BlogSite.Web.UI.Models.Archive>
 @foreach (var archivePost in Model)
 {
-    <div class="container">
-        @foreach (var monthGroup in archivePost.MonthGroups)
-        {
-            <div class="row">
-                <div class="col-xs-12 text-left">
-                    <h3>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(monthGroup.Month) @archivePost.Year</h3>
-                </div>
-                <hr />
+    <h1>@archivePost.Year</h1>
+    foreach (var monthGroup in archivePost.MonthGroups)
+    {
+        <!-- Timeline -->
+        <div class="timeline">
+            <!-- Line component -->
+            <div class="line text-muted"></div>
+            <!-- Separator -->
+            <div class="separator text-muted">
+                <h3><time>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(monthGroup.Month)</time></h3>
             </div>
-            <div class="row">
-                <div class="col-xs-2"></div>
-                <div class="col-xs-10">
-                    <ul class="list-unstyled">
-                        @foreach (var blogPost in monthGroup.Posts)
-                        {
-                            <li>
-                                <span class="glyphicon glyphicon-bookmark comment"></span>
-                                <a href="/post/@blogPost.BlogFormattedUri">@blogPost.Title</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-            <br />
-        }
-    </div>
+            <!-- /Separator -->
+            @foreach (var blogPost in monthGroup.Posts)
+            {
+                <!-- Panel -->
+                <article class="panel panel-primary panel-outline">
+                    <!-- Icon -->
+                    <div class="panel-heading icon">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </div>
+                    <!-- /Icon -->
+                    <!-- Body -->
+                    <div class="panel-body">
+                        On <strong>@blogPost.PostedDate.ToString("dddd, d")</strong>&nbsp;<a href="/post/@blogPost.BlogFormattedUri">@blogPost.Title</a>
+                    </div>
+                    <!-- /Body -->
+                </article>
+                <!-- /Panel -->
+            }
+        </div>
+        <!-- /Timeline -->
+    }
 }

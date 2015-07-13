@@ -19,7 +19,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using System;
     using System.Configuration;
     using System.Web.Mvc;
+    using GlobalAccess;
     using Models;
+    using Services;
+    using Utilities.Common.Entities;
     using Utilities.Common.RegularTypes;
     using Utilities.Web;
 
@@ -31,13 +34,14 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     public class ProfileController : BaseController
     {
         /// <summary>
-        ///     My profile.
+        ///     The document database access
         /// </summary>
-        /// <returns>ActionResult.</returns>
-        public ActionResult MyProfile()
-        {
-            return this.View();
-        }
+        private readonly DocumentDbAccess documentDbAccess = DocumentDbAccess.Instance;
+
+        /// <summary>
+        ///     The profile service
+        /// </summary>
+        private ProfileService profileService;
 
         /// <summary>
         ///     Writes a testimonial for me.
@@ -45,7 +49,41 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ActionResult.</returns>
         public ActionResult WriteATestimonialForMe()
         {
+            this.ViewBag.TestimonialSubmitted = this.TempData["TestimonialSubmitted"];
             return this.View();
+        }
+
+        /// <summary>
+        ///     Writes a testimonial for me.
+        /// </summary>
+        /// <param name="postedTestimonial">The posted testimonial.</param>
+        /// <returns>ActionResult.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult WriteATestimonialForMe(Testimonial postedTestimonial)
+        {
+            this.ViewBag.TestimonialSubmitted = false;
+            this.ViewBag.KeyMatchFailed = false;
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(postedTestimonial);
+            }
+
+            if (
+                !string.Equals(
+                postedTestimonial.AuthorToken.Trim(),
+                ConfigurationManager.AppSettings[ApplicationConstants.TestimonialToken],
+                StringComparison.OrdinalIgnoreCase))
+            {
+                this.ViewBag.KeyMatchFailed = true;
+                return this.View(postedTestimonial);
+            }
+
+            postedTestimonial.TestimonialId = DateTime.UtcNow.Ticks;
+            postedTestimonial.IsApproved = false;
+            this.profileService.AddDocument(postedTestimonial);
+            this.TempData["TestimonialSubmitted"] = true;
+            return this.RedirectToRoute("Profile", new { controller = "Profile", action = "WriteATestimonialForMe" });
         }
 
         /// <summary>
@@ -73,20 +111,21 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         [AcceptVerbs(HttpVerbs.Get)]
         public ViewResult Resume()
         {
-            return this.View("Resume", new PassKey());
+            return this.View("Resume");
         }
 
         /// <summary>
-        /// Resumes the specified key data.
+        ///     Resumes the specified key data.
         /// </summary>
         /// <param name="keyData">The key data.</param>
         /// <returns>ViewResult.</returns>
-        [AcceptVerbs(HttpVerbs.Post)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ViewResult Resume(PassKey keyData)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View("Resume", new PassKey());
+                return this.View("Resume", keyData);
             }
 
             if (keyData != null && keyData.Key != null)
@@ -94,7 +133,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
                 this.ViewBag.IsValid = keyData.Key.Trim().Equals(ConfigurationManager.AppSettings[ApplicationConstants.ViewerToken], StringComparison.OrdinalIgnoreCase);
             }
 
-            return this.View("Resume", new PassKey());
+            return this.View("Resume");
         }
 
         /// <summary>
@@ -104,6 +143,14 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         public ViewResult Contact()
         {
             return this.View("Contact");
+        }
+
+        /// <summary>
+        ///     Initializes the action.
+        /// </summary>
+        protected override void InitializeAction()
+        {
+            this.profileService = new ProfileService(this.documentDbAccess);
         }
     }
 }

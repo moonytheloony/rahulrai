@@ -128,5 +128,15 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// The testimonial token
         /// </summary>
         public static string TestimonialToken = "TestimonialToken";
+
+        /// <summary>
+        /// The testimonial database
+        /// </summary>
+        public static string TestimonialDatabase = "TestimonialDatabase";
+
+        /// <summary>
+        /// The testimonial collection
+        /// </summary>
+        public static string TestimonialCollection = "TestimonialCollection";
     }
 }

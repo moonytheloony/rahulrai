@@ -6,46 +6,45 @@
 <h1>Testimonials</h1>
 <hr>
 <!-- Date/Time -->
-<p><span class="glyphicon glyphicon-time"></span> Updated on June 30, 2015 at 9:00 PM</p>
-<hr>
-<p>Coming Soon!!</p>
-<p>
-    <div class="circle circle-border">
-        <div class="circle-inner">
-            <div class="inner-text">
-                RR
+<div class="container-fluid text-right"><a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "WriteATestimonialForMe" })"><img src="~/Content/Social/48/textplus.png" alt="add testimonial" class="iconImage img-responsive" data-toggle="tooltip" title="Write a Testimonial" /></a></div>
+    <p>Coming Soon!!</p>
+    <p>
+        <div class="circle circle-border">
+            <div class="circle-inner">
+                <div class="inner-text">
+                    RR
+                </div>
             </div>
         </div>
-    </div>
-    <blockquote>
-        Sample Quote
-    </blockquote>
-</p>
-<table class="table">
-    @if (null != Model)
-    {
-        foreach (var item in Model)
+        <blockquote>
+            Sample Quote
+        </blockquote>
+    </p>
+    <table class="table">
+        @if (null != Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AuthorFirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AuthorLastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AuthorEmail)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AuthorOrganization)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AuthorComments)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AuthorToken)
-                </td>
-            </tr>
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AuthorFirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AuthorLastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AuthorEmail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AuthorOrganization)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AuthorComments)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AuthorToken)
+                    </td>
+                </tr>
+            }
         }
-    }
-</table>
+    </table>

@@ -410,7 +410,12 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public const string Colon = ":";
 
         /// <summary>
-        ///     The username claim identifier.
+        /// The semi colon
+        /// </summary>
+        public const string SemiColon = ";";
+
+        /// <summary>
+        /// The username claim identifier.
         /// </summary>
         public const string UserNameClaimIdentifier = @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
 

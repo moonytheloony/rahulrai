@@ -1,0 +1,125 @@
+﻿@{
+    Layout = "~/Views/Shared/_Profile.cshtml";
+}
+
+@model RahulRai.Websites.Utilities.Common.Entities.Testimonial
+<h1>Write a Testimonial</h1>
+<hr>
+<p>Thanks for choosing to write a testimonial for me! You would need a token to use here. Please @Html.RouteLink("contact me", "Profile", new { action = "Contact", controller = "Profile" }) for a token!</p>
+<br />
+<p>If you face issues posting here, please send me a mail with the content and I will import it to the database.</p>
+<hr>
+@using (Html.BeginRouteForm("Profile", new { action = "WriteATestimonialForMe", controller = "Profile" }))
+{
+    @Html.AntiForgeryToken()
+    <form role="form">
+        @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+        {
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert">x</a>
+                <h4>There are errors in entries you made</h4>
+                @Html.ValidationSummary()
+            </div>
+            <script>
+                $(".validation-summary-errors").removeClass("validation-summary-errors");
+                $(".input-validation-error").removeClass("input-validation-error").parent().addClass("has-error");
+            </script>
+        }
+        @if (ViewBag.TestimonialSubmitted != null && ViewBag.TestimonialSubmitted == true)
+        {
+            <div class="alert alert-success">
+                <h4>Thank You!</h4>
+                <h5>Thank you for writing a testimonial for me! I will feature it soon on my website!</h5>
+            </div>
+        }
+        @if (ViewBag.KeyMatchFailed != null && ViewBag.KeyMatchFailed == true)
+        {
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert">x</a>
+                <h4>Invalid Access Token!</h4>
+                <h5>The AccessToken is not correct. Please validate or contact me for a token!</h5>
+            </div>
+        }
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.AuthorFirstName, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.AuthorFirstName, new { @class = "form-control", maxlength = 100 })
+            </div>
+        </div>
+        <div class="col-md-8">
+            <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.AuthorLastName, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.AuthorLastName, new { @class = "form-control", maxlength = 100 })
+            </div>
+        </div>
+        <div class="col-md-8">
+            <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.AuthorEmail, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.AuthorEmail, new { @class = "form-control", maxlength = 100 })
+            </div>
+        </div>
+        <div class="col-md-8">
+            <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.AuthorOrganization, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.AuthorOrganization, new { @class = "form-control", maxlength = 100 })
+            </div>
+        </div>
+        <div class="col-md-8">
+            <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.AuthorDesignation, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.AuthorDesignation, new { @class = "form-control", maxlength = 100 })
+            </div>
+        </div>
+        <div class="col-md-8">
+            <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.AuthorComments, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.AuthorComments, new { @class = "form-control", @rows = 5, id = "commentInput", maxlength = 500 })
+                <div class="text-right">
+                    Character Count:
+                    <span id="charsLeft">0</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.AuthorToken, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.AuthorToken, new { @class = "form-control", maxlength = 10 })
+            </div>
+        </div>
+        <div class="col-md-8">
+            <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-8 text-right">
+                <input type="submit" value="Submit Testimonial" class="btn btn-default btn-info" />
+            </div>
+        </div>
+    </form>
+}
+
+<!--Marker for length of text in testimonial section-->
+<script>
+    $(function () {
+        $("#commentInput").keyup(function () {
+            $("#charsLeft").text($(this).val().length + "/" + $(this).attr("maxlength"));
+        });
+    });
+</script>

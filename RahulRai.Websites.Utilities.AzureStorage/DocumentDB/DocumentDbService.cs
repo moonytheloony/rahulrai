@@ -118,10 +118,13 @@ namespace RahulRai.Websites.Utilities.AzureStorage.DocumentDB
         /// Gets the query object.
         /// </summary>
         /// <typeparam name="T">Type to query</typeparam>
-        /// <returns>Queryable object</returns>
-        public IOrderedQueryable<T> GetQueryObject<T>()
+        /// <param name="itemCount">The item count.</param>
+        /// <returns>
+        /// Queryable object
+        /// </returns>
+        public IOrderedQueryable<T> GetQueryObject<T>(int itemCount)
         {
-            return this.client.CreateDocumentQuery<T>(this.documentCollection.DocumentsLink);
+            return this.client.CreateDocumentQuery<T>(this.documentCollection.DocumentsLink, new FeedOptions { MaxItemCount = itemCount });
         }
 
         /// <summary>

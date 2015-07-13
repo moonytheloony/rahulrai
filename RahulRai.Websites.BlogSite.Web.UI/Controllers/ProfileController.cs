@@ -18,6 +18,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 
     using System;
     using System.Configuration;
+    using System.Linq;
+    using System.Security.Cryptography;
     using System.Web.Mvc;
     using GlobalAccess;
     using Models;
@@ -49,6 +51,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ActionResult.</returns>
         public ActionResult WriteATestimonialForMe()
         {
+            //// In case of redirect. Check whether a testimonial was submitted.
             this.ViewBag.TestimonialSubmitted = this.TempData["TestimonialSubmitted"];
             return this.View();
         }
@@ -101,7 +104,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ViewResult.</returns>
         public ViewResult Testimonials()
         {
-            return this.View("Testimonials");
+            ////Get top N Testimonials.
+            var documents = this.profileService.QueryDocument<Testimonial>(ApplicationConstants.TopTestimonialCount);
+            var result =
+                documents.Where(document => document.IsApproved == false)
+                    .OrderByDescending(document => document.TestimonialId);
+            return this.View("Testimonials", result);
         }
 
         /// <summary>

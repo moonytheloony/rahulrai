@@ -50,10 +50,13 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// Queries the document.
         /// </summary>
         /// <typeparam name="T">Type to query</typeparam>
-        /// <returns>Queryable document</returns>
-        public IOrderedQueryable<T> QueryDocument<T>()
+        /// <param name="itemCount">The item count.</param>
+        /// <returns>
+        /// Queryable document
+        /// </returns>
+        public IOrderedQueryable<T> QueryDocument<T>(int itemCount)
         {
-            return this.documentDbAccess.DocumentDbService.GetQueryObject<T>();
+            return this.documentDbAccess.DocumentDbService.GetQueryObject<T>(itemCount);
         }
     }
 }

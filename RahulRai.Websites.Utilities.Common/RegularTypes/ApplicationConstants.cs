@@ -138,5 +138,10 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// The testimonial collection
         /// </summary>
         public static string TestimonialCollection = "TestimonialCollection";
+
+        /// <summary>
+        /// The top testimonial count
+        /// </summary>
+        public static int TopTestimonialCount = 50;
     }
 }

@@ -6,45 +6,52 @@
 <h1>Testimonials</h1>
 <hr>
 <!-- Date/Time -->
-<div class="container-fluid text-right"><a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "WriteATestimonialForMe" })"><img src="~/Content/Social/48/textplus.png" alt="add testimonial" class="iconImage img-responsive" data-toggle="tooltip" title="Write a Testimonial" /></a></div>
-    <p>Coming Soon!!</p>
-    <p>
-        <div class="circle circle-border">
-            <div class="circle-inner">
-                <div class="inner-text">
-                    RR
+<div class="container text-right">
+    <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "WriteTestimonial" })">
+        <img src="~/Content/Social/48/textplus.png" alt="add testimonial" class="iconImage img-responsive" data-toggle="tooltip" title="Write a Testimonial" />
+    </a>
+</div>
+<br />
+
+@if (null != Model)
+{
+    foreach (var item in Model)
+    {
+        <div class="container content">
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1">
+                    <div class="testimonial">
+                        @Html.Raw(item.AuthorComments)
+                    </div>
+                    <div class="arrow-down"></div>
+                    <div class="container-fluid content">
+                        <div class="row">
+                            <div class="col-sm-1 pull-left">
+                                <div class="circle circle-border arrownAlign">
+                                    <div class="circle-inner">
+                                        <div class="inner-text">
+                                            @item.AuthorFirstName.ToUpperInvariant().FirstOrDefault()@item.AuthorLastName.ToUpperInvariant().FirstOrDefault()
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 pull-left">
+                                <p class="testimonial-author">@item.AuthorFirstName&nbsp;@item.AuthorLastName</p>
+                                <p class="testimonials-post">
+                                    @if (!string.IsNullOrWhiteSpace(item.AuthorDesignation))
+                                    {
+                                        <span>@item.AuthorDesignation,&nbsp;</span>
+                                    }
+                                    @item.AuthorOrganization
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <blockquote>
-            Sample Quote
-        </blockquote>
-    </p>
-    <table class="table">
-        @if (null != Model)
-        {
-            foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AuthorFirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AuthorLastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AuthorEmail)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AuthorOrganization)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AuthorComments)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AuthorToken)
-                    </td>
-                </tr>
-            }
-        }
-    </table>
+        <br />
+        <hr />
+        <br />
+    }
+}

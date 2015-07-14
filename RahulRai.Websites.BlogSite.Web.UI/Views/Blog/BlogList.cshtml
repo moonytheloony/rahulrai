@@ -1,48 +1,8 @@
 ﻿@using RahulRai.Websites.Utilities.Common.Helpers
 @model IList<RahulRai.Websites.Utilities.Common.Entities.BlogPost>
-<!-- Blog Entries Column -->
-@*<div class="visible-xs">
-        <h1>
-            Thoughts on Everything
-        </h1>
-    </div>
-    <div id="myCarousel" class="carousel hidden-xs" data-interval="2000" data-ride="carousel">
-        <div class="carousel-inner" role="listbox">
-            <div class="item active">
-                <h1>
-                    Thoughts on Cloud
-                </h1>
-            </div>
-            <div class="item">
-                <h1>
-                    Thoughts on Coding
-                </h1>
-            </div>
-            <div class="item">
-                <h1>
-                    Thoughts on Technology
-                </h1>
-            </div>
-            <div class="item">
-                <h1>
-                    Thoughts on Architecture
-                </h1>
-            </div>
-            <div class="item">
-                <h1>
-                    Thoughts on Cluster Funks
-                </h1>
-            </div>
-            <div class="item">
-                <h1>
-                    Thoughts on Zen Mails
-                </h1>
-            </div>
-        </div>
-    </div>*@
 @foreach (var blogPost in Model)
 {
-        <!-- Blog Post -->
+    <!-- Blog Post -->
     <h3>
         <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">@blogPost.Title</a>
     </h3>

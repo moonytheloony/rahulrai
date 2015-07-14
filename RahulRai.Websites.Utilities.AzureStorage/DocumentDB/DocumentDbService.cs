@@ -31,7 +31,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.DocumentDB
     /// <summary>
     /// Document Database Service class.
     /// </summary>
-    public class DocumentDbService
+    public class DocumentDbService : IDisposable
     {
         /// <summary>
         /// The client
@@ -49,6 +49,11 @@ namespace RahulRai.Websites.Utilities.AzureStorage.DocumentDB
         private DocumentCollection documentCollection;
 
         /// <summary>
+        ///     The disposed
+        /// </summary>
+        private bool disposed;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DocumentDbService"/> class.
         /// </summary>
         /// <param name="endpointUri">The endpoint URI.</param>
@@ -56,6 +61,14 @@ namespace RahulRai.Websites.Utilities.AzureStorage.DocumentDB
         public DocumentDbService(string endpointUri, string authKey)
         {
             this.client = new DocumentClient(new Uri(endpointUri), authKey);
+        }
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="DocumentDbService"/> class.
+        /// </summary>
+        ~DocumentDbService()
+        {
+            this.Dispose(false);
         }
 
         /// <summary>
@@ -133,6 +146,36 @@ namespace RahulRai.Websites.Utilities.AzureStorage.DocumentDB
         public void DeleteDatabase()
         {
             var operation = this.client.DeleteDatabaseAsync(this.database.SelfLink).Result.Resource;
+        }
+
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+            TraceUtility.LogInformation("Disposed all fields");
+        }
+
+        /// <summary>
+        ///     Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        ///     unmanaged resources.
+        /// </param>
+        private void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    this.client.Dispose();
+                }
+            }
+
+            this.disposed = true;
         }
     }
 }

@@ -1701,7 +1701,7 @@
     <Content Include="Views\Profile\Contact.cshtml" />
     <Content Include="Views\Blog\SearchResult.cshtml" />
     <Content Include="Views\Blog\Archive.cshtml" />
-    <Content Include="Views\Profile\WriteATestimonialForMe.cshtml" />
+    <Content Include="Views\Profile\WriteTestimonial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

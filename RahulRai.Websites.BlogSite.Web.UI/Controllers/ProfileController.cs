@@ -49,7 +49,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         ///     Writes a testimonial for me.
         /// </summary>
         /// <returns>ActionResult.</returns>
-        public ActionResult WriteATestimonialForMe()
+        public ActionResult WriteTestimonial()
         {
             //// In case of redirect. Check whether a testimonial was submitted.
             this.ViewBag.TestimonialSubmitted = this.TempData["TestimonialSubmitted"];
@@ -62,8 +62,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <param name="postedTestimonial">The posted testimonial.</param>
         /// <returns>ActionResult.</returns>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult WriteATestimonialForMe(Testimonial postedTestimonial)
+        public ActionResult WriteTestimonial(Testimonial postedTestimonial)
         {
             this.ViewBag.TestimonialSubmitted = false;
             this.ViewBag.KeyMatchFailed = false;
@@ -84,9 +83,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 
             postedTestimonial.TestimonialId = DateTime.UtcNow.Ticks;
             postedTestimonial.IsApproved = false;
+            this.profileService.CleanseTestimonial(ref postedTestimonial);
             this.profileService.AddDocument(postedTestimonial);
             this.TempData["TestimonialSubmitted"] = true;
-            return this.RedirectToRoute("Profile", new { controller = "Profile", action = "WriteATestimonialForMe" });
+            return this.RedirectToRoute("Profile", new { controller = "Profile", action = "WriteTestimonial" });
         }
 
         /// <summary>
@@ -128,7 +128,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <param name="keyData">The key data.</param>
         /// <returns>ViewResult.</returns>
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ViewResult Resume(PassKey keyData)
         {
             if (!this.ModelState.IsValid)

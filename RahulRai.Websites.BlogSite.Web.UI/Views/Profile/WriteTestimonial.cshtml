@@ -9,9 +9,8 @@
 <br />
 <p>If you face issues posting here, please send me a mail with the content and I will import it to the database.</p>
 <hr>
-@using (Html.BeginRouteForm("Profile", new { action = "WriteATestimonialForMe", controller = "Profile" }))
+@using (Html.BeginRouteForm("Profile", new { action = "WriteTestimonial", controller = "Profile" }))
 {
-    @Html.AntiForgeryToken()
     <form role="form">
         @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
         {
@@ -29,7 +28,7 @@
         {
             <div class="alert alert-success">
                 <h4>Thank You!</h4>
-                <h5>Thank you for writing a testimonial for me! I will feature it soon on my website!</h5>
+                <h5>Thank you for writing a testimonial for me! I will soon feature it on my website!</h5>
             </div>
         }
         @if (ViewBag.KeyMatchFailed != null && ViewBag.KeyMatchFailed == true)
@@ -37,7 +36,7 @@
             <div class="alert alert-danger">
                 <a href="#" class="close" data-dismiss="alert">x</a>
                 <h4>Invalid Access Token!</h4>
-                <h5>The AccessToken is not correct. Please validate or contact me for a token!</h5>
+                <h5>The AccessToken is not correct. Please review the token or contact me for a token!</h5>
             </div>
         }
         <div class="form-group">
@@ -88,7 +87,7 @@
         <div class="form-group">
             <div class="col-md-8">
                 @Html.LabelFor(model => model.AuthorComments, new { @class = "control-label" })
-                @Html.TextAreaFor(model => model.AuthorComments, new { @class = "form-control", @rows = 5, id = "commentInput", maxlength = 500 })
+                @Html.TextAreaFor(model => model.AuthorComments, new { @class = "form-control", @rows = 10, id = "commentInput", maxlength = 500, placeholder = "Some helpful guidelines:\n1. Begin with a very brief background of how you know me.\n2. Mention qualities employers seek by focussing on prefessional attributes (e.g. honesty, problem solving ability etc.).\n3. Tell a brief success story to add validity to your statements.\n4. End on a strong note (e.g. I heartily recommend Rahul and would be too happy to work with him again)." })
                 <div class="text-right">
                     Character Count:
                     <span id="charsLeft">0</span>

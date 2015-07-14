@@ -26,7 +26,6 @@
         </div>
         @using (Html.BeginRouteForm("Profile", new { action = "Resume", controller = "Profile" }))
         {
-            @Html.AntiForgeryToken()
             if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
             {
                 <div class="row">

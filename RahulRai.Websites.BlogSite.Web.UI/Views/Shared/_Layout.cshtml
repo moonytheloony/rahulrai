@@ -1,4 +1,5 @@
-﻿@{
+﻿@using RahulRai.Websites.Utilities.Common.Helpers
+@{
     Layout = "_LayoutNoContent.cshtml";
     var resourceBasePath = ViewBag.ResourceBasePath;
     var myEmail = ViewBag.MyEmail;
@@ -29,11 +30,11 @@
                 <ul class="nav">
                     <li>
                         <a href="@(Url.RouteUrl("Default", new { controller = "Profile", action = "ProfileContent" }))">
-                            <i class="glyphicon glyphicon-cog"></i>
-                            Profile
+                            <i class="glyphicon glyphicon-qrcode"></i>
+                            About Me
                         </a>
                     </li>
-                    <li>
+                    <li class="@Html.IsSelected(actions: "Archive", controllers: "Blog")">
                         <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Archive" })">
                             <i class="glyphicon glyphicon-folder-open"></i>
                             Archive
@@ -50,44 +51,57 @@
             <!-- END MENU -->
             <!--Carousel-->
             <br />
-            <br />
-            <div class="container-fluid text-center text-info col-center">
-                <div id="myCarousel" class="carousel slide" data-interval="2000" data-ride="carousel">
+            <hr />
+            <div class="container text-center text-info col-center">
+                <div id="myCarousel" class="carousel" data-interval="2000" data-ride="carousel">
                     <div class="carousel-inner" role="listbox">
                         <div class="item active">
-                            <h4>
-                                Thoughts on Cloud
-                            </h4>
+                            <h3>
+                                Thoughts on
+                                <br />
+                                Cloud
+                            </h3>
                         </div>
                         <div class="item">
-                            <h4>
-                                Thoughts on Coding
-                            </h4>
+                            <h3>
+                                Thoughts on
+                                <br />
+                                Coding
+                            </h3>
                         </div>
                         <div class="item">
-                            <h4>
-                                Thoughts on Technology
-                            </h4>
+                            <h3>
+                                Thoughts on
+                                <br />
+                                Technology
+                            </h3>
                         </div>
                         <div class="item">
-                            <h4>
-                                Thoughts on Architecture
-                            </h4>
+                            <h3>
+                                Thoughts on
+                                <br />
+                                Architecture
+                            </h3>
                         </div>
                         <div class="item">
-                            <h4>
-                                Thoughts on Cluster Funks
-                            </h4>
+                            <h3>
+                                Thoughts on
+                                <br />
+                                Cluster Funks
+                            </h3>
                         </div>
                         <div class="item">
-                            <h4>
-                                Thoughts on Zen Mails
-                            </h4>
+                            <h3>
+                                Thoughts on
+                                <br />
+                                Zen Mails
+                            </h3>
                         </div>
                     </div>
                 </div>
             </div>
             <!--/Carousel-->
+            <hr />
         </div>
     </div>
     <div class="col-md-9">

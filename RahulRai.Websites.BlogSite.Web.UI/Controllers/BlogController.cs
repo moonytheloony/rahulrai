@@ -75,10 +75,19 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <returns>ActionResult.</returns>
+        [HttpPost]
         public ActionResult GetSearchedBlogs(string searchTerm)
         {
-            var blogList = new List<BlogPost>();
-            return this.View("BlogList", blogList);
+            ////if (ModelState.IsValid)
+            ////{
+            ////    var blogList = new List<BlogPost>();
+            ////    return this.View("SearchResult", blogList);
+            ////}
+
+            ////ViewBag.ModelErrors = from modelValue in ModelState.Values
+            ////                      where modelValue.Errors.Count > 0
+            ////                      select modelValue.Errors;
+            return this.View("SearchResult", null);
         }
 
         /// <summary>
@@ -130,7 +139,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
             var groupedBlogPosts = from post in blogList
                                    group post by post.PostedDate.Year into yearGroup
                                    let postYear = yearGroup.Key
-                                   orderby postYear descending 
+                                   orderby postYear descending
                                    select new Archive
                                         {
                                             Year = postYear,
@@ -138,7 +147,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
                                                 from yearPost in yearGroup
                                                 group yearPost by yearPost.PostedDate.Month into monthGroup
                                                 let postMonth = monthGroup.Key
-                                                orderby postMonth descending 
+                                                orderby postMonth descending
                                                 select new MonthGroup { Month = postMonth, Posts = monthGroup.ToList() }
                                         };
             return this.View(groupedBlogPosts);

@@ -41,7 +41,7 @@ namespace RahulRai.Websites.Tools.DocumentTool
         ///     The search service name
         /// </summary>
         private static readonly string SearchServiceName =
-            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
 
         /// <summary>
         ///     The search service

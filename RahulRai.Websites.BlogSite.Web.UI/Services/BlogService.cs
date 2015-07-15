@@ -19,6 +19,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using GlobalAccess;
     using Microsoft.WindowsAzure.Storage.Table;
     using Microsoft.WindowsAzure.Storage.Table.Queryable;
@@ -54,6 +55,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         private readonly int searchRecordsSize;
 
         /// <summary>
+        ///     The blog search access
+        /// </summary>
+        private BlogSearchAccess blogSearchAccess;
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="BlogService" /> class.
         /// </summary>
         /// <param name="blogContext">The blog context.</param>
@@ -77,7 +83,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        /// Gets the blog archive.
+        ///     Gets the blog archive.
         /// </summary>
         /// <returns>List of blogs</returns>
         public IList<BlogPost> GetBlogArchive()
@@ -123,6 +129,59 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
+        ///     Searches the blogs.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <returns>blogs searched</returns>
+        public IEnumerable<BlogPost> SearchBlogs(string searchTerm)
+        {
+            this.blogSearchAccess = BlogSearchAccess.Instance;
+            var searchService = this.blogSearchAccess.AzureSearchService;
+            var searchedBlogs = searchService.SearchDocuments(searchTerm);
+            var foundBlogs = searchedBlogs as IList<BlogSearch> ?? searchedBlogs.ToList();
+            return !foundBlogs.Any()
+                ? null
+                : this.GetSearchedBlogPreviews(foundBlogs.Select(attribute => attribute.BlogId))
+                    .Select(TableBlogEntity.GetBlogPost);
+        }
+
+        /// <summary>
+        /// Sanitizes the search term.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <returns>Error messages</returns>
+        internal IEnumerable<string> SanitizeSearchTerm(ref string searchTerm)
+        {
+            var errorList = new List<string>();
+
+            //// Not empty or whitespace.
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                errorList.Add("Search term can not be empty.");
+                return errorList;
+            }
+
+            searchTerm = searchTerm.ToLowerInvariant().Trim();
+
+            //// Remove multispaces
+            searchTerm = Regex.Replace(searchTerm.Trim(), @"\s+", " ");
+
+            //// Appropriate length.
+            if (searchTerm.Length < 2 || searchTerm.Length > 20)
+            {
+                errorList.Add("Search term should have at least 2 and at most 20 characters.");
+            }
+
+            //// No special characters.
+            if (!Regex.IsMatch(searchTerm, @"^([ a-zA-Z0-9-]+)$"))
+            {
+                errorList.Add("You can only use alphabets, numbers, spaces and dashes in your search query.");
+            }
+
+            return errorList;
+        }
+
+        /// <summary>
         ///     Gets the paged blog previews.
         /// </summary>
         /// <param name="token">The token.</param>
@@ -147,7 +206,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        /// Blogs the archive.
+        ///     Blogs the archive.
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="shouldAddPage">if set to <c>true</c> [should add page].</param>
@@ -190,7 +249,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             }
 
             var rowKeyFilterCondition = string.Empty;
-            var partitionKeyFilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, ApplicationConstants.BlogKey);
             var isDraftCondition = TableQuery.GenerateFilterConditionForBool("IsDraft", QueryComparisons.Equal, false);
             var isDeletedCondition = TableQuery.GenerateFilterConditionForBool("IsDeleted", QueryComparisons.Equal, false);
             foreach (var rowkey in rowKeyList)
@@ -202,18 +260,15 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             }
 
             var activeTable = this.blogContext.CustomOperation();
-            var combinedQuery = activeTable.CreateQuery<DynamicTableEntity>().Where(
+            var combinedQuery = new TableQuery<DynamicTableEntity>().Where(
                 TableQuery.CombineFilters(
                     TableQuery.CombineFilters(
-                        TableQuery.CombineFilters(
-                            partitionKeyFilter,
-                            TableOperators.And,
-                            rowKeyFilterCondition),
+                        rowKeyFilterCondition,
                         TableOperators.And,
                         isDraftCondition),
-                    TableOperators.And,
+                TableOperators.And,
                     isDeletedCondition)).Take(this.searchRecordsSize);
-            var result = combinedQuery.AsTableQuery().ExecuteSegmented(null, this.blogContext.TableRequestOptions);
+            var result = activeTable.ExecuteQuerySegmented(combinedQuery, null, this.blogContext.TableRequestOptions);
             return result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>());
         }
     }

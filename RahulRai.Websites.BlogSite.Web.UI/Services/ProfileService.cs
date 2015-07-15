@@ -35,7 +35,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// Initializes a new instance of the <see cref="ProfileService"/> class.
         /// </summary>
         /// <param name="documentDbAccess">The document database access.</param>
-        public ProfileService(GlobalAccess.DocumentDbAccess documentDbAccess)
+        public ProfileService(DocumentDbAccess documentDbAccess)
         {
             this.documentDbAccess = documentDbAccess;
         }

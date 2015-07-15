@@ -1672,6 +1672,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="GlobalAccess\BlogSearchAccess.cs" />
     <Compile Include="GlobalAccess\BlogStoreAccess.cs" />
     <Compile Include="GlobalAccess\DocumentDbAccess.cs" />
     <Compile Include="GlobalAccess\UserPageDictionary.cs" />

@@ -16,10 +16,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 {
     #region
 
-    using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
     using GlobalAccess;
     using Models;
@@ -75,23 +73,22 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <returns>ActionResult.</returns>
-        [HttpPost]
-        public ActionResult GetSearchedBlogs(string searchTerm)
+        [HttpGet]
+        public ActionResult SearchResult(string searchTerm)
         {
-            ////if (ModelState.IsValid)
-            ////{
-            ////    var blogList = new List<BlogPost>();
-            ////    return this.View("SearchResult", blogList);
-            ////}
+            var errorList = this.blogService.SanitizeSearchTerm(ref searchTerm);
+            if (errorList.Any())
+            {
+                this.ViewBag.Errors = errorList;
+                return this.View("SearchResult", null);
+            }
 
-            ////ViewBag.ModelErrors = from modelValue in ModelState.Values
-            ////                      where modelValue.Errors.Count > 0
-            ////                      select modelValue.Errors;
-            return this.View("SearchResult", null);
+            var searchedBlogs = this.blogService.SearchBlogs(searchTerm);
+            return this.View("SearchResult", searchedBlogs);
         }
 
         /// <summary>
-        /// Pages the specified identifier.
+        ///     Pages the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>ActionResult.</returns>
@@ -108,7 +105,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Gets the blog post.
+        ///     Gets the blog post.
         /// </summary>
         /// <param name="postId">The post identifier.</param>
         /// <returns>ActionResult.</returns>
@@ -137,19 +134,21 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
             var blogList = this.blogService.GetBlogArchive();
             //// Group results by month and year.
             var groupedBlogPosts = from post in blogList
-                                   group post by post.PostedDate.Year into yearGroup
-                                   let postYear = yearGroup.Key
-                                   orderby postYear descending
-                                   select new Archive
-                                        {
-                                            Year = postYear,
-                                            MonthGroups =
-                                                from yearPost in yearGroup
-                                                group yearPost by yearPost.PostedDate.Month into monthGroup
-                                                let postMonth = monthGroup.Key
-                                                orderby postMonth descending
-                                                select new MonthGroup { Month = postMonth, Posts = monthGroup.ToList() }
-                                        };
+                                   group post by post.PostedDate.Year
+                                       into yearGroup
+                                       let postYear = yearGroup.Key
+                                       orderby postYear descending
+                                       select new Archive
+                                       {
+                                           Year = postYear,
+                                           MonthGroups =
+                                               from yearPost in yearGroup
+                                               group yearPost by yearPost.PostedDate.Month
+                                                   into monthGroup
+                                                   let postMonth = monthGroup.Key
+                                                   orderby postMonth descending
+                                                   select new MonthGroup { Month = postMonth, Posts = monthGroup.ToList() }
+                                       };
             return this.View(groupedBlogPosts);
         }
 
@@ -162,7 +161,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Sets the previous next page.
+        ///     Sets the previous next page.
         /// </summary>
         /// <param name="currentPageNumber">The current page number.</param>
         private void SetPreviousNextPage(int currentPageNumber)

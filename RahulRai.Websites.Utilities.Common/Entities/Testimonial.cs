@@ -16,6 +16,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
 {
     #region
 
+    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using RegularTypes;
@@ -25,6 +26,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
     /// <summary>
     ///     Class Testimonial.
     /// </summary>
+    [Serializable]
     public class Testimonial
     {
         /// <summary>
@@ -115,5 +117,13 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         ///     <c>true</c> if this instance is approved; otherwise, <c>false</c>.
         /// </value>
         public bool IsApproved { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is featured.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is featured; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsFeatured { get; set; }
     }
 }

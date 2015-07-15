@@ -17,6 +17,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     #region
 
     using System;
+    using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
     using System.Security.Cryptography;
@@ -64,6 +65,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         [HttpPost]
         public ActionResult WriteTestimonial(Testimonial postedTestimonial)
         {
+            this.profileService = new ProfileService(this.documentDbAccess);
             this.ViewBag.TestimonialSubmitted = false;
             this.ViewBag.KeyMatchFailed = false;
             if (!this.ModelState.IsValid)
@@ -83,6 +85,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 
             postedTestimonial.TestimonialId = DateTime.UtcNow.Ticks;
             postedTestimonial.IsApproved = false;
+            postedTestimonial.IsFeatured = false;
             this.profileService.CleanseTestimonial(ref postedTestimonial);
             this.profileService.AddDocument(postedTestimonial);
             this.TempData["TestimonialSubmitted"] = true;
@@ -104,11 +107,38 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>ViewResult.</returns>
         public ViewResult Testimonials()
         {
+            this.profileService = new ProfileService(this.documentDbAccess);
+            var result = new List<Testimonial>();
+            List<Testimonial> cacheResult;
+            //// Check in cache first. Retry operation on first failure. Product Issue :(
+            try
+            {
+                cacheResult = ApplicationCache.Get<List<Testimonial>>(ApplicationConstants.TestimonialCacheKey);
+            }
+            catch (Exception)
+            {
+                cacheResult = ApplicationCache.Get<List<Testimonial>>(ApplicationConstants.TestimonialCacheKey);
+            }
+
+            if (null != cacheResult)
+            {
+                return this.View("Testimonials", cacheResult);
+            }
+
+            var testimonialCount = Convert.ToInt32(ConfigurationManager.AppSettings[ApplicationConstants.TopTestimonialCount]);
             ////Get top N Testimonials.
-            var documents = this.profileService.QueryDocument<Testimonial>(ApplicationConstants.TopTestimonialCount);
-            var result =
-                documents.Where(document => document.IsApproved == false)
-                    .OrderByDescending(document => document.TestimonialId);
+            var documentsFeatured = this.profileService.QueryDocument<Testimonial>(testimonialCount);
+            var featured = documentsFeatured.Where(document => document.IsFeatured && document.IsApproved).OrderByDescending(document => document.TestimonialId).ToList();
+            result.AddRange(featured);
+            if (testimonialCount - featured.Count() <= 0)
+            {
+                return this.View("Testimonials", result);
+            }
+
+            var documentsApproved = this.profileService.QueryDocument<Testimonial>(testimonialCount - featured.Count());
+            var approved = documentsApproved.Where(document => document.IsApproved && !document.IsFeatured).OrderByDescending(document => document.TestimonialId).ToList();
+            result.AddRange(approved);
+            ApplicationCache.Set(ApplicationConstants.TestimonialCacheKey, result);
             return this.View("Testimonials", result);
         }
 
@@ -150,14 +180,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         public ViewResult Contact()
         {
             return this.View("Contact");
-        }
-
-        /// <summary>
-        ///     Initializes the action.
-        /// </summary>
-        protected override void InitializeAction()
-        {
-            this.profileService = new ProfileService(this.documentDbAccess);
         }
     }
 }

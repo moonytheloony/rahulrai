@@ -5,9 +5,11 @@
 @model RahulRai.Websites.Utilities.Common.Entities.Testimonial
 <h1>Write a Testimonial</h1>
 <hr>
-<p>Thanks for choosing to write a testimonial for me! You would need a token to use here. Please @Html.RouteLink("contact me", "Profile", new { action = "Contact", controller = "Profile" }) for a token!</p>
-<br />
-<p>If you face issues posting here, please send me a mail with the content and I will import it to the database.</p>
+<p class="lead">Thank you for choosing to write a testimonial for me!<br />You would need a token to use here. Please @Html.RouteLink("contact me", "Profile", new { action = "Contact", controller = "Profile" }) to get a token.</p>
+<p>
+    <i class="glyphicon glyphicon-exclamation-sign"></i>
+    Facing issues? Please send me a mail with the content and I will import it to the database.
+</p>
 <hr>
 @using (Html.BeginRouteForm("Profile", new { action = "WriteTestimonial", controller = "Profile" }))
 {

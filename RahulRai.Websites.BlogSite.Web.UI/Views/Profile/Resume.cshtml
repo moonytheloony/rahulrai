@@ -15,13 +15,10 @@
 {
     <div class="text-left container">
         <div class="row">
-            <div class="col-xs-12">
-                <h1>
-                    <small>
-                        @Html.RouteLink("Contact Me", "Profile", new { action = "Contact", controller = "Profile" }) for a Pass Key
-                    </small>
-                </h1>
-                <br />
+            <div class="col-sm-8 text-left">
+                <p class="lead">
+                    @Html.RouteLink("Contact Me", "Profile", new { action = "Contact", controller = "Profile" }) for a Pass Key
+                </p>
             </div>
         </div>
         @using (Html.BeginRouteForm("Profile", new { action = "Resume", controller = "Profile" }))
@@ -29,7 +26,7 @@
             if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
             {
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-sm-8 col-sm-offset-2">
                         <div class="alert alert-danger">
                             <a href="#" class="close" data-dismiss="alert">x</a>
                             <h4>There are errors in entries you made</h4>
@@ -45,7 +42,7 @@
             if (ViewBag.IsValid != null && ViewBag.IsValid == false)
             {
                 <div class="row">
-                    <div class="col-xs-8 col-sm-6">
+                    <div class="col-sm-8 col-sm-offset-2">
                         <div class="alert alert-danger">
                             <a href="#" class="close" data-dismiss="alert">x</a>
                             Your key is incorrect! Please try again.
@@ -55,15 +52,13 @@
             }
             <div class="form-group">
                 <div class="row">
-                    <div class="col-xs-8 col-sm-6">
-                        @Html.LabelFor(element => element.Key)
-                        @Html.TextBoxFor(element => element.Key, new { @class = "form-control" })
-                    </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-xs-8 col-sm-6 text-right">
-                        <input type="submit" class="btn btn-default btn-info" value="Submit" />
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div class="input-group">
+                            @Html.TextBoxFor(element => element.Key, new { @class = "form-control", placeholder = "Your Pass Key" })
+                            <span class="input-group-btn">
+                                <input type="submit" class="btn btn-default btn-info" value="Submit" />
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

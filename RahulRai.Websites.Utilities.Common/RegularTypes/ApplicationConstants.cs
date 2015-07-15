@@ -142,6 +142,16 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// <summary>
         /// The top testimonial count
         /// </summary>
-        public static int TopTestimonialCount = 50;
+        public static string TopTestimonialCount = "TopTestimonialCount";
+
+        /// <summary>
+        /// The cache eviction minutes
+        /// </summary>
+        public static double CacheEvictionMinutes = 720;
+
+        /// <summary>
+        /// The testimonial cache key
+        /// </summary>
+        public static string TestimonialCacheKey = "Testimonials";
     }
 }

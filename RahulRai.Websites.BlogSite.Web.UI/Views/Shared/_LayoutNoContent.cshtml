@@ -5,7 +5,8 @@
     var title = ViewBag.Title;
     var resourceBasePath = ViewBag.ResourceBasePath;
     var myEmail = ViewBag.MyEmail;
-    var version = Guid.NewGuid().ToString();
+    //// Expire content daily.
+    var version = DateTime.UtcNow.ToString("yy-mm-dd");
 }
 <!--/Initialize Data-->
 <head>
@@ -47,7 +48,7 @@
                     @Html.RouteLink("Rahul Rai", "Default", new { controller = "Blog", action = "GetLatestBlogs" }, new { @class = "mylogo" })
                 </div>
                 <div class="col-sm-4 col-md-4 pull-right col-center hidden-xs">
-                    @using (Html.BeginRouteForm("Default", new { controller = "Blog", action = "GetSearchedBlogs" }, FormMethod.Post, new { @class = "navbar-form", @role = "search" }))
+                    @using (Html.BeginRouteForm("Default", new { controller = "Blog", action = "SearchResult" }, FormMethod.Get, new { @class = "navbar-form", @role = "search" }))
                     {
                         <div class="input-group text-right">
                             @Html.TextBox("searchTerm", null, new { @class = "form-control", placeholder = "Where's that blog?", maxlength = 20 })

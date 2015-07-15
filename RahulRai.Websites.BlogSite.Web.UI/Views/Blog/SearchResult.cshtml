@@ -1,1 +1,73 @@
-﻿
+﻿@using System.Configuration
+@using RahulRai.Websites.Utilities.Common.Helpers
+@using RahulRai.Websites.Utilities.Common.RegularTypes
+@model IEnumerable<RahulRai.Websites.Utilities.Common.Entities.BlogPost>
+@{
+    var hasErrors = ViewBag.Errors != null && ViewBag.Errors.Count > 0;
+}
+<h1>Search Results</h1>
+<hr>
+@if (hasErrors)
+{
+    <div class="alert alert-danger">
+        <h4>Your search expression has the following errors</h4>
+        <ul>
+            @foreach (var error in ViewBag.Errors)
+            {
+                <li>
+                    <h5>@error</h5>
+                </li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    if (null == Model || !Model.Any())
+    {
+        <p class="lead">Your search did not match any articles</p>
+    }
+    else
+    {
+        <h2>
+            Top Results for Your Search
+        </h2>
+        <br />
+        foreach (var blogPost in Model)
+        {
+            <!-- Blog Post -->
+            <h3>
+                <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">@blogPost.Title</a>
+            </h3>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-6 text-left">
+                        <span class="glyphicon glyphicon-time"></span>
+                        @blogPost.PostedDate.ToLocalTime().ToString("f")
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <span class="glyphicon glyphicon-star comment"></span>
+                        <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })#disqus_thread"
+                           data-disqus-identifier="/post/@blogPost.BlogFormattedUri" class="comment"></a>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <p>@Routines.GeneratePreview(blogPost.Body)</p>
+            <a class="btn btn-primary" href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+            <hr />
+        }
+    }
+}
+<!-- Enable Disqus -->
+<script type="text/javascript">
+    //Iniailize Disqus
+    var disqus_shortname = 'rahulrai';
+    (function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>

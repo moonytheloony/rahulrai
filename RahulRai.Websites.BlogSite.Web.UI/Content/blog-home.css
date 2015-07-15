@@ -80,6 +80,8 @@ code {
 
 #disqus_thread {
     margin-bottom: 10px;
+    max-height: 50vh;
+    overflow-y: auto;
 }
 
 img {
@@ -354,6 +356,10 @@ img {
 /*End Timeline*/
 
 /*Testimonials*/
+.featured {
+    color: #ffd700;
+}
+
 .testimonial {
     margin: 0;
     background: #F5F5F5;

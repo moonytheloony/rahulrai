@@ -49,7 +49,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI
         {
             filters.Add(new HandleErrorAttribute(), 2);
             filters.Add(new ErrorHandlerAttribute(), 1);
-            filters.Add(new RequireHttpsAttribute());
         }
     }
 }

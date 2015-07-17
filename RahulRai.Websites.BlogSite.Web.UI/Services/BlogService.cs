@@ -20,6 +20,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
     using GlobalAccess;
     using Microsoft.WindowsAzure.Storage.Table;
     using Microsoft.WindowsAzure.Storage.Table.Queryable;
@@ -76,9 +77,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         ///     Gets the latest blogs.
         /// </summary>
         /// <returns>List&lt;BlogPost&gt;.</returns>
-        public List<BlogPost> GetLatestBlogs()
+        public async Task<List<BlogPost>> GetLatestBlogs()
         {
-            var result = this.GetPagedBlogPreviews(null, true);
+            var result = await this.GetPagedBlogPreviews(null, true);
             return result.Select(TableBlogEntity.GetBlogPost).ToList();
         }
 
@@ -96,10 +97,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// </summary>
         /// <param name="pageNumber">The page number.</param>
         /// <returns>List&lt;BlogPost&gt;.</returns>
-        public List<BlogPost> GetBlogsForPage(int pageNumber)
+        public async Task<List<BlogPost>> GetBlogsForPage(int pageNumber)
         {
             var segment = UserPageDictionary.PageDictionary.GetPageContinuationToken(pageNumber);
-            var resultBlogs = this.GetPagedBlogPreviews(segment, !UserPageDictionary.PageDictionary.CanMoveForward());
+            var resultBlogs = await this.GetPagedBlogPreviews(segment, !UserPageDictionary.PageDictionary.CanMoveForward());
             return resultBlogs.Select(TableBlogEntity.GetBlogPost).ToList();
         }
 
@@ -186,7 +187,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// <param name="token">The token.</param>
         /// <param name="shouldAddPage">if set to <c>true</c> [should add page].</param>
         /// <returns>IEnumerable&lt;TableBlogEntity&gt;.</returns>
-        private IEnumerable<TableBlogEntity> GetPagedBlogPreviews(TableContinuationToken token, bool shouldAddPage)
+        private async Task<IEnumerable<TableBlogEntity>> GetPagedBlogPreviews(TableContinuationToken token, bool shouldAddPage)
         {
             var activeTable = this.blogContext.CustomOperation();
             var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
@@ -195,7 +196,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
                                && record.Properties["IsDeleted"].BooleanValue == false
                                && string.Compare(record.RowKey, this.rowKeyToUse, StringComparison.OrdinalIgnoreCase) > 0
                          select record).Take(this.pageSize);
-            var result = query.AsTableQuery().ExecuteSegmented(token, this.blogContext.TableRequestOptions);
+            var result = await Task.Run(() => query.AsTableQuery().ExecuteSegmented(token, this.blogContext.TableRequestOptions));
             if (shouldAddPage && null != result.ContinuationToken)
             {
                 UserPageDictionary.PageDictionary.AddPage(result.ContinuationToken);

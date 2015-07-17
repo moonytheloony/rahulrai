@@ -50,7 +50,17 @@ namespace RahulRai.Websites.Utilities.Web
             var actionToInvoke = filterContext.ActionDescriptor.ActionName.ToLowerInvariant();
             switch (actionToInvoke)
             {
-                case "get":
+                case "getlatestblogs":
+                    this.ViewBag.Title = "Recent Posts";
+                    break;
+                case "notfound":
+                    this.ViewBag.Title = "404: Not Found";
+                    break;
+                case "internalserver":
+                    this.ViewBag.Title = "Server Error";
+                    break;
+                case "searchresult":
+                    this.ViewBag.Title = "Search Results";
                     break;
                 default:
                     this.ViewBag.Title = "Rahul on Technology and Things";

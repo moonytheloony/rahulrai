@@ -61,10 +61,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         ///     Gets the latest blogs.
         /// </summary>
         /// <returns>ActionResult.</returns>
-        public ActionResult GetLatestBlogs()
+        public async Task<ActionResult> GetLatestBlogs()
         {
             UserPageDictionary.PageDictionary = null;
-            var blogPosts = this.blogService.GetLatestBlogs();
+            var blogPosts = await this.blogService.GetLatestBlogs();
             this.SetPreviousNextPage(0);
             return this.View("BlogList", blogPosts);
         }
@@ -93,14 +93,14 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>ActionResult.</returns>
-        public ActionResult Page(int id)
+        public async Task<ActionResult> Page(int id)
         {
             if (id > UserPageDictionary.PageDictionary.MaximumPageNumber || id < 0)
             {
                 this.RedirectToAction("GetLatestBlogs");
             }
 
-            var blogList = this.blogService.GetBlogsForPage(id);
+            var blogList = await this.blogService.GetBlogsForPage(id);
             this.SetPreviousNextPage(id);
             return this.View("BlogList", blogList);
         }
@@ -110,14 +110,14 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         /// <param name="postId">The post identifier.</param>
         /// <returns>ActionResult.</returns>
-        public ActionResult GetBlogPost(string postId)
+        public async Task<ActionResult> GetBlogPost(string postId)
         {
             if (string.IsNullOrWhiteSpace(postId))
             {
                 return new HttpNotFoundResult("no post specified");
             }
 
-            var blogPost = this.blogService.GetBlogPost(postId);
+            var blogPost = await Task.Run(() => this.blogService.GetBlogPost(postId));
             if (null == blogPost)
             {
                 return new HttpNotFoundResult("article does not exist");
@@ -130,9 +130,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         ///     Goes the archive.
         /// </summary>
         /// <returns>ActionResult.</returns>
-        public ActionResult Archive()
+        public async Task<ActionResult> Archive()
         {
-            var blogList = this.blogService.GetBlogArchive();
+            var blogList = await Task.Run(() => this.blogService.GetBlogArchive());
             //// Group results by month and year.
             var groupedBlogPosts = from post in blogList
                                    group post by post.PostedDate.Year

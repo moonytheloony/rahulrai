@@ -104,9 +104,8 @@
             <hr />
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9" id="content">
         <div class="profile-content" id="contentPane">
-            <a class="visible-xs" name="content"></a>
             @RenderBody()
             <div class="visible-xs text-right">
                 <br />
@@ -115,3 +114,11 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" language="javascript">
+    // Navigate to cotent pane on page load for small screens.
+    $(function () {
+        if ($(window).width() <= 739) {
+            $(document).scrollTop($("#contentPane").offset().top - 100);
+        }
+    });
+</script>

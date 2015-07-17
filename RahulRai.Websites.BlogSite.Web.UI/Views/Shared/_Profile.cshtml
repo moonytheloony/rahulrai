@@ -70,3 +70,11 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" language="javascript">
+    // Navigate to cotent pane on page load for small screens.
+    $(function () {
+        if ($(window).width() <= 739) {
+            $(document).scrollTop($("#contentPane").offset().top - 100);
+        }
+    });
+</script>

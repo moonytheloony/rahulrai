@@ -20,7 +20,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
-    using System.Security.Cryptography;
     using System.Web.Mvc;
     using GlobalAccess;
     using Models;
@@ -34,6 +33,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     /// <summary>
     ///     Class ProfileController.
     /// </summary>
+    [RequireHttps]
     public class ProfileController : BaseController
     {
         /// <summary>

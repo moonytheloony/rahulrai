@@ -16,6 +16,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI
 {
     #region
 
+    using System;
     using System.Web.Mvc;
     using System.Web.Routing;
 
@@ -33,7 +34,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            routes.Add(new Route("metaweblog", new WeblogRouteHandler()));
+            routes.Add(new Route("metaweblog", new WeblogRouteHandler())
+            {
+                DataTokens = new RouteValueDictionary(new { scheme = Uri.UriSchemeHttps })
+            });
             routes.MapRoute("BlogPost", "post/{postId}", new { controller = "Blog", action = "GetBlogPost" });
             routes.MapRoute("Error", "Error/{action}", new { controller = "Error" });
             routes.MapRoute("Profile", "Profile/{action}/{id}", new { controller = "Profile", id = UrlParameter.Optional });

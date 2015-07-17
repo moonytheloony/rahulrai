@@ -18,6 +18,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 
     using System.Configuration;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
     using GlobalAccess;
     using Models;
@@ -74,7 +75,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <param name="searchTerm">The search term.</param>
         /// <returns>ActionResult.</returns>
         [HttpGet]
-        public ActionResult SearchResult(string searchTerm)
+        public async Task<ActionResult> SearchResult(string searchTerm)
         {
             var errorList = this.blogService.SanitizeSearchTerm(ref searchTerm);
             if (errorList.Any())
@@ -83,7 +84,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
                 return this.View("SearchResult", null);
             }
 
-            var searchedBlogs = this.blogService.SearchBlogs(searchTerm);
+            var searchedBlogs = await Task.Run(() => this.blogService.SearchBlogs(searchTerm));
             return this.View("SearchResult", searchedBlogs);
         }
 

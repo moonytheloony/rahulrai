@@ -30,25 +30,25 @@
                 <div class="profile-usermenu">
                     <ul class="nav">
                         <li class="@Html.IsSelected(actions: "ProfileContent", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "ProfileContent" }))#content">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "ProfileContent" }))">
                                 <i class="glyphicon glyphicon-cog"></i>
                                 Profile
                             </a>
                         </li>
                         <li class="@Html.IsSelected(actions: "Testimonials", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Testimonials" }))#content">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "Testimonials" }))">
                                 <i class="glyphicon glyphicon-thumbs-up"></i>
                                 Testimonials
                             </a>
                         </li>
                         <li class="@Html.IsSelected(actions: "Resume", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Resume" }))#content">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "Resume" }))">
                                 <i class="glyphicon glyphicon-star"></i>
                                 Resume
                             </a>
                         </li>
                         <li class="@Html.IsSelected(actions: "Contact", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Contact" }))#content">
+                            <a href="@(Url.RouteUrl("Profile", new { action = "Contact" }))">
                                 <i class="glyphicon glyphicon-phone"></i>
                                 Contact
                             </a>

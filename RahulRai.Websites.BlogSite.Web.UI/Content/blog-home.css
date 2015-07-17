@@ -359,6 +359,9 @@ img {
 .featured {
     color: #ffd700;
     font-size: 25px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .testimonial {

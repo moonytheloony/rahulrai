@@ -145,7 +145,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         /// <returns>System.String.</returns>
         public static string FormatTitle(string title)
         {
-            var cleanString = Regex.Replace(title, @"[^\w\.@-]", KnownTypes.HyphenSeparator, RegexOptions.None);
+            var cleanString = Regex.Replace(title, @"[^\w@-]", KnownTypes.HyphenSeparator, RegexOptions.None);
             return cleanString;
         }
 

@@ -34,8 +34,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI
         /// </summary>
         protected void Application_Start()
         {
-            ////HtmlHelper.ClientValidationEnabled = true;
-            ////HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -51,6 +49,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI
         {
             filters.Add(new HandleErrorAttribute(), 2);
             filters.Add(new ErrorHandlerAttribute(), 1);
+            filters.Add(new RequireHttpsAttribute());
         }
     }
 }

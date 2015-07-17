@@ -101,8 +101,9 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Search
         /// </summary>
         /// <param name="searchText">The search text.</param>
         /// <param name="filter">The filter.</param>
+        /// <param name="resultCount">Results to return</param>
         /// <returns>IEnumerable&lt;BlogSearch&gt;.</returns>
-        public IEnumerable<BlogSearch> SearchDocuments(string searchText, string filter = null)
+        public IEnumerable<BlogSearch> SearchDocuments(string searchText, string filter = null, int resultCount = 50)
         {
             // Execute search based on search text and optional filter
             var searchParameter = new SearchParameters();
@@ -110,6 +111,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.Search
             if (!string.IsNullOrEmpty(filter))
             {
                 searchParameter.Filter = filter;
+                searchParameter.Top = resultCount;
             }
 
             var response = this.indexClient.Documents.Search<BlogSearch>(searchText, searchParameter);

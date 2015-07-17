@@ -114,8 +114,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
                          where record.PartitionKey == ApplicationConstants.BlogKey
                                && record.Properties["IsDeleted"].BooleanValue == false
-                               &&
-                               record.Properties["FormattedUri"].StringValue.Equals(postId, StringComparison.OrdinalIgnoreCase)
+                               && record.Properties["FormattedUri"].StringValue.Equals(postId, StringComparison.OrdinalIgnoreCase)
                          select record).Take(this.pageSize);
             var result = query.AsTableQuery().ExecuteSegmented(null, this.blogContext.TableRequestOptions);
             if (!result.Any())
@@ -137,7 +136,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         {
             this.blogSearchAccess = BlogSearchAccess.Instance;
             var searchService = this.blogSearchAccess.AzureSearchService;
-            var searchedBlogs = searchService.SearchDocuments(searchTerm);
+            var searchedBlogs = searchService.SearchDocuments(searchTerm, null, this.pageSize);
             var foundBlogs = searchedBlogs as IList<BlogSearch> ?? searchedBlogs.ToList();
             return !foundBlogs.Any()
                 ? null
@@ -254,9 +253,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             foreach (var rowkey in rowKeyList)
             {
                 var rowFilter = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, rowkey);
+                var partitionFilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, ApplicationConstants.BlogKey);
+                var combinedFilter = TableQuery.CombineFilters(rowFilter, TableOperators.And, partitionFilter);
                 rowKeyFilterCondition = string.IsNullOrWhiteSpace(rowKeyFilterCondition)
                     ? rowFilter
-                    : TableQuery.CombineFilters(rowKeyFilterCondition, TableOperators.Or, rowFilter);
+                    : TableQuery.CombineFilters(combinedFilter, TableOperators.Or, rowFilter);
             }
 
             var activeTable = this.blogContext.CustomOperation();

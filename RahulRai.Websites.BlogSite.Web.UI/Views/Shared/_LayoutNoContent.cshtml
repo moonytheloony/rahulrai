@@ -1,10 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using System.Web.Configuration
+@using RahulRai.Websites.Utilities.Common.RegularTypes
+<!DOCTYPE html>
 <html lang="en">
 <!--Initialize Data-->
 @{
     var title = ViewBag.Title;
     var resourceBasePath = ViewBag.ResourceBasePath;
     var myEmail = ViewBag.MyEmail;
+    var appInsightKey = WebConfigurationManager.AppSettings[ApplicationConstants.AppInsightKey];
     //// Expire content daily.
     var version = DateTime.UtcNow.ToString("yy-mm-dd");
 }
@@ -25,6 +28,17 @@
     @Scripts.Render("~/bundles/SyntaxHighlighter")
     <link href="~/Content/blog-home.css?version=@version" rel="stylesheet" />
     <script type="text/javascript">
+        ////Application Insight Web Page Load Time Tracking.
+        var appInsights = window.appInsights || function (config) {
+            function s(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, r = document, f = window, e = "script", o = r.createElement(e), i, u; for (o.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", r.getElementsByTagName(e)[0].parentNode.appendChild(o), t.cookie = r.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;) s("track" + i.pop()); return config.disableExceptionTracking || (i = "onerror", s("_" + i), u = f[i], f[i] = function (config, r, f, e, o) { var s = u && u(config, r, f, e, o); return s !== !0 && t["_" + i](config, r, f, e, o), s }), t
+        }({
+            instrumentationKey: "@appInsightKey"
+        });
+
+        window.appInsights = appInsights;
+        appInsights.trackPageView();
+    </script>
+    <script type="text/javascript">
         SyntaxHighlighter.defaults['toolbar'] = false;
         SyntaxHighlighter.all();
     </script>
@@ -34,6 +48,19 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script>
+        //// Google Analytics.
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-7566205-4', 'auto');
+        ga('send', 'pageview');
+
+    </script>
 </head>
 <body>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
@@ -80,8 +107,11 @@
                     <p>Copyright &copy; rahulrai.in @DateTime.Now.Year</p>
                     <p>Powered by <a href="http://azure.microsoft.com/en-us/">Microsoft Azure App Services</a> </p>
                     <p>Continuous deployment through <a href="http://github.com/‎">GITHub</a></p>
-                    <p>Theme courtesy <a href="http://startbootstrap.com/">StartBootstrap.com</a></p>
-                    <p>&hearts; <a href="https://www.facebook.com/neha.bharadwaj2">Neha Rai</a></p>
+                    <p>
+                        <i class="glyphicon glyphicon-lock"></i>
+                        <a href="#" data-toggle="modal" data-target="#myModal">Affiliations</a>
+                    </p>
+                    <p>UX with &hearts; <a href="https://www.facebook.com/neha.bharadwaj2">Neha Rai</a></p>
                 </div>
                 <div class="col-xs-6 text-right">
                     <a href="https://www.facebook.com/moonytheloony"><img src="~/Content/Social/48/fb.png" alt="facebook" class="iconImage img-responsive" /></a>
@@ -95,6 +125,34 @@
             <!-- /.row -->
         </div>
     </footer>
+    <!--Affiliations-->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">Affiliations</h2>
+                </div>
+                <div class="modal-body">
+                    <!-- Begin DigiCert site seal HTML -->
+                    <div id="DigiCertClickID_3Wm3PlNT" data-language="en" class="allow-test-seal">
+                    </div>
+                    <!-- End DigiCert site seal HTML -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/Affiliations-->
+    <!-- Begin DigiCert site seal JavaScript code -->
+    <script type="text/javascript" async defer>
+        var __dcid = __dcid || []; __dcid.push(["DigiCertClickID_3Wm3PlNT", "3", "s", "white", "3Wm3PlNT"]); (function () { var cid = document.createElement("script"); cid.async = true; cid.src = "//seal.digicert.com/seals/cascade/seal.min.js"; var s = document.getElementsByTagName("script"); var ls = s[(s.length - 1)]; ls.parentNode.insertBefore(cid, ls.nextSibling); }());
+    </script>
+    <!-- End DigiCert site seal JavaScript code -->
     <script type="text/javascript">
         //Open links in new tab
         $(document).ready(function () {

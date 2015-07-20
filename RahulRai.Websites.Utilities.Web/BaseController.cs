@@ -17,6 +17,7 @@ namespace RahulRai.Websites.Utilities.Web
     #region
 
     using System.Configuration;
+    using System.Web.Configuration;
     using System.Web.Mvc;
     using Common.RegularTypes;
 
@@ -33,8 +34,8 @@ namespace RahulRai.Websites.Utilities.Web
         protected BaseController()
         {
             this.ViewBag.ResourceBasePath =
-                ConfigurationManager.AppSettings[ApplicationConstants.ApplicationResourceRoot];
-            this.ViewBag.MyEmail = ConfigurationManager.AppSettings[ApplicationConstants.MyEmail];
+                WebConfigurationManager.AppSettings[ApplicationConstants.ApplicationResourceRoot];
+            this.ViewBag.MyEmail = WebConfigurationManager.AppSettings[ApplicationConstants.MyEmail];
             this.ViewBag.Previous = false;
             this.ViewBag.Next = false;
             this.ViewBag.PreviousPageNumber = 0;

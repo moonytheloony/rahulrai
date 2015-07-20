@@ -18,6 +18,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.GlobalAccess
 
     using System.Configuration;
     using System.Text.RegularExpressions;
+    using System.Web.Configuration;
     using Utilities.AzureStorage.DocumentDB;
     using Utilities.Common.Exceptions;
     using Utilities.Common.RegularTypes;
@@ -43,19 +44,19 @@ namespace RahulRai.Websites.BlogSite.Web.UI.GlobalAccess
         ///     The connection string
         /// </summary>
         private readonly string connectionString =
-            ConfigurationManager.AppSettings[ApplicationConstants.DocumentDbConnectionString];
+            WebConfigurationManager.AppSettings[ApplicationConstants.DocumentDbConnectionString];
 
         /// <summary>
         ///     The testimonial collection
         /// </summary>
         private readonly string testimonialCollection =
-            ConfigurationManager.AppSettings[ApplicationConstants.TestimonialCollection];
+            WebConfigurationManager.AppSettings[ApplicationConstants.TestimonialCollection];
 
         /// <summary>
         ///     The testimonial database
         /// </summary>
         private readonly string testimonialDatabase =
-            ConfigurationManager.AppSettings[ApplicationConstants.TestimonialDatabase];
+            WebConfigurationManager.AppSettings[ApplicationConstants.TestimonialDatabase];
 
         /// <summary>
         ///     Prevents a default instance of the <see cref="DocumentDbAccess" /> class from being created.

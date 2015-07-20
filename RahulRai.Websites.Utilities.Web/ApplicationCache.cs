@@ -20,6 +20,7 @@ namespace RahulRai.Websites.Utilities.Web
     using System.Configuration;
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
+    using System.Web.Configuration;
     using Common.RegularTypes;
     using StackExchange.Redis;
 
@@ -49,8 +50,8 @@ namespace RahulRai.Websites.Utilities.Web
                 ConnectionMultiplexer.Connect(
                 string.Format(
                 "{0},ssl=true,password={1}",
-                ConfigurationManager.AppSettings[ApplicationConstants.SessionStateHost],
-                ConfigurationManager.AppSettings[ApplicationConstants.SessionStateKey]));
+                WebConfigurationManager.AppSettings[ApplicationConstants.SessionStateHost],
+                WebConfigurationManager.AppSettings[ApplicationConstants.SessionStateKey]));
             Cache = connection.GetDatabase();
             EvictionTime = TimeSpan.FromMinutes(ApplicationConstants.CacheEvictionMinutes);
         }

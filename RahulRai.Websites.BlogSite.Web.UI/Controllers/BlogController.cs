@@ -19,6 +19,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using System.Configuration;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Web.Configuration;
     using System.Web.Mvc;
     using GlobalAccess;
     using Models;
@@ -44,13 +45,13 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         ///     The page size
         /// </summary>
         private readonly int pageSize =
-            int.Parse(ConfigurationManager.AppSettings[ApplicationConstants.BlogListPageSize]);
+            int.Parse(WebConfigurationManager.AppSettings[ApplicationConstants.BlogListPageSize]);
 
         /// <summary>
         ///     The search records
         /// </summary>
         private readonly int searchRecordsSize =
-            int.Parse(ConfigurationManager.AppSettings[ApplicationConstants.SearchRecordsSize]);
+            int.Parse(WebConfigurationManager.AppSettings[ApplicationConstants.SearchRecordsSize]);
 
         /// <summary>
         ///     The blog service

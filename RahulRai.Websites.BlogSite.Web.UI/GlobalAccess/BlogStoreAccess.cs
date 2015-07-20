@@ -17,6 +17,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.GlobalAccess
     #region
 
     using System.Configuration;
+    using System.Web.Configuration;
     using Utilities.AzureStorage.TableStorage;
     using Utilities.Common.Entities;
     using Utilities.Common.RegularTypes;
@@ -41,13 +42,13 @@ namespace RahulRai.Websites.BlogSite.Web.UI.GlobalAccess
         /// <summary>
         ///     The blog table name
         /// </summary>
-        private readonly string blogTableName = ConfigurationManager.AppSettings[ApplicationConstants.BlogTableName];
+        private readonly string blogTableName = WebConfigurationManager.AppSettings[ApplicationConstants.BlogTableName];
 
         /// <summary>
         ///     The connection string
         /// </summary>
         private readonly string connectionString =
-            ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
+            WebConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
 
         /// <summary>
         ///     Prevents a default instance of the <see cref="BlogStoreAccess" /> class from being created.

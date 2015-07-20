@@ -17,6 +17,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.GlobalAccess
     #region
 
     using System.Configuration;
+    using System.Web.Configuration;
     using Utilities.AzureStorage.Search;
     using Utilities.Common.RegularTypes;
 
@@ -40,12 +41,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI.GlobalAccess
         /// <summary>
         /// The key
         /// </summary>
-        private readonly string key = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+        private readonly string key = WebConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
 
         /// <summary>
         /// The name
         /// </summary>
-        private readonly string name = ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
+        private readonly string name = WebConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
 
         /// <summary>
         /// Prevents a default instance of the <see cref="BlogSearchAccess"/> class from being created.

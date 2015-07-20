@@ -1,4 +1,5 @@
 ﻿@using System.Configuration
+@using System.Web.Configuration
 @using RahulRai.Websites.Utilities.Common.RegularTypes
 @using RahulRai.Websites.BlogSite.Web.UI.Models
 @{
@@ -70,7 +71,7 @@ else
     <div class="h_iframe hidden-xs">
         <!-- a transparent image is preferable -->
         <img class="ratio" src="http://placehold.it/16x20" width="16" height="20" alt="placeholder" />
-        <iframe src="https://docs.google.com/viewer?srcid=@ConfigurationManager.AppSettings[ApplicationConstants.ResumeDocumentKey]&pid=explorer&efh=false&a=v&chrome=false&embedded=true" allowfullscreen></iframe>
+        <iframe src="https://docs.google.com/viewer?srcid=@WebConfigurationManager.AppSettings[ApplicationConstants.ResumeDocumentKey]&pid=explorer&efh=false&a=v&chrome=false&embedded=true" allowfullscreen></iframe>
     </div>
     <div class="visible-xs">
         Please use a higher resolution display to view this file.

@@ -20,6 +20,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
+    using System.Web.Configuration;
     using System.Web.Mvc;
     using GlobalAccess;
     using Models;
@@ -76,7 +77,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
             if (
                 !string.Equals(
                 postedTestimonial.AuthorToken.Trim(),
-                ConfigurationManager.AppSettings[ApplicationConstants.TestimonialToken],
+                WebConfigurationManager.AppSettings[ApplicationConstants.TestimonialToken],
                 StringComparison.OrdinalIgnoreCase))
             {
                 this.ViewBag.KeyMatchFailed = true;
@@ -125,7 +126,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
                 return this.View("Testimonials", cacheResult);
             }
 
-            var testimonialCount = Convert.ToInt32(ConfigurationManager.AppSettings[ApplicationConstants.TopTestimonialCount]);
+            var testimonialCount = Convert.ToInt32(WebConfigurationManager.AppSettings[ApplicationConstants.TopTestimonialCount]);
             ////Get top N Testimonials.
             var documentsFeatured = this.profileService.QueryDocument<Testimonial>(testimonialCount);
             var featured = documentsFeatured.Where(document => document.IsFeatured && document.IsApproved).OrderByDescending(document => document.TestimonialId).ToList();
@@ -167,7 +168,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 
             if (keyData != null && keyData.Key != null)
             {
-                this.ViewBag.IsValid = keyData.Key.Trim().Equals(ConfigurationManager.AppSettings[ApplicationConstants.ViewerToken], StringComparison.OrdinalIgnoreCase);
+                this.ViewBag.IsValid = keyData.Key.Trim().Equals(WebConfigurationManager.AppSettings[ApplicationConstants.ViewerToken], StringComparison.OrdinalIgnoreCase);
             }
 
             return this.View("Resume");

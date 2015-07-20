@@ -153,5 +153,10 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// The testimonial cache key
         /// </summary>
         public static string TestimonialCacheKey = "Testimonials";
+
+        /// <summary>
+        /// The application insight key
+        /// </summary>
+        public static string AppInsightKey = "AppInsightKey";
     }
 }

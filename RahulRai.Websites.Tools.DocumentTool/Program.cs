@@ -19,6 +19,7 @@ namespace RahulRai.Websites.Tools.DocumentTool
     using System;
     using System.Configuration;
     using System.Linq;
+    using System.Web.Configuration;
     using Utilities.AzureStorage.Search;
     using Utilities.Common.Entities;
     using Utilities.Common.Helpers;
@@ -35,13 +36,13 @@ namespace RahulRai.Websites.Tools.DocumentTool
         ///     The search service key
         /// </summary>
         private static readonly string SearchServiceKey =
-            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+            WebConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
 
         /// <summary>
         ///     The search service name
         /// </summary>
         private static readonly string SearchServiceName =
-            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
+            WebConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
 
         /// <summary>
         ///     The search service

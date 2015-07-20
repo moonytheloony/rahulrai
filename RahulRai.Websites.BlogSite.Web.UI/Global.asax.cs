@@ -17,9 +17,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI
     #region
 
     using System.Web;
+    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
+    using Microsoft.ApplicationInsights.Extensibility;
+    using Utilities.Common.RegularTypes;
     using Utilities.Web;
 
     #endregion
@@ -39,6 +42,15 @@ namespace RahulRai.Websites.BlogSite.Web.UI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterSessionStateProvider.Set();
+            SetupTelemetry();
+        }
+
+        /// <summary>
+        /// Setups the telemetry.
+        /// </summary>
+        private static void SetupTelemetry()
+        {
+            TelemetryConfiguration.Active.InstrumentationKey = WebConfigurationManager.AppSettings[ApplicationConstants.AppInsightKey];
         }
 
         /// <summary>

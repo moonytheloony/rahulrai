@@ -21,6 +21,7 @@ namespace RahulRai.Websites.Utilities.Web
     using System.Configuration;
     using System.IO;
     using System.Linq;
+    using System.Web.Configuration;
     using AzureStorage.BlobStorage;
     using AzureStorage.Search;
     using AzureStorage.TableStorage;
@@ -43,18 +44,18 @@ namespace RahulRai.Websites.Utilities.Web
         ///     The blog resource container name
         /// </summary>
         private readonly string blogResourceContainerName =
-            ConfigurationManager.AppSettings[ApplicationConstants.BlogResourceContainerName];
+            WebConfigurationManager.AppSettings[ApplicationConstants.BlogResourceContainerName];
 
         /// <summary>
         ///     The blog table name
         /// </summary>
-        private readonly string blogTableName = ConfigurationManager.AppSettings[ApplicationConstants.BlogTableName];
+        private readonly string blogTableName = WebConfigurationManager.AppSettings[ApplicationConstants.BlogTableName];
 
         /// <summary>
         ///     The connection string
         /// </summary>
         private readonly string connectionString =
-            ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
+            WebConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString];
 
         /// <summary>
         ///     The media storage service
@@ -75,13 +76,13 @@ namespace RahulRai.Websites.Utilities.Web
         ///     The search service key
         /// </summary>
         private readonly string searchServiceKey =
-            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
+            WebConfigurationManager.AppSettings[ApplicationConstants.SearchServiceKey];
 
         /// <summary>
         ///     The search service name
         /// </summary>
         private readonly string searchServiceName =
-            ConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
+            WebConfigurationManager.AppSettings[ApplicationConstants.SearchServiceName];
 
         /// <summary>
         ///     The disposed
@@ -581,8 +582,8 @@ namespace RahulRai.Websites.Utilities.Web
         private static void ValidateUser(string username, string password)
         {
             TraceUtility.LogInformation("Started validation of user");
-            var adminName = ConfigurationManager.AppSettings[ApplicationConstants.PublisherName];
-            var secret = ConfigurationManager.AppSettings[ApplicationConstants.Secret];
+            var adminName = WebConfigurationManager.AppSettings[ApplicationConstants.PublisherName];
+            var secret = WebConfigurationManager.AppSettings[ApplicationConstants.Secret];
             if (string.Equals(username, adminName, StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(password, secret, StringComparison.InvariantCulture))
             {

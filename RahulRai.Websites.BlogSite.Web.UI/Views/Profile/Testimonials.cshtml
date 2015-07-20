@@ -3,6 +3,7 @@
 }
 
 @using System.Configuration
+@using System.Web.Configuration
 @using RahulRai.Websites.Utilities.Common.RegularTypes
 @model IEnumerable<RahulRai.Websites.Utilities.Common.Entities.Testimonial>
 <h1>Testimonials</h1>
@@ -14,7 +15,7 @@
     </a>
 </div>
 <div class="container-fluid text-center">
-    <p class="lead">Top @ConfigurationManager.AppSettings[ApplicationConstants.TopTestimonialCount] Featured and Recent Testimonials</p>
+    <p class="lead">Top @WebConfigurationManager.AppSettings[ApplicationConstants.TopTestimonialCount] Featured and Recent Testimonials</p>
 </div>
 <br />
 @if (null != Model)

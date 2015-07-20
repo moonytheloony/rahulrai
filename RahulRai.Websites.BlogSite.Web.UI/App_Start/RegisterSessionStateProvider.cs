@@ -64,10 +64,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI
             providerSetting.Parameters.Add("port", "6380");
             providerSetting.Parameters.Add(
                 "host",
-                ConfigurationManager.AppSettings[ApplicationConstants.SessionStateHost]);
+                WebConfigurationManager.AppSettings[ApplicationConstants.SessionStateHost]);
             providerSetting.Parameters.Add(
                 "accessKey",
-                ConfigurationManager.AppSettings[ApplicationConstants.SessionStateKey]);
+                WebConfigurationManager.AppSettings[ApplicationConstants.SessionStateKey]);
             providerSetting.Parameters.Add("ssl", "true");
             return providerSetting;
         }

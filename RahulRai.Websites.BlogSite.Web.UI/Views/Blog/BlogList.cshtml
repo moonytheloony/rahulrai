@@ -30,7 +30,7 @@
     <div class="container-fluid">
         <div class="row">
             <ul class="pager">
-                <li class="@(ViewBag.Previous? "previous col-xs-4" : "disabled previous col-xs-4")">
+                <li class="@(ViewBag.Previous ? "previous col-xs-4" : "disabled previous col-xs-4")">
                     <a href="@(ViewBag.Previous ? Url.RouteUrl("Default", new { action = "Page", id = ViewBag.PreviousPageNumber }) : "#")"><i class="glyphicon glyphicon-arrow-left" href="#"></i>&nbsp;&nbsp;Prev.</a>
                 </li>
                 <li class="col-xs-4">
@@ -55,3 +55,5 @@
         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
 </script>
+<link rel="prerender" href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "ProfileContent" })" />
+<link rel="prerender" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Archive" })" />

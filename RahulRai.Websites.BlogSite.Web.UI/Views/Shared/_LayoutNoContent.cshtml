@@ -21,6 +21,8 @@
     <meta name="author" content="Rahul Rai">
     <title>@title</title>
     <link rel="icon" href="@(resourceBasePath + "RahulRai.ico")" />
+    <meta name="msapplication-TileColor" content="#428BCA" />
+    <meta name="msapplication-square150x150logo" content="@(resourceBasePath + "RahulRai.png")" />
     <!-- Bootstrap Core CSS -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <!-- Custom CSS -->
@@ -61,6 +63,14 @@
         ga('send', 'pageview');
 
     </script>
+    <!--Adding resources to cache-->
+    <link rel="prefetch" href="~/Content/bootstrap.min.css" />
+    <link rel="prefetch" href="~/Content/blog-home.css?version=@version" />
+    <link rel="prefetch" href="@(resourceBasePath + "RahulRai.png")" />
+    <link rel="prefetch" href="~/Scripts/jquery-1.10.2.min.js" />
+    <link rel="prefetch" href="~/Scripts/bootstrap.min.js" />
+    <link rel="prefetch" href="~/Scripts/jquery.unobtrusive-ajax.min.js" />
+    <!--/Adding resources to cache-->
 </head>
 <body>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>

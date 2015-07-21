@@ -1703,6 +1703,7 @@
     <Content Include="Views\Blog\SearchResult.cshtml" />
     <Content Include="Views\Blog\Archive.cshtml" />
     <Content Include="Views\Profile\WriteTestimonial.cshtml" />
+    <Content Include="Views\Profile\Publications.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

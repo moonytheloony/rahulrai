@@ -20,12 +20,17 @@
                 <article class="panel panel-primary panel-outline">
                     <!-- Icon -->
                     <div class="panel-heading icon">
-                        <i class="glyphicon glyphicon-pencil"></i>
+                        <b>
+                            @blogPost.PostedDate.Day
+                        </b>
+                        @*<i class="glyphicon glyphicon-pencil"></i>*@
                     </div>
                     <!-- /Icon -->
                     <!-- Body -->
                     <div class="panel-body">
-                        <strong>@blogPost.PostedDate.ToString("dddd, d")</strong>&nbsp;<a href="/post/@blogPost.BlogFormattedUri">@blogPost.Title</a>
+                        <h4>
+                            <a href="/post/@blogPost.BlogFormattedUri" data-toggle="tooltip" title="@blogPost.PostedDate.ToString("MMMM dd, yyyy")">@blogPost.Title</a>
+                        </h4>
                     </div>
                     <!-- /Body -->
                 </article>

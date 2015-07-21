@@ -103,6 +103,15 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
+        /// Publicationses this instance.
+        /// </summary>
+        /// <returns>Publication view</returns>
+        public ViewResult Publications()
+        {
+            return this.View();
+        }
+
+        /// <summary>
         ///     Testimonials this instance.
         /// </summary>
         /// <returns>ViewResult.</returns>

@@ -319,7 +319,7 @@ img {
         }
 
         .timeline .panel .panel-heading.icon * {
-            font-size: 15px;
+            font-size: 16px;
             vertical-align: middle;
             line-height: 35px;
         }
@@ -346,7 +346,7 @@ img {
     }
 
         .timeline .panel-outline .panel-body {
-            padding: 10px 0px;
+            padding: 0px 0px;
         }
 
         .timeline .panel-outline .panel-heading:not(.icon),
@@ -422,3 +422,52 @@ img {
     margin: 0 0 5px 5px;
 }
 /*End Testimonials*/
+/*Publications*/
+.widget .panel-body {
+    padding: 0px;
+}
+
+.widget .list-group {
+    margin-bottom: 0;
+}
+
+.widget .panel-title {
+    display: inline;
+}
+
+.widget .label-info {
+    float: right;
+}
+
+.widget li.list-group-item {
+    -ms-border-radius: 0;
+    border-radius: 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+    .widget li.list-group-item:hover {
+        background-color: #563d7c;
+        background-color: rgba(86,61,124,.1);
+    }
+
+.widget .mic-info {
+    color: #666666;
+    font-size: 11px;
+}
+
+.widget .action {
+    margin-top: 5px;
+}
+
+.widget .comment-text {
+    font-size: 12px;
+}
+
+.widget .btn-block {
+    -ms-border-top-left-radius: 0px;
+    border-top-left-radius: 0px;
+    -ms-border-top-right-radius: 0px;
+    border-top-right-radius: 0px;
+}
+/*End Publications*/

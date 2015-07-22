@@ -457,21 +457,11 @@ img {
 
 .widget .mic-info {
     color: #666666;
-    font-size: 11px;
-}
-
-.widget .action {
-    margin-top: 5px;
-}
-
-.widget .comment-text {
     font-size: 12px;
 }
 
-.widget .btn-block {
-    -ms-border-top-left-radius: 0px;
-    border-top-left-radius: 0px;
-    -ms-border-top-right-radius: 0px;
-    border-top-right-radius: 0px;
+.widget .comment-text {
+    font-size: 14px;
+    color: #666666;
 }
 /*End Publications*/

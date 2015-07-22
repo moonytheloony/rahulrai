@@ -67,6 +67,10 @@ code {
     color: white;
 }
 
+    .footerDiv p {
+        margin: 0 0 5px !important;
+    }
+
 .contentPane {
     min-height: 100vh;
     padding: 25px;

@@ -51,9 +51,6 @@ namespace RahulRai.Websites.Utilities.Web
             var actionToInvoke = filterContext.ActionDescriptor.ActionName.ToLowerInvariant();
             switch (actionToInvoke)
             {
-                case "getlatestblogs":
-                    this.ViewBag.Title = "Recent Posts";
-                    break;
                 case "notfound":
                     this.ViewBag.Title = "404: Not Found";
                     break;

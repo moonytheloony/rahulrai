@@ -4,7 +4,7 @@
     var resourceBasePath = ViewBag.ResourceBasePath;
     var myEmail = ViewBag.MyEmail;
 }
-<a class="visible-xs" name="menu"></a>
+<a class="visible-xs" id="menu"></a>
 <div class="container">
     <div class="row">
         <div class="col-md-3">
@@ -41,12 +41,12 @@
                                 Testimonials
                             </a>
                         </li>
-                        @*<li class="@Html.IsSelected(actions: "Publications", controllers: "Profile")">
+                        <li class="@Html.IsSelected(actions: "Publications", controllers: "Profile")">
                             <a href="@(Url.RouteUrl("Profile", new { action = "Publications" }))">
                                 <i class="glyphicon glyphicon-book"></i>
                                 Publications
                             </a>
-                        </li>*@
+                        </li>
                         <li class="@Html.IsSelected(actions: "Resume", controllers: "Profile")">
                             <a href="@(Url.RouteUrl("Profile", new { action = "Resume" }))">
                                 <i class="glyphicon glyphicon-star"></i>
@@ -66,7 +66,7 @@
         </div>
         <div class="col-md-9">
             <div class="profile-content" id="contentPane">
-                <a class="visible-xs" name="content"></a>
+                <a class="visible-xs" id="content"></a>
                 @RenderBody()
                 <div class="visible-xs text-right">
                     <br />

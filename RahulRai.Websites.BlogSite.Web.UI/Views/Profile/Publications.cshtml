@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Profile.cshtml";
+    var myEmail = ViewBag.MyEmail;
 }
 <h1>Publications</h1>
 <hr>
@@ -8,380 +9,188 @@
 <hr>
 <div class="container">
     <div class="row">
-        <div class="panel panel-default widget">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    <b>Books and Articles</b>
-                </h3>
-            </div>
-            <div class="panel-body" id="link_other">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1 ">
-                                <div class="circle circle-border arrownAlign">
-                                    <div class="circle-inner">
-                                        <div class="inner-text">
-                                            B
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="http://www.amazon.com/Cloud-Architecture-Patterns-Using-Microsoft/dp/1449319777">
-                                        Cloud Architecture Patterns: Using Microsoft Azure
-                                    </a>
-                                    <div class="mic-info">
-                                        Publisher: O’Reilly
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Reviewer
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1 ">
-                                <div class="circle circle-border arrownAlign">
-                                    <div class="circle-inner">
-                                        <div class="inner-text">
-                                            B
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="http://www.amazon.com/gp/product/1621140369/">
-                                        Cloud Design Patterns: Prescriptive Architecture Guidance for Cloud Applications
-                                    </a>
-                                    <div class="mic-info">
-                                        Publisher: Patterns and Practices
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Contributor
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1 ">
-                                <div class="circle circle-border arrownAlign">
-                                    <div class="circle-inner">
-                                        <div class="inner-text">
-                                            A
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="#">
-                                        Reliable Uploads to Blob Storage via a Silverlight Control (Obsolete)
-                                    </a>
-                                    <div class="mic-info">
-                                        Publisher: MSDN
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Author
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1 ">
-                                <div class="circle circle-border arrownAlign">
-                                    <div class="circle-inner">
-                                        <div class="inner-text">
-                                            A
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="https://msdn.microsoft.com/library/azure/hh824678.aspx">
-                                        Reliable Uploads to Blob Storage via an HTML5 Control
-                                    </a>
-                                    <div class="mic-info">
-                                        Publisher: MSDN
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Author
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="row">
-        <div class="panel panel-default widget">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    <b>Talk and Community</b>
-                </h3>
-            </div>
-            <div class="panel-body" id="link_other">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1 ">
-                                <div class="circle circle-border arrownAlign">
-                                    <div class="circle-inner">
-                                        <div class="inner-text">
-                                            T
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="#">
-                                        Hybrid Application Architecture. Live Telecast.
-                                    </a>
-                                    <div class="mic-info">
-                                        Virtual Tech Days India
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Speaker
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1 ">
-                                <div class="circle circle-border arrownAlign">
-                                    <div class="circle-inner">
-                                        <div class="inner-text">
-                                            C
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="https://msdn.microsoft.com/en-us/library/jj613124(v=pandp.50).aspx">
-                                        Enterprise Library Integration Pack for Microsoft Azure
-                                    </a>
-                                    <div class="mic-info">
-                                        Publisher: Patterns and Practices
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Contributor
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1 ">
-                                <div class="circle circle-border arrownAlign">
-                                    <div class="circle-inner">
-                                        <div class="inner-text">
-                                            C
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="https://msdn.microsoft.com/en-us/library/dn622074.aspx">
-                                        Cloud Design Patterns
-                                    </a>
-                                    <div class="mic-info">
-                                        Publisher: Patterns and Practices
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Contributor
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1 ">
-                                <div class="circle circle-border arrownAlign">
-                                    <div class="circle-inner">
-                                        <div class="inner-text">
-                                            T
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="https://www.mytechready.com/">
-                                        TechReady
-                                    </a>
-                                    <div class="mic-info">
-                                        TechReady
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Speaker
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="row">
-        <div class="panel panel-warning widget">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    <b>Upcoming</b>
-                </h3>
-            </div>
-            <div class="panel-body" id="link_other">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1">
-                                <div class="circle circle-border arrownAlign">
-                                    <div class="circle-inner">
-                                        <div class="inner-text">
-                                            X
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-10 col-md-11">
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<!--Test content-->
-<div class="container">
-    <div class="row">
         <div class="board">
             <div class="board-inner">
                 <ul class="nav nav-tabs" id="myTab">
                     <div class="liner"></div>
                     <li class="active">
-                        <a href="#home" data-toggle="tab" title="welcome">
+                        <a href="#books" data-toggle="tab" title="Books">
                             <span class="round-tabs one">
                                 <i class="glyphicon glyphicon-book"></i>
                             </span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="#profile" data-toggle="tab" title="profile">
+                        <a href="#articles" data-toggle="tab" title="Articles">
                             <span class="round-tabs two">
                                 <i class="glyphicon glyphicon-file"></i>
                             </span>
                         </a>
                     </li>
                     <li>
-                        <a href="#messages" data-toggle="tab" title="bootsnipp goodies">
+                        <a href="#talk" data-toggle="tab" title="Talk">
                             <span class="round-tabs three">
-                                <i class="glyphicon glyphicon-gift"></i>
+                                <i class="glyphicon glyphicon-volume-up"></i>
                             </span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="#settings" data-toggle="tab" title="blah blah">
+                        <a href="#community" data-toggle="tab" title="Community">
                             <span class="round-tabs four">
-                                <i class="glyphicon glyphicon-comment"></i>
+                                <i class="glyphicon glyphicon-user"></i>
                             </span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="#doner" data-toggle="tab" title="completed">
+                        <a href="#upcoming" data-toggle="tab" title="Upcoming">
                             <span class="round-tabs five">
-                                <i class="glyphicon glyphicon-ok"></i>
+                                <i class="glyphicon glyphicon-calendar"></i>
                             </span>
                         </a>
                     </li>
-
                 </ul>
             </div>
-
             <div class="tab-content">
-                <div class="tab-pane fade in active" id="home">
-
-                    <h3 class="head text-center">Welcome to Bootsnipp<sup>™</sup> <span style="color:#f48260;">♥</span></h3>
-                    <p class="narrow text-center">
-                        Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                    </p>
-
-                    <p class="text-center">
-                        <a href="" class="btn btn-success btn-outline-rounded green"> start using bootsnipp <span style="margin-left:10px;" class="glyphicon glyphicon-send"></span></a>
-                    </p>
-                </div>
-                <div class="tab-pane fade" id="profile">
-                    <h3 class="head text-center">Create a Bootsnipp<sup>™</sup> Profile</h3>
-                    <p class="narrow text-center">
-                        Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                    </p>
-
-                    <p class="text-center">
-                        <a href="" class="btn btn-success btn-outline-rounded green"> create your profile <span style="margin-left:10px;" class="glyphicon glyphicon-send"></span></a>
-                    </p>
-
-                </div>
-                <div class="tab-pane fade" id="messages">
-                    <h3 class="head text-center">Bootsnipp goodies</h3>
-                    <p class="narrow text-center">
-                        Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                    </p>
-
-                    <p class="text-center">
-                        <a href="" class="btn btn-success btn-outline-rounded green"> start using bootsnipp <span style="margin-left:10px;" class="glyphicon glyphicon-send"></span></a>
-                    </p>
-                </div>
-                <div class="tab-pane fade" id="settings">
-                    <h3 class="head text-center">Drop comments!</h3>
-                    <p class="narrow text-center">
-                        Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                    </p>
-
-                    <p class="text-center">
-                        <a href="" class="btn btn-success btn-outline-rounded green"> start using bootsnipp <span style="margin-left:10px;" class="glyphicon glyphicon-send"></span></a>
-                    </p>
-                </div>
-                <div class="tab-pane fade" id="doner">
-                    <div class="text-center">
-                        <i class="img-intro icon-checkmark-circle"></i>
+                <div class="tab-pane fade in active" id="books">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h1 class="text-left">Books</h1>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <a href="mailto:@myEmail?subject=Authoring or Revieweing Request" class="btn btn-success">Authoring & Reviewing Request<span style="margin-left:10px;" class="glyphicon glyphicon-pencil"></span></a>
+                        </div>
                     </div>
-                    <h3 class="head text-center">thanks for staying tuned! <span style="color:#f48260;">♥</span> Bootstrap</h3>
-                    <p class="narrow text-center">
-                        Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                    </p>
+                    <div>
+                        <a href="http://www.amazon.com/gp/product/1621140369/">
+                            <h3>Cloud Design Patterns: Prescriptive Architecture Guidance for Cloud Applications</h3>
+                        </a>
+                        <div>
+                            Publisher: Patterns and Practices
+                        </div>
+                        <div>
+                            Contributor
+                        </div>
+                    </div>
+                    <div>
+                        <a href="http://www.amazon.com/Cloud-Architecture-Patterns-Using-Microsoft/dp/1449319777">
+                            <h3>Cloud Architecture Patterns: Using Microsoft Azure</h3>
+                        </a>
+                        <div>
+                            Publisher: O’Reilly
+                        </div>
+                        <div>
+                            Reviewer
+                        </div>
+                    </div>
                 </div>
-                <div class="clearfix"></div>
-            </div>
+                <div class="tab-pane fade" id="articles">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h1 class="text-left">Articles</h1>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <a href="mailto:@myEmail?subject=Authoring or Revieweing Request" class="btn btn-success">Authoring & Reviewing Request<span style="margin-left:10px;" class="glyphicon glyphicon-pencil"></span></a>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="#">
+                            <h3>Reliable Uploads to Blob Storage via a Silverlight Control (Obsolete)</h3>
+                        </a>
+                        <div>
+                            Publisher: MSDN
+                        </div>
+                        <div>
+                            Author
+                        </div>
+                    </div>
+                    <div>
+                        <a href="https://msdn.microsoft.com/library/azure/hh824678.aspx">
+                            <h3>Reliable Uploads to Blob Storage via an HTML5 Control</h3>
+                        </a>
+                        <div>
+                            Publisher: MSDN
+                        </div>
+                        <div>
+                            Author
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="talk">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h1 class="text-left">Talk</h1>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <a href="mailto:@myEmail?subject=Invite For a Talk" class="btn btn-success">Invite Me to Speak<span style="margin-left:10px;" class="glyphicon glyphicon-volume-up"></span></a>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="https://www.mytechready.com/">
+                            <h3>TechReady</h3>
+                        </a>
+                        <div>
+                            TechReady
+                        </div>
+                        <div>
+                            Speaker
+                        </div>
+                    </div>
+                    <div>
+                        <a href="#">
+                            <h3>Hybrid Application Architecture. Live Telecast.</h3>
+                        </a>
+                        <div>
+                            Virtual Tech Days India
+                        </div>
+                        <div>
+                            Speaker
+                        </div>
+                    </div>
 
+                </div>
+                <div class="tab-pane fade" id="community">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h1 class="text-left">Community</h1>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <a href="mailto:@myEmail?subject=Invite For a Community Initiative" class="btn btn-success">Invite Me to Community Initiative<span style="margin-left:10px;" class="glyphicon glyphicon-user"></span></a>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="https://msdn.microsoft.com/en-us/library/dn622074.aspx">
+                            <h3>Cloud Design Patterns</h3>
+                        </a>
+                        <div>
+                            Publisher: Patterns and Practices
+                        </div>
+                        <div>
+                            Contributor
+                        </div>
+                    </div>
+                    <div>
+                        <a href="https://msdn.microsoft.com/en-us/library/jj613124(v=pandp.50).aspx">
+                            <h3>Enterprise Library Integration Pack for Microsoft Azure</h3>
+                        </a>
+                        <div>
+                            Publisher: Patterns and Practices
+                        </div>
+                        <div>
+                            Contributor
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="upcoming">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h1 class="text-left">Upcoming</h1>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <a href="mailto:@myEmail?subject=Request to Join You" class="btn btn-success">Join Me in an Initiative<span style="margin-left:10px;" class="glyphicon glyphicon-calendar"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

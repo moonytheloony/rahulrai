@@ -41,12 +41,12 @@
                                 Testimonials
                             </a>
                         </li>
-                        <li class="@Html.IsSelected(actions: "Publications", controllers: "Profile")">
+                        @*<li class="@Html.IsSelected(actions: "Publications", controllers: "Profile")">
                             <a href="@(Url.RouteUrl("Profile", new { action = "Publications" }))">
                                 <i class="glyphicon glyphicon-book"></i>
                                 Publications
                             </a>
-                        </li>
+                        </li>*@
                         <li class="@Html.IsSelected(actions: "Resume", controllers: "Profile")">
                             <a href="@(Url.RouteUrl("Profile", new { action = "Resume" }))">
                                 <i class="glyphicon glyphicon-star"></i>

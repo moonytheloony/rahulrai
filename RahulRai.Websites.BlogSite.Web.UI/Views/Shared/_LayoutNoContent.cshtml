@@ -218,6 +218,12 @@
             $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="tab"]').tooltip();
         });
+
+        //Equal Height
+        $(document).ready(function () {
+            var highestCol = Math.max($('#sidebar').height(), $('#content').height());
+            $('#sidebar').height(highestCol);
+        });
     </script>
 </body>
 </html>

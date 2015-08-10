@@ -34,7 +34,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     /// <summary>
     ///     Class ProfileController.
     /// </summary>
-    //[RequireHttps]
+    [RequireHttps]
     public class ProfileController : BaseController
     {
         /// <summary>

@@ -108,7 +108,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>Publication view</returns>
         public ViewResult Publications()
         {
-            return this.View();
+            var publications = ProfileService.PopulatePublications();
+            return this.View(publications);
         }
 
         /// <summary>

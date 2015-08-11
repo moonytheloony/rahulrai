@@ -20,13 +20,12 @@
 <hr />
 <!-- Post Content -->
 @Html.Raw(Model.Body)
-<hr />
 @if (!string.IsNullOrWhiteSpace(Model.SpecialMention))
 {
     <!--Custom Text-->
     <p class="panel-info">@Html.Raw(Model.SpecialMention)</p>
+    <hr />
 }
-<hr />
 <!-- Blog Comments -->
 <div id="disqus_thread">
     @* ReSharper disable once PossibleNullReferenceException *@

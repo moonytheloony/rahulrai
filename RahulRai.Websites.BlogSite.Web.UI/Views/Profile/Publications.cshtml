@@ -2,6 +2,8 @@
     Layout = "~/Views/Shared/_Profile.cshtml";
     var myEmail = ViewBag.MyEmail;
 }
+@using RahulRai.Websites.Utilities.Common.Entities
+@model IEnumerable<Publication>
 <h1>Publications</h1>
 <hr>
 <!-- Date/Time -->
@@ -53,33 +55,25 @@
             <div class="tab-content" id="link_other">
                 <div class="tab-pane fade in active" id="books">
                     <div class="text-right">
-                        <a href="mailto:@myEmail?subject=Authoring or Revieweing Request" class="btn btn-success">Authoring & Reviewing Request<span style="margin-left:10px;" class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="mailto:@myEmail?subject=Authoring or Review Request" class="btn btn-success">Authoring or Review Request<span style="margin-left:10px;" class="glyphicon glyphicon-pencil"></span></a>
                     </div>
                     <div class="text-left">
                         <h1>Books</h1>
                     </div>
-                    <div>
-                        <a href="http://www.amazon.com/gp/product/1621140369/">
-                            <h3>Cloud Design Patterns: Prescriptive Architecture Guidance for Cloud Applications</h3>
-                        </a>
+                    @foreach (var item in Model.Where(element => element.PublicationType == PublicationType.Books))
+                    {
                         <div>
-                            Publisher: Patterns and Practices
+                            <a href="@item.PublicationUri.ToString()">
+                                <h3>@item.PublicationName</h3>
+                            </a>
+                            <div>
+                                @item.Line1
+                            </div>
+                            <div>
+                                @item.Line2
+                            </div>
                         </div>
-                        <div>
-                            Contributor
-                        </div>
-                    </div>
-                    <div>
-                        <a href="http://www.amazon.com/Cloud-Architecture-Patterns-Using-Microsoft/dp/1449319777">
-                            <h3>Cloud Architecture Patterns: Using Microsoft Azure</h3>
-                        </a>
-                        <div>
-                            Publisher: O’Reilly
-                        </div>
-                        <div>
-                            Reviewer
-                        </div>
-                    </div>
+                    }
                 </div>
                 <div class="tab-pane fade" id="articles">
                     <div class="text-right">
@@ -88,28 +82,20 @@
                     <div class="text-left">
                         <h1>Articles</h1>
                     </div>
-                    <div>
-                        <a href="#">
-                            <h3>Reliable Uploads to Blob Storage via a Silverlight Control (Obsolete)</h3>
-                        </a>
+                    @foreach (var item in Model.Where(element => element.PublicationType == PublicationType.Articles))
+                    {
                         <div>
-                            Publisher: MSDN
+                            <a href="@item.PublicationUri.ToString()">
+                                <h3>@item.PublicationName</h3>
+                            </a>
+                            <div>
+                                @item.Line1
+                            </div>
+                            <div>
+                                @item.Line2
+                            </div>
                         </div>
-                        <div>
-                            Author
-                        </div>
-                    </div>
-                    <div>
-                        <a href="https://msdn.microsoft.com/library/azure/hh824678.aspx">
-                            <h3>Reliable Uploads to Blob Storage via an HTML5 Control</h3>
-                        </a>
-                        <div>
-                            Publisher: MSDN
-                        </div>
-                        <div>
-                            Author
-                        </div>
-                    </div>
+                    }
                 </div>
                 <div class="tab-pane fade" id="talk">
                     <div class="text-right">
@@ -118,29 +104,20 @@
                     <div class="text-left">
                         <h1>Talk</h1>
                     </div>
-                    <div>
-                        <a href="https://www.mytechready.com/">
-                            <h3>TechReady</h3>
-                        </a>
+                    @foreach (var item in Model.Where(element => element.PublicationType == PublicationType.Talk))
+                    {
                         <div>
-                            TechReady
+                            <a href="@item.PublicationUri.ToString()">
+                                <h3>@item.PublicationName</h3>
+                            </a>
+                            <div>
+                                @item.Line1
+                            </div>
+                            <div>
+                                @item.Line2
+                            </div>
                         </div>
-                        <div>
-                            Speaker
-                        </div>
-                    </div>
-                    <div>
-                        <a href="#">
-                            <h3>Hybrid Application Architecture. Live Telecast.</h3>
-                        </a>
-                        <div>
-                            Virtual Tech Days India
-                        </div>
-                        <div>
-                            Speaker
-                        </div>
-                    </div>
-
+                    }
                 </div>
                 <div class="tab-pane fade" id="community">
                     <div class="text-right">
@@ -149,28 +126,20 @@
                     <div class="text-left">
                         <h1>Community</h1>
                     </div>
-                    <div>
-                        <a href="https://msdn.microsoft.com/en-us/library/dn622074.aspx">
-                            <h3>Cloud Design Patterns</h3>
-                        </a>
+                    @foreach (var item in Model.Where(element => element.PublicationType == PublicationType.Community))
+                    {
                         <div>
-                            Publisher: Patterns and Practices
+                            <a href="@item.PublicationUri.ToString()">
+                                <h3>@item.PublicationName</h3>
+                            </a>
+                            <div>
+                                @item.Line1
+                            </div>
+                            <div>
+                                @item.Line2
+                            </div>
                         </div>
-                        <div>
-                            Contributor
-                        </div>
-                    </div>
-                    <div>
-                        <a href="https://msdn.microsoft.com/en-us/library/jj613124(v=pandp.50).aspx">
-                            <h3>Enterprise Library Integration Pack for Microsoft Azure</h3>
-                        </a>
-                        <div>
-                            Publisher: Patterns and Practices
-                        </div>
-                        <div>
-                            Contributor
-                        </div>
-                    </div>
+                    }
                 </div>
                 <div class="tab-pane fade" id="upcoming">
                     <div class="text-right">
@@ -179,17 +148,20 @@
                     <div class="text-left">
                         <h1>Upcoming</h1>
                     </div>
-                    <div>
-                        <a href="#">
-                            <h3>Big Data Analysis and Predictions Framework</h3>
-                        </a>
+                    @foreach (var item in Model.Where(element => element.PublicationType == PublicationType.Upcoming))
+                    {
                         <div>
-                            Team: 
+                            <a href="@item.PublicationUri.ToString()">
+                                <h3>@item.PublicationName</h3>
+                            </a>
+                            <div>
+                                @item.Line1
+                            </div>
+                            <div>
+                                @item.Line2
+                            </div>
                         </div>
-                        <div>
-                            We are working on a framework to collect data from DF Pipelines, Logic Apps etc. and moderate data using workflows. The data would be moved to Big Data repository on top of which we will run custom big data analysis frameworks and use ML to predict outcomes.
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

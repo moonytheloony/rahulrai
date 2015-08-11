@@ -14,12 +14,19 @@
 
 namespace RahulRai.Websites.BlogSite.Web.UI.Services
 {
+    #region
+
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using GlobalAccess;
-    using Utilities.Common.Entities;
+    using System.Web;
+
+    using RahulRai.Websites.BlogSite.Web.UI.GlobalAccess;
+    using RahulRai.Websites.Utilities.Common.Entities;
+
+    #endregion
 
     /// <summary>
     /// Profile Service class.
@@ -38,6 +45,101 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         public ProfileService(DocumentDbAccess documentDbAccess)
         {
             this.documentDbAccess = documentDbAccess;
+        }
+
+        /// <summary>
+        /// Populates the publications.
+        /// </summary>
+        /// <returns>List of publications</returns>
+        public static List<Publication> PopulatePublications()
+        {
+            //// Keeping this here now. Will move it to DocumentDb soon.
+            var publications = new List<Publication>();
+
+            //// Populate Books
+            var book1 = new Publication
+            {
+                PublicationType = PublicationType.Books,
+                PublicationUri = new Uri("http://www.amazon.com/gp/product/1621140369/"),
+                PublicationName = "Cloud Design Patterns: Prescriptive Architecture Guidance for Cloud Applications",
+                Line1 = "Publisher: Patterns and Practices",
+                Line2 = "Contributor"
+            };
+            var book2 = new Publication
+            {
+                PublicationType = PublicationType.Books,
+                PublicationUri = new Uri("http://www.amazon.com/Cloud-Architecture-Patterns-Using-Microsoft/dp/1449319777"),
+                PublicationName = "Cloud Architecture Patterns: Using Microsoft Azure",
+                Line1 = "Publisher: O’Reilly",
+                Line2 = "Reviewer"
+            };
+
+            //// Populate Articles
+            var article1 = new Publication
+            {
+                PublicationType = PublicationType.Articles,
+                PublicationUri = new Uri(HttpContext.Current.Request.Url.AbsoluteUri),
+                PublicationName = "Reliable Uploads to Blob Storage via a Silverlight Control (Obsolete)",
+                Line1 = "Publisher: MSDN",
+                Line2 = "Author"
+            };
+            var article2 = new Publication
+            {
+                PublicationType = PublicationType.Articles,
+                PublicationUri = new Uri("https://msdn.microsoft.com/library/azure/hh824678.aspx"),
+                PublicationName = "Reliable Uploads to Blob Storage via an HTML5 Control",
+                Line1 = "Publisher: MSDN",
+                Line2 = "Author"
+            };
+
+            //// Populate Talks
+            var talk1 = new Publication
+            {
+                PublicationType = PublicationType.Talk,
+                PublicationUri = new Uri("https://www.mytechready.com/"),
+                PublicationName = "TechReady",
+                Line1 = "TechReady",
+                Line2 = "Speaker"
+            };
+            var talk2 = new Publication
+            {
+                PublicationType = PublicationType.Talk,
+                PublicationUri = new Uri(HttpContext.Current.Request.Url.AbsoluteUri),
+                PublicationName = "Hybrid Application Architecture. Live Telecast.",
+                Line1 = "Virtual Tech Days India",
+                Line2 = "Speaker"
+            };
+
+            //// Populate Community
+            var community1 = new Publication
+            {
+                PublicationType = PublicationType.Community,
+                PublicationUri = new Uri("https://msdn.microsoft.com/en-us/library/dn622074.aspx"),
+                PublicationName = "Cloud Design Patterns",
+                Line1 = "Publisher: Patterns and Practices",
+                Line2 = "Contributor"
+            };
+            var community2 = new Publication
+            {
+                PublicationType = PublicationType.Community,
+                PublicationUri = new Uri("https://msdn.microsoft.com/en-us/library/jj613124(v=pandp.50).aspx"),
+                PublicationName = "Enterprise Library Integration Pack for Microsoft Azure",
+                Line1 = "Publisher: Patterns and Practices",
+                Line2 = "Contributor"
+            };
+
+            //// Populate Upcoming
+            var upcoming1 = new Publication
+            {
+                PublicationType = PublicationType.Upcoming,
+                PublicationUri = new Uri(HttpContext.Current.Request.Url.AbsoluteUri),
+                PublicationName = "Big Data Analysis and Predictions Framework",
+                Line1 = "Team: Join me",
+                Line2 = "We are working on a framework to collect data from DF Pipelines, Logic Apps etc. and moderate data using workflows. The data would be moved to Big Data repository on top of which we will run custom big data analysis frameworks and use ML to predict outcomes."
+            };
+
+            publications.AddRange(new[] { book1, book2, article1, article2, talk1, talk2, community1, community2, upcoming1 });
+            return publications;
         }
 
         /// <summary>

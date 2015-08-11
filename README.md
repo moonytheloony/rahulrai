@@ -1,4 +1,2 @@
 # rahulrai
-Source code for my blogging site rahulrai.in
-
-..to add text
+Source code for my blogging site http://rahulrai.in

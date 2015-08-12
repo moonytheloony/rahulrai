@@ -158,5 +158,15 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// The application insight key
         /// </summary>
         public static string AppInsightKey = "AppInsightKey";
+
+        /// <summary>
+        /// The survey connection string
+        /// </summary>
+        public static string SurveyConnectionString = "SurveyConnectionString";
+
+        /// <summary>
+        /// The survey container name
+        /// </summary>
+        public static string SurveyContainerName = "SurveyContainerName";
     }
 }

@@ -29,6 +29,11 @@ footer {
         text-decoration: none;
     }
 
+hr.sloganWrapper {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #e7e7e7, rgba(0, 0, 0, 0));
+}
 /*Comment Marker*/
 .comment {
     color: #428BCA;
@@ -106,7 +111,20 @@ img {
 .profile-sidebar {
     background: #ffffff;
     min-height: 100vh;
-    border-right: 1px solid #e7e7e7;
+    border-right: 1px solid transparent;
+    border-left: 0 solid transparent;
+    border-top: 0 solid transparent;
+    border-bottom: 0 solid transparent;
+    -moz-border-image: -moz-linear-gradient(top, #e7e7e7 0%, #ffffff 100%);
+    -webkit-border-image: -webkit-linear-gradient(top, #e7e7e7 0%, #ffffff 100%);
+    -ms-border-image: linear-gradient(to bottom, #e7e7e7 0%, #ffffff 100%);
+    -o-border-image: linear-gradient(to bottom, #e7e7e7 0%, #ffffff 100%);
+    border-image: linear-gradient(to bottom, #e7e7e7 0%, #ffffff 100%);
+    -moz-border-image-slice: 1;
+    -ms-border-image-slice: 1;
+    -o-border-image-slice: 1;
+    -webkit-border-image-slice: 1;
+    border-image-slice: 1;
 }
 
 .profile-userpic img {

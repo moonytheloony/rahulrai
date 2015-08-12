@@ -55,6 +55,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// </summary>
         private readonly int searchRecordsSize;
 
+        private readonly string surveyConnectionString;
+
         /// <summary>
         ///     The blog search access
         /// </summary>
@@ -71,6 +73,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             this.blogContext = blogContext;
             this.pageSize = pageSize;
             this.searchRecordsSize = searchRecordsSize;
+            this.surveyConnectionString = "";
         }
 
         /// <summary>
@@ -102,6 +105,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             var segment = UserPageDictionary.PageDictionary.GetPageContinuationToken(pageNumber);
             var resultBlogs = await this.GetPagedBlogPreviews(segment, !UserPageDictionary.PageDictionary.CanMoveForward());
             return resultBlogs.Select(TableBlogEntity.GetBlogPost).ToList();
+        }
+
+        public Task<List<string>> GetAvailableSurveys()
+        {
+            //// Parse the survey container and get all surveys.
+            return null;
         }
 
         /// <summary>

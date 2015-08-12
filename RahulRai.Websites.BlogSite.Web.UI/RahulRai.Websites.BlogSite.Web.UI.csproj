@@ -1675,6 +1675,7 @@
     <Compile Include="GlobalAccess\BlogSearchAccess.cs" />
     <Compile Include="GlobalAccess\BlogStoreAccess.cs" />
     <Compile Include="GlobalAccess\DocumentDbAccess.cs" />
+    <Compile Include="GlobalAccess\SurveyStoreAccess.cs" />
     <Compile Include="GlobalAccess\UserPageDictionary.cs" />
     <Compile Include="Models\Archive.cs" />
     <Compile Include="Models\MonthGroup.cs" />
@@ -1704,6 +1705,7 @@
     <Content Include="Views\Blog\Archive.cshtml" />
     <Content Include="Views\Profile\WriteTestimonial.cshtml" />
     <Content Include="Views\Profile\Publications.cshtml" />
+    <Content Include="Views\Blog\Survey.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

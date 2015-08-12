@@ -40,6 +40,12 @@
                             Archive
                         </a>
                     </li>
+                    @*<li class="@Html.IsSelected(actions: "Survey", controllers: "Blog")">
+                            <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Survey" })">
+                                <i class="glyphicon glyphicon-th-list"></i>
+                                Surveys
+                            </a>
+                        </li>*@
                     <li>
                         <a href="mailto:@myEmail?subject=I found and issue in rahulrai.in">
                             <i class="glyphicon glyphicon-pushpin"></i>
@@ -51,7 +57,7 @@
             <!-- END MENU -->
             <!--Carousel-->
             <br />
-            <hr />
+            <hr class="sloganWrapper" />
             <div class="container text-center text-info col-center">
                 <div id="myCarousel" class="carousel" data-interval="2000" data-ride="carousel">
                     <div class="carousel-inner" role="listbox">
@@ -101,7 +107,7 @@
                 </div>
             </div>
             <!--/Carousel-->
-            <hr />
+            <hr class="sloganWrapper" />
         </div>
     </div>
     <div class="col-sm-9" id="content">

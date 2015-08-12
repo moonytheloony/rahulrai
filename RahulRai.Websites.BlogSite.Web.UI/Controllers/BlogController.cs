@@ -53,6 +53,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         private readonly int searchRecordsSize =
             int.Parse(WebConfigurationManager.AppSettings[ApplicationConstants.SearchRecordsSize]);
 
+        private readonly string surveyConnectionString =
+            WebConfigurationManager.AppSettings[ApplicationConstants.SurveyConnectionString];
+
         /// <summary>
         ///     The blog service
         /// </summary>
@@ -152,6 +155,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
                                                    select new MonthGroup { Month = postMonth, Posts = monthGroup.ToList() }
                                        };
             return this.View(groupedBlogPosts);
+        }
+
+        public async Task<ActionResult> Survey(string survey)
+        {
+            var surveyList = await Task.Run(() => this.blogService.GetAvailableSurveys());
+            return this.View();
         }
 
         /// <summary>

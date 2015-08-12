@@ -1,10 +1,76 @@
 ﻿@{
     var resourceBasePath = ViewBag.ResourceBasePath;
+    Layout = "_LayoutNoContent.cshtml";
 }
 <h1>Page Not Found</h1>
 <p class="lead">This page is lost from server!</p>
 <p>
-    My apologies for any inconvenience caused to you. Kindly verify the URL or search for articles on this site.
+    My apologies for any inconvenience caused to you. Kindly verify the URL or search for articles on this site. You can either click @Html.RouteLink("here", "Default", new { controller = "Blog", action = "GetLatestBlogs" }) to navigate to home page, or wait to get redirected automatically.
 </p>
-<br />
-<p><img src=@(resourceBasePath + "page_lost_img.jpg") alt="Page Lost" class="img-responsive" /></p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="item html">
+                <h3>0</h3>
+                <svg width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <title>Layer 1</title>
+                        <circle id="circle" class="circle_animation" r="35" cy="80" cx="80" stroke-width="5" stroke="#27A7DF" fill="none" />
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <p>
+                <img src=@(resourceBasePath + "page_lost_img.jpg") alt="Page Lost" class="img-responsive" />
+            </p>
+        </div>
+    </div>
+</div>
+<script>
+    var time = 10;
+    var initialOffset = '220';
+    var i = 1;
+    var interval = setInterval(function () {
+        $('.circle_animation').css('stroke-dashoffset', initialOffset - (i * (initialOffset / time)));
+        $('h3').text(i);
+        if (i === time) {
+            clearInterval(interval);
+        }
+        i++;
+    }, 1000);
+</script>
+<style>
+    .item {
+        position: relative;
+        float: right;
+    }
+
+        .item h3 {
+            text-align: center;
+            position: absolute;
+            line-height: 125px;
+            width: 100%;
+        }
+
+    svg {
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .circle_animation {
+        stroke-dasharray: 220px;
+        stroke-dashoffset: 220;
+        -webkit-transition: all 1s linear;
+        -moz-transition: all 1s linear;
+        -ms-transition: all 1s linear;
+        -o-transition: all 1s linear;
+        transition: all 1s linear;
+    }
+</style>
+<meta http-equiv="refresh" content="11;url=@Url.RouteUrl("Default", new { controller = "Blog", action = "GetLatestBlogs" })" />

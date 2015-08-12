@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
 // Assembly         : RahulRai.Websites.Utilities.AzureStorage
 // Author           : rahulrai
-// Created          : 04-15-2015
+// Created          : 07-30-2015
 //
 // Last Modified By : rahulrai
-// Last Modified On : 06-24-2015
+// Last Modified On : 08-12-2015
 // ***********************************************************************
 // <copyright file="BlobStorageService.cs" company="Rahul Rai">
 //     Copyright (c) Rahul Rai. All rights reserved.
@@ -18,13 +18,16 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
 
     using System;
     using System.IO;
+    using System.Text;
     using System.Web;
-    using Common.Entities;
-    using Common.Exceptions;
-    using Common.RegularTypes;
+
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
     using Microsoft.WindowsAzure.Storage.RetryPolicies;
+
+    using RahulRai.Websites.Utilities.Common.Entities;
+    using RahulRai.Websites.Utilities.Common.Exceptions;
+    using RahulRai.Websites.Utilities.Common.RegularTypes;
 
     #endregion
 
@@ -33,14 +36,14 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
     #endregion
 
     /// <summary>
-    ///     The azure blob repository.
+    /// The azure blob repository.
     /// </summary>
     public class BlobStorageService
     {
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlobStorageService" /> class.
+        /// Initializes a new instance of the <see cref="BlobStorageService" /> class.
         /// </summary>
         /// <param name="storageAccountConnectionString">The storage account connection string.</param>
         public BlobStorageService(string storageAccountConnectionString)
@@ -52,19 +55,12 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
                     CustomRetryPolicy.MaxRetries);
         }
 
-        /// <summary>
-        ///     Prevents a default instance of the <see cref="BlobStorageService" /> class from being created.
-        /// </summary>
-        private BlobStorageService()
-        {
-        }
-
         #endregion
 
         #region Properties
 
         /// <summary>
-        ///     Gets or sets the repository client.
+        /// Gets or sets the repository client.
         /// </summary>
         /// <value>The BLOB client.</value>
         private CloudBlobClient BlobClient { get; set; }
@@ -74,7 +70,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
         #region Public Methods and Operators
 
         /// <summary>
-        ///     The add file to folder.
+        /// The add file to folder.
         /// </summary>
         /// <param name="containerName">The folder name.</param>
         /// <param name="fileStream">The file stream.</param>
@@ -92,7 +88,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
         }
 
         /// <summary>
-        ///     The create container.
+        /// The create container.
         /// </summary>
         /// <param name="containerName">The folder name.</param>
         /// <param name="visibilityType">The visibility type.</param>
@@ -104,7 +100,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
         }
 
         /// <summary>
-        ///     The delete file.
+        /// The delete file.
         /// </summary>
         /// <param name="containerName">The folder name.</param>
         /// <param name="blobName">The file name.</param>
@@ -117,12 +113,73 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
             return FileOperationStatus.FileDeleted;
         }
 
+        /// <summary>
+        /// Gets the BLOB content as string.
+        /// </summary>
+        /// <param name="containerName">Name of the container.</param>
+        /// <param name="blobName">Name of the BLOB.</param>
+        /// <returns>System.String.</returns>
+        public string GetBlobContentAsString(string containerName, string blobName)
+        {
+            var container = this.BlobClient.GetContainerReference(containerName);
+            var blob = container.GetBlockBlobReference(blobName);
+            string text;
+            using (var memoryStream = new MemoryStream())
+            {
+                blob.DownloadToStream(memoryStream);
+                text = Encoding.UTF8.GetString(memoryStream.ToArray());
+            }
+
+            return text;
+        }
+
+        /// <summary>
+        /// Lists the blobs.
+        /// </summary>
+        /// <param name="containerName">Name of the container.</param>
+        /// <param name="maxCount">The maximum count.</param>
+        /// <returns>BlobResultSegment.</returns>
+        public BlobResultSegment ListBlobs(string containerName, int maxCount)
+        {
+            //// This does not handle continuation appropriately but can be extended.
+            BlobContinuationToken token = null;
+            var container = this.BlobClient.GetContainerReference(containerName);
+            var result = ListBlobsSegmented(container, maxCount, ref token);
+            return result;
+        }
+
         #endregion
 
         #region Methods
 
         /// <summary>
-        ///     The create container with permissions.
+        /// Lists the blobs segmented.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="maxCount">The maximum count.</param>
+        /// <param name="continuationToken">The continuation token.</param>
+        /// <returns>BlobResultSegment.</returns>
+        private static BlobResultSegment ListBlobsSegmented(
+            CloudBlobContainer container,
+            int maxCount,
+            ref BlobContinuationToken continuationToken)
+        {
+            BlobResultSegment resultSegment = null;
+            resultSegment = container.ListBlobsSegmented(
+                string.Empty,
+                true,
+                BlobListingDetails.All,
+                maxCount,
+                continuationToken,
+                new BlobRequestOptions { RetryPolicy = new ExponentialRetry(TimeSpan.FromSeconds(1), 3) },
+                null);
+
+            continuationToken = resultSegment.ContinuationToken;
+            return resultSegment;
+        }
+
+        /// <summary>
+        /// The create container with permissions.
         /// </summary>
         /// <param name="folderName">The folder name.</param>
         /// <param name="visibilityType">The visibility type.</param>

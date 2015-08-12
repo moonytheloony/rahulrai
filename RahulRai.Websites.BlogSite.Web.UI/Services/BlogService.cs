@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
 // Assembly         : RahulRai.Websites.BlogSite.Web.UI
 // Author           : rahulrai
-// Created          : 06-30-2015
+// Created          : 07-30-2015
 //
 // Last Modified By : rahulrai
-// Last Modified On : 07-01-2015
+// Last Modified On : 08-12-2015
 // ***********************************************************************
 // <copyright file="BlogService.cs" company="Rahul Rai">
 //     Copyright (c) Rahul Rai. All rights reserved.
@@ -21,73 +21,119 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using GlobalAccess;
+    using System.Web.Configuration;
+
+    using Microsoft.WindowsAzure.Storage.Blob;
     using Microsoft.WindowsAzure.Storage.Table;
     using Microsoft.WindowsAzure.Storage.Table.Queryable;
-    using Utilities.AzureStorage.TableStorage;
-    using Utilities.Common.Entities;
-    using Utilities.Common.RegularTypes;
+
+    using RahulRai.Websites.BlogSite.Web.UI.GlobalAccess;
+    using RahulRai.Websites.Utilities.AzureStorage.BlobStorage;
+    using RahulRai.Websites.Utilities.AzureStorage.TableStorage;
+    using RahulRai.Websites.Utilities.Common.Entities;
+    using RahulRai.Websites.Utilities.Common.RegularTypes;
 
     #endregion
 
     /// <summary>
-    ///     Class BlogService.
+    /// Class BlogService.
     /// </summary>
     public class BlogService
     {
+        #region Fields
+
         /// <summary>
-        ///     The blog context
+        /// The blog context
         /// </summary>
         private readonly AzureTableStorageService<TableBlogEntity> blogContext;
 
         /// <summary>
-        ///     The page size
+        /// The page size
         /// </summary>
         private readonly int pageSize;
 
         /// <summary>
-        ///     The row key to use
+        /// The row key to use
         /// </summary>
         private readonly string rowKeyToUse = string.Format("{0:D19}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks);
 
         /// <summary>
-        ///     The search records size
+        /// The search records size
         /// </summary>
         private readonly int searchRecordsSize;
 
-        private readonly string surveyConnectionString;
+        /// <summary>
+        /// The survey context
+        /// </summary>
+        private readonly BlobStorageService surveyContext;
 
         /// <summary>
-        ///     The blog search access
+        /// The blog search access
         /// </summary>
         private BlogSearchAccess blogSearchAccess;
 
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlogService" /> class.
+        /// Initializes a new instance of the <see cref="BlogService" /> class.
         /// </summary>
+        /// <param name="surveyContext">The survey context.</param>
         /// <param name="blogContext">The blog context.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <param name="searchRecordsSize">Size of the search records.</param>
-        public BlogService(AzureTableStorageService<TableBlogEntity> blogContext, int pageSize, int searchRecordsSize)
+        public BlogService(
+            BlobStorageService surveyContext,
+            AzureTableStorageService<TableBlogEntity> blogContext,
+            int pageSize,
+            int searchRecordsSize)
         {
             this.blogContext = blogContext;
             this.pageSize = pageSize;
             this.searchRecordsSize = searchRecordsSize;
-            this.surveyConnectionString = "";
+            this.surveyContext = surveyContext;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
-        ///     Gets the latest blogs.
+        /// Gets the available surveys.
         /// </summary>
-        /// <returns>List&lt;BlogPost&gt;.</returns>
-        public async Task<List<BlogPost>> GetLatestBlogs()
+        /// <param name="surveyName">Name of the survey.</param>
+        /// <returns>Task&lt;List&lt;System.String&gt;&gt;.</returns>
+        public async Task<List<string>> GetAvailableSurveys(string surveyName)
         {
-            var result = await this.GetPagedBlogPreviews(null, true);
-            return result.Select(TableBlogEntity.GetBlogPost).ToList();
+            var surveys = new List<string>();
+            var surveyContainer = WebConfigurationManager.AppSettings[ApplicationConstants.SurveyContainerName];
+            var surveyMaxCount = int.Parse(WebConfigurationManager.AppSettings[ApplicationConstants.AllowedSurveyCount]);
+            var result = await Task.Run(() => this.surveyContext.ListBlobs(surveyContainer, surveyMaxCount));
+            if (null == result)
+            {
+                return surveys;
+            }
+
+            //// Extract JSON file.
+            foreach (var blob in result.Results)
+            {
+                var resultBlob = blob as CloudBlockBlob;
+                var blobContent =
+                    await
+                        Task.Run(
+                            () =>
+                                resultBlob != null
+                                    ? this.surveyContext.GetBlobContentAsString(surveyContainer, resultBlob.Name)
+                                    : null);
+                surveys.Add(blobContent);
+            }
+
+            return surveys;
         }
 
         /// <summary>
-        ///     Gets the blog archive.
+        /// Gets the blog archive.
         /// </summary>
         /// <returns>List of blogs</returns>
         public IList<BlogPost> GetBlogArchive()
@@ -96,25 +142,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        ///     Gets the blogs for page.
-        /// </summary>
-        /// <param name="pageNumber">The page number.</param>
-        /// <returns>List&lt;BlogPost&gt;.</returns>
-        public async Task<List<BlogPost>> GetBlogsForPage(int pageNumber)
-        {
-            var segment = UserPageDictionary.PageDictionary.GetPageContinuationToken(pageNumber);
-            var resultBlogs = await this.GetPagedBlogPreviews(segment, !UserPageDictionary.PageDictionary.CanMoveForward());
-            return resultBlogs.Select(TableBlogEntity.GetBlogPost).ToList();
-        }
-
-        public Task<List<string>> GetAvailableSurveys()
-        {
-            //// Parse the survey container and get all surveys.
-            return null;
-        }
-
-        /// <summary>
-        ///     Gets the blog post.
+        /// Gets the blog post.
         /// </summary>
         /// <param name="postId">The post identifier.</param>
         /// <returns>BlogPost.</returns>
@@ -122,9 +150,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         {
             var activeTable = this.blogContext.CustomOperation();
             var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
-                         where record.PartitionKey == ApplicationConstants.BlogKey
-                               && record.Properties["IsDeleted"].BooleanValue == false
-                               && record.Properties["FormattedUri"].StringValue.Equals(postId, StringComparison.OrdinalIgnoreCase)
+                         where
+                             record.PartitionKey == ApplicationConstants.BlogKey
+                                 && record.Properties["IsDeleted"].BooleanValue == false
+                                 && record.Properties["FormattedUri"].StringValue.Equals(
+                                     postId,
+                                     StringComparison.OrdinalIgnoreCase)
                          select record).Take(this.pageSize);
             var result = query.AsTableQuery().ExecuteSegmented(null, this.blogContext.TableRequestOptions);
             if (!result.Any())
@@ -138,7 +169,30 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        ///     Searches the blogs.
+        /// Gets the blogs for page.
+        /// </summary>
+        /// <param name="pageNumber">The page number.</param>
+        /// <returns>List&lt;BlogPost&gt;.</returns>
+        public async Task<List<BlogPost>> GetBlogsForPage(int pageNumber)
+        {
+            var segment = UserPageDictionary.PageDictionary.GetPageContinuationToken(pageNumber);
+            var resultBlogs =
+                await this.GetPagedBlogPreviews(segment, !UserPageDictionary.PageDictionary.CanMoveForward());
+            return resultBlogs.Select(TableBlogEntity.GetBlogPost).ToList();
+        }
+
+        /// <summary>
+        /// Gets the latest blogs.
+        /// </summary>
+        /// <returns>List&lt;BlogPost&gt;.</returns>
+        public async Task<List<BlogPost>> GetLatestBlogs()
+        {
+            var result = await this.GetPagedBlogPreviews(null, true);
+            return result.Select(TableBlogEntity.GetBlogPost).ToList();
+        }
+
+        /// <summary>
+        /// Searches the blogs.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <returns>blogs searched</returns>
@@ -153,6 +207,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
                 : this.GetSearchedBlogPreviews(foundBlogs.Select(attribute => attribute.BlogId))
                     .Select(TableBlogEntity.GetBlogPost);
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Sanitizes the search term.
@@ -191,31 +249,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        ///     Gets the paged blog previews.
-        /// </summary>
-        /// <param name="token">The token.</param>
-        /// <param name="shouldAddPage">if set to <c>true</c> [should add page].</param>
-        /// <returns>IEnumerable&lt;TableBlogEntity&gt;.</returns>
-        private async Task<IEnumerable<TableBlogEntity>> GetPagedBlogPreviews(TableContinuationToken token, bool shouldAddPage)
-        {
-            var activeTable = this.blogContext.CustomOperation();
-            var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
-                         where record.PartitionKey == ApplicationConstants.BlogKey
-                               && record.Properties["IsDraft"].BooleanValue == false
-                               && record.Properties["IsDeleted"].BooleanValue == false
-                               && string.Compare(record.RowKey, this.rowKeyToUse, StringComparison.OrdinalIgnoreCase) > 0
-                         select record).Take(this.pageSize);
-            var result = await Task.Run(() => query.AsTableQuery().ExecuteSegmented(token, this.blogContext.TableRequestOptions));
-            if (shouldAddPage && null != result.ContinuationToken)
-            {
-                UserPageDictionary.PageDictionary.AddPage(result.ContinuationToken);
-            }
-
-            return result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>());
-        }
-
-        /// <summary>
-        ///     Blogs the archive.
+        /// Blogs the archive.
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="shouldAddPage">if set to <c>true</c> [should add page].</param>
@@ -223,18 +257,21 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         private IList<BlogPost> BlogArchive(TableContinuationToken token, bool shouldAddPage)
         {
             var activeTable = this.blogContext.CustomOperation();
-            var query = new TableQuery<DynamicTableEntity>().Where(
-                TableQuery.CombineFilters(
-                    TableQuery.GenerateFilterConditionForBool("IsDraft", QueryComparisons.Equal, false),
-                    TableOperators.And,
-                    TableQuery.GenerateFilterConditionForBool("IsDeleted", QueryComparisons.Equal, false)))
-                .Select(new[] { "Title", "PostedDate" });
-            EntityResolver<BlogPost> resolver = (pk, rk, ts, props, etag) => new BlogPost
-            {
-                Title = props["Title"].StringValue,
-                PostedDate = props["PostedDate"].DateTime ?? DateTime.MinValue,
-                BlogId = rk
-            };
+            var query =
+                new TableQuery<DynamicTableEntity>().Where(
+                    TableQuery.CombineFilters(
+                        TableQuery.GenerateFilterConditionForBool("IsDraft", QueryComparisons.Equal, false),
+                        TableOperators.And,
+                        TableQuery.GenerateFilterConditionForBool("IsDeleted", QueryComparisons.Equal, false)))
+                    .Select(new[] { "Title", "PostedDate" });
+            EntityResolver<BlogPost> resolver =
+                (pk, rk, ts, props, etag) =>
+                    new BlogPost
+                        {
+                            Title = props["Title"].StringValue,
+                            PostedDate = props["PostedDate"].DateTime ?? DateTime.MinValue,
+                            BlogId = rk
+                        };
             var result = activeTable.ExecuteQuerySegmented(query, resolver, token, this.blogContext.TableRequestOptions);
             if (shouldAddPage && null != result.ContinuationToken)
             {
@@ -245,7 +282,36 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        ///     Gets the searched blog previews.
+        /// Gets the paged blog previews.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="shouldAddPage">if set to <c>true</c> [should add page].</param>
+        /// <returns>IEnumerable&lt;TableBlogEntity&gt;.</returns>
+        private async Task<IEnumerable<TableBlogEntity>> GetPagedBlogPreviews(
+            TableContinuationToken token,
+            bool shouldAddPage)
+        {
+            var activeTable = this.blogContext.CustomOperation();
+            var query = (from record in activeTable.CreateQuery<DynamicTableEntity>()
+                         where
+                             record.PartitionKey == ApplicationConstants.BlogKey
+                                 && record.Properties["IsDraft"].BooleanValue == false
+                                 && record.Properties["IsDeleted"].BooleanValue == false
+                                 && string.Compare(record.RowKey, this.rowKeyToUse, StringComparison.OrdinalIgnoreCase)
+                                     > 0
+                         select record).Take(this.pageSize);
+            var result =
+                await Task.Run(() => query.AsTableQuery().ExecuteSegmented(token, this.blogContext.TableRequestOptions));
+            if (shouldAddPage && null != result.ContinuationToken)
+            {
+                UserPageDictionary.PageDictionary.AddPage(result.ContinuationToken);
+            }
+
+            return result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>());
+        }
+
+        /// <summary>
+        /// Gets the searched blog previews.
         /// </summary>
         /// <param name="rowkeys">The rowkeys.</param>
         /// <returns>IEnumerable&lt;TableBlogEntity&gt;.</returns>
@@ -259,11 +325,17 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
 
             var rowKeyFilterCondition = string.Empty;
             var isDraftCondition = TableQuery.GenerateFilterConditionForBool("IsDraft", QueryComparisons.Equal, false);
-            var isDeletedCondition = TableQuery.GenerateFilterConditionForBool("IsDeleted", QueryComparisons.Equal, false);
+            var isDeletedCondition = TableQuery.GenerateFilterConditionForBool(
+                "IsDeleted",
+                QueryComparisons.Equal,
+                false);
             foreach (var rowkey in rowKeyList)
             {
                 var rowFilter = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, rowkey);
-                var partitionFilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, ApplicationConstants.BlogKey);
+                var partitionFilter = TableQuery.GenerateFilterCondition(
+                    "PartitionKey",
+                    QueryComparisons.Equal,
+                    ApplicationConstants.BlogKey);
                 var combinedFilter = TableQuery.CombineFilters(rowFilter, TableOperators.And, partitionFilter);
                 rowKeyFilterCondition = string.IsNullOrWhiteSpace(rowKeyFilterCondition)
                     ? rowFilter
@@ -271,16 +343,16 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             }
 
             var activeTable = this.blogContext.CustomOperation();
-            var combinedQuery = new TableQuery<DynamicTableEntity>().Where(
-                TableQuery.CombineFilters(
+            var combinedQuery =
+                new TableQuery<DynamicTableEntity>().Where(
                     TableQuery.CombineFilters(
-                        rowKeyFilterCondition,
+                        TableQuery.CombineFilters(rowKeyFilterCondition, TableOperators.And, isDraftCondition),
                         TableOperators.And,
-                        isDraftCondition),
-                TableOperators.And,
-                    isDeletedCondition)).Take(this.searchRecordsSize);
+                        isDeletedCondition)).Take(this.searchRecordsSize);
             var result = activeTable.ExecuteQuerySegmented(combinedQuery, null, this.blogContext.TableRequestOptions);
             return result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>());
         }
+
+        #endregion
     }
 }

@@ -50,6 +50,11 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public static string ApplicationResourceRoot = "ApplicationResourceRoot";
 
         /// <summary>
+        /// The allowed survey count
+        /// </summary>
+        public static string AllowedSurveyCount = "AllowedSurveyCount";
+
+        /// <summary>
         ///     My email
         /// </summary>
         public static string MyEmail = "MyEmail";

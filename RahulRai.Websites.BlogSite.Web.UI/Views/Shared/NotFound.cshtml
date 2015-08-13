@@ -5,16 +5,16 @@
 <h1>Page Not Found</h1>
 <p class="lead">This page is lost from server!</p>
 <p>
-    My apologies for any inconvenience caused to you. Kindly verify the URL or search for articles on this site. You can either click @Html.RouteLink("here", "Default", new { controller = "Blog", action = "GetLatestBlogs" }) to navigate to home page, or wait to get redirected automatically.
+    My apologies for any inconvenience caused to you. Kindly verify the URL or search for articles on this site. You can either click @Html.RouteLink("here", "Default", new { controller = "Blog", action = "GetLatestBlogs" }) to navigate to home page, or wait to get redirected automatically in 10 seconds.
 </p>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12">
-            <div class="item html">
+        <div class="col-xs-12 text-center col-center">
+            <div class="item">
                 <h3>0</h3>
                 <svg width="160" height="160" xmlns="http://www.w3.org/2000/svg">
                     <g>
-                        <title>Layer 1</title>
+                        <title>SVG TIMER</title>
                         <circle id="circle" class="circle_animation" r="35" cy="80" cx="80" stroke-width="5" stroke="#27A7DF" fill="none" />
                     </g>
                 </svg>
@@ -45,7 +45,6 @@
 <style>
     .item {
         position: relative;
-        float: right;
     }
 
         .item h3 {

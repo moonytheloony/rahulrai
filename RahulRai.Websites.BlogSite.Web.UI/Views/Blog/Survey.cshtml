@@ -1,4 +1,85 @@
-﻿@model IEnumerable<string>
+﻿@using RahulRai.Websites.Utilities.Common.Entities
+@model IEnumerable<UserInput>
 <h1>Ongoing Surveys</h1>
 <hr>
+@if (Model.Count() > 1)
+{
+    foreach (var survey in Model)
+    {
+        <h3>
+            <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Survey", surveyName = survey.DocumentName })">@survey.SurveyTitle</a>
+        </h3>
+        <p>@survey.SurveyGuideline</p>
+        <a class="btn btn-primary" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Survey", surveyName = survey.DocumentName })">Fill Survey <span class="glyphicon glyphicon-chevron-right"></span></a>
+        <hr />
+    }
+}
+else
+{
+    <form class="form-horizontal" role="form">
+        @if (Model.Count() == 1)
+        {
+            //// Expand the form if there is just one form.
+            var form = Model.First();
+            <h2>@form.SurveyTitle</h2>
+            <p class="lead">@form.SurveyGuideline</p>
+            <br />
+            if (form.UserInputType == UserInputType.VoteSingleOption)
+            {
+                foreach (var option in form.Input)
+                {
+                    <div class="radio">
+                        <label><input type="radio" name="radiogroup" id="@option.InputIdentifier">@option.InputText</label>
+                    </div>
+                }
+            }
+
+            if (form.UserInputType == UserInputType.VoteMultipleOptions)
+            {
+                foreach (var option in form.Input)
+                {
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="@option.InputIdentifier">@option.InputText</label>
+                    </div>
+                }
+            }
+
+            if (form.UserInputType == UserInputType.Text)
+            {
+                foreach (var option in form.Input)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-4 text-left">
+                            <label class="control-label">@option.InputText</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="@option.InputIdentifier">
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                }
+            }
+
+            if (form.AcceptAttachment)
+            {
+                <div class="row">
+                    <div class="col-sm-4 text-left">
+                        <label>Please upload file</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="file" id="attachment" />
+                    </div>
+                    <div class="col-sm-2"></div>
+                </div>
+            }
+        }
+        <br />
+        <div class="form-group">
+            <div class="col-sm-10 text-right">
+                <input type="submit" value="Save and Thanks" class="btn btn-default btn-info" />
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+    </form>
+}
 

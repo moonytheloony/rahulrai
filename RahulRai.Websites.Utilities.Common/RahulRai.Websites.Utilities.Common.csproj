@@ -193,6 +193,7 @@
     <Compile Include="Entities\TableBlogEntity.cs" />
     <Compile Include="Entities\Testimonial.cs" />
     <Compile Include="Entities\UserInput.cs" />
+    <Compile Include="Entities\ValidateUserInput.cs" />
     <Compile Include="Exceptions\BlogSystemException.cs" />
     <Compile Include="Exceptions\InputValidationFailedException.cs" />
     <Compile Include="Helpers\Routines.cs" />

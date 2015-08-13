@@ -16,11 +16,14 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 {
     #region
 
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
+    using System.Web;
     using System.Web.Configuration;
     using System.Web.Mvc;
+    using System.Web.Script.Serialization;
 
     using RahulRai.Websites.BlogSite.Web.UI.GlobalAccess;
     using RahulRai.Websites.BlogSite.Web.UI.Models;
@@ -61,12 +64,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         private readonly int searchRecordsSize =
             int.Parse(WebConfigurationManager.AppSettings[ApplicationConstants.SearchRecordsSize]);
-
-        /// <summary>
-        /// The survey connection string
-        /// </summary>
-        private readonly string surveyConnectionString =
-            WebConfigurationManager.AppSettings[ApplicationConstants.SurveyConnectionString];
 
         /// <summary>
         /// The blog service
@@ -117,9 +114,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         {
             if (string.IsNullOrWhiteSpace(postId))
             {
-                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                this.Response.TrySkipIisCustomErrors = true;
-                return this.View();
+                return new HttpNotFoundResult();
             }
 
             var blogPost = await Task.Run(() => this.blogService.GetBlogPost(postId));
@@ -128,9 +123,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
                 return this.View("BlogPost", blogPost);
             }
 
-            this.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            this.Response.TrySkipIisCustomErrors = true;
-            return this.View();
+            return new HttpNotFoundResult();
         }
 
         /// <summary>
@@ -189,6 +182,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         public async Task<ActionResult> Survey(string surveyName)
         {
             var surveyList = await Task.Run(() => this.blogService.GetAvailableSurveys(surveyName));
+            if (null == surveyList)
+            {
+                return new HttpNotFoundResult();
+            }
+
             return this.View(surveyList);
         }
 

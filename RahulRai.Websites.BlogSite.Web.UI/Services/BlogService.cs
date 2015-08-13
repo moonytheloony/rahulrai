@@ -22,6 +22,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Web.Configuration;
+    using System.Web.Script.Serialization;
 
     using Microsoft.WindowsAzure.Storage.Blob;
     using Microsoft.WindowsAzure.Storage.Table;
@@ -104,29 +105,50 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// </summary>
         /// <param name="surveyName">Name of the survey.</param>
         /// <returns>Task&lt;List&lt;System.String&gt;&gt;.</returns>
-        public async Task<List<string>> GetAvailableSurveys(string surveyName)
+        public async Task<List<UserInput>> GetAvailableSurveys(string surveyName)
         {
-            var surveys = new List<string>();
+            var surveys = new List<UserInput>();
             var surveyContainer = WebConfigurationManager.AppSettings[ApplicationConstants.SurveyContainerName];
-            var surveyMaxCount = int.Parse(WebConfigurationManager.AppSettings[ApplicationConstants.AllowedSurveyCount]);
-            var result = await Task.Run(() => this.surveyContext.ListBlobs(surveyContainer, surveyMaxCount));
-            if (null == result)
+            if (string.IsNullOrWhiteSpace(surveyName))
             {
-                return surveys;
-            }
+                var surveyMaxCount = int.Parse(WebConfigurationManager.AppSettings[ApplicationConstants.AllowedSurveyCount]);
+                var result = await Task.Run(() => this.surveyContext.ListBlobs(surveyContainer, surveyMaxCount));
+                if (null == result)
+                {
+                    return surveys;
+                }
 
-            //// Extract JSON file.
-            foreach (var blob in result.Results)
+                //// Extract JSON file.
+                foreach (var blob in result.Results)
+                {
+                    var resultBlob = blob as CloudBlockBlob;
+                    var blobContent = await Task.Run(() => resultBlob != null ? this.surveyContext.GetBlobContentAsString(surveyContainer, resultBlob.Name) : null);
+                    if (null == blobContent)
+                    {
+                        continue;
+                    }
+
+                    var userInputObject = new JavaScriptSerializer().Deserialize<UserInput>(blobContent);
+                    if (resultBlob == null)
+                    {
+                        continue;
+                    }
+
+                    userInputObject.DocumentName = resultBlob.Name;
+                    surveys.Add(userInputObject);
+                }
+            }
+            else
             {
-                var resultBlob = blob as CloudBlockBlob;
-                var blobContent =
-                    await
-                        Task.Run(
-                            () =>
-                                resultBlob != null
-                                    ? this.surveyContext.GetBlobContentAsString(surveyContainer, resultBlob.Name)
-                                    : null);
-                surveys.Add(blobContent);
+                var content = await Task.Run(() => this.surveyContext.GetBlobContentAsString(surveyContainer, surveyName));
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    return null;
+                }
+
+                var userInputObject = new JavaScriptSerializer().Deserialize<UserInput>(content);
+                userInputObject.DocumentName = surveyName;
+                surveys.Add(userInputObject);
             }
 
             return surveys;

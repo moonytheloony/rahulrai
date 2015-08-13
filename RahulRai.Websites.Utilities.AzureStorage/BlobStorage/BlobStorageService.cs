@@ -123,14 +123,7 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
         {
             var container = this.BlobClient.GetContainerReference(containerName);
             var blob = container.GetBlockBlobReference(blobName);
-            string text;
-            using (var memoryStream = new MemoryStream())
-            {
-                blob.DownloadToStream(memoryStream);
-                text = Encoding.UTF8.GetString(memoryStream.ToArray());
-            }
-
-            return text;
+            return blob.Exists() ? blob.DownloadText(Encoding.UTF8) : string.Empty;
         }
 
         /// <summary>

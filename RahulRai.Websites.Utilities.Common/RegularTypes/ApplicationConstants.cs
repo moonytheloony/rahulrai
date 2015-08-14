@@ -173,5 +173,10 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// The survey container name
         /// </summary>
         public static string SurveyContainerName = "SurveyContainerName";
+
+        /// <summary>
+        /// The cache control string
+        /// </summary>
+        public static string CacheControlString = "max-age=604800,must-revalidate";
     }
 }

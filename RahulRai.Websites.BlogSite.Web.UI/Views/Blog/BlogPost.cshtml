@@ -5,12 +5,27 @@
 <h1>@Model.Title</h1>
 <hr>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-xs-8 text-left">
+    <div class="row hidden-xs">
+        <div class="col-sm-8 text-left">
             <!-- Date/Time -->
             <p><span class="glyphicon glyphicon-time col-center"></span> Posted on @Model.PostedDate.ToLocalTime().ToString("f")</p>
         </div>
-        <div class="col-xs-4 text-right" id="link_other">
+        <div class="col-sm-4 text-right" id="link_other">
+            <a href="http://twitter.com/share?url=@Request.Url.AbsoluteUri&text=@Model.Title"><img src="~/Content/Social/48/twitter.png" alt="share on twitter" class="iconImage img-responsive" data-toggle="tooltip" title="Tweet" /></a>
+            <a href="http://www.facebook.com/sharer.php?u=@Request.Url.AbsoluteUri"><img src="~/Content/Social/48/fb.png" alt="share on facebook" class="iconImage img-responsive" data-toggle="tooltip" title="Post" /></a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url=@Request.Url.AbsoluteUri&summary=@Model.Title&source=rahulrai.in"><img src="~/Content/Social/48/linkedin.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="Share" /></a>
+            <a href="whatsapp://send?text=Read about @Model.Title here @Request.Url.AbsoluteUri"><img src="~/Content/Social/48/whatsapp.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="WhatsApp (mobile)" /></a>
+        </div>
+    </div>
+    <!--In XS sxreens these controls should stack in rows-->
+    <div class="row visible-xs">
+        <div class="col-sm-8 text-center">
+            <!-- Date/Time -->
+            <p><span class="glyphicon glyphicon-time col-center"></span> Posted on @Model.PostedDate.ToLocalTime().ToString("f")</p>
+        </div>
+    </div>
+    <div class="row visible-xs">
+        <div class="col-xs-12 visible-xs text-center" id="link_other">
             <a href="http://twitter.com/share?url=@Request.Url.AbsoluteUri&text=@Model.Title"><img src="~/Content/Social/48/twitter.png" alt="share on twitter" class="iconImage img-responsive" data-toggle="tooltip" title="Tweet" /></a>
             <a href="http://www.facebook.com/sharer.php?u=@Request.Url.AbsoluteUri"><img src="~/Content/Social/48/fb.png" alt="share on facebook" class="iconImage img-responsive" data-toggle="tooltip" title="Post" /></a>
             <a href="https://www.linkedin.com/shareArticle?mini=true&url=@Request.Url.AbsoluteUri&summary=@Model.Title&source=rahulrai.in"><img src="~/Content/Social/48/linkedin.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="Share" /></a>

@@ -84,6 +84,9 @@ namespace RahulRai.Websites.Utilities.AzureStorage.BlobStorage
             var blockBlob = container.GetBlockBlobReference(blobName);
             blockBlob.Properties.ContentType = MimeMapping.GetMimeMapping(blobName);
             blockBlob.UploadFromStream(fileStream);
+            //// Cache images for a week for optimization.
+            blockBlob.Properties.CacheControl = ApplicationConstants.CacheControlString;
+            blockBlob.SetProperties();
             return blockBlob.Uri;
         }
 

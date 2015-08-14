@@ -16,57 +16,70 @@
 }
 else
 {
-    <form class="form-horizontal" role="form">
-        @if (Model.Count() == 1)
-        {
-            var random = new Random();
-            var variable1 = random.Next(0, 10);
-            var variable2 = random.Next(0, 10);
-            Session["HumanCheck"] = variable1 + variable2;
-            Session["Survey"] = Model;
-            //// Expand the form if there is just one form.
-            var form = Model.First();
-            <h2>@form.SurveyTitle</h2>
-            <p class="lead">@form.SurveyGuideline</p>
-            <br />
-            if (form.UserInputType == UserInputType.VoteSingleOption)
+    using (Html.BeginRouteForm("Default", new { action = "WriteTestimonial", controller = "Profile" }))
+    {
+        <form class="form-horizontal" role="form">
+            @if (Model.Count() == 1)
             {
-                foreach (var option in form.Input)
+                var random = new Random();
+                var variable1 = random.Next(0, 10);
+                var variable2 = random.Next(0, 10);
+                Session["HumanCheck"] = variable1 + variable2;
+                Session["Survey"] = Model;
+                //// Expand the form if there is just one form.
+                var form = Model.First();
+                <h2>@form.SurveyTitle</h2>
+                <p class="lead">@form.SurveyGuideline</p>
+                <br />
+                if (form.UserInputType == UserInputType.VoteSingleOption)
                 {
-                    <div class="radio">
-                        <label><input type="radio" name="radiogroup" id="@option.InputIdentifier">@option.InputText</label>
-                    </div>
+                    foreach (var option in form.Input)
+                    {
+                        <div class="radio">
+                            <label><input type="radio" name="radiogroup" id="@option.InputIdentifier">@option.InputText</label>
+                        </div>
+                    }
                 }
-            }
 
-            if (form.UserInputType == UserInputType.VoteMultipleOptions)
-            {
-                foreach (var option in form.Input)
+                if (form.UserInputType == UserInputType.VoteMultipleOptions)
                 {
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="@option.InputIdentifier">@option.InputText</label>
-                    </div>
+                    foreach (var option in form.Input)
+                    {
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="@option.InputIdentifier">@option.InputText</label>
+                        </div>
+                    }
                 }
-            }
 
-            if (form.UserInputType == UserInputType.Text)
-            {
-                foreach (var option in form.Input)
+                if (form.UserInputType == UserInputType.Text)
                 {
-                    <div class="form-group">
+                    foreach (var option in form.Input)
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-4 text-left">
+                                <label class="control-label">@option.InputText</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="@option.InputIdentifier">
+                            </div>
+                            <div class="col-sm-2"></div>
+                        </div>
+                    }
+                }
+
+                if (form.AcceptAttachment)
+                {
+                    <div class="row">
                         <div class="col-sm-4 text-left">
-                            <label class="control-label">@option.InputText</label>
+                            <label>Please upload file</label>
                         </div>
                         <div class="col-sm-6">
-                            <input class="form-control" id="@option.InputIdentifier">
+                            <input type="file" id="attachment" />
                         </div>
                         <div class="col-sm-2"></div>
                     </div>
                 }
-            }
 
-            if (form.AcceptAttachment)
-            {
                 <div class="row">
                     <div class="col-sm-4 text-left">
                         <label>Please upload file</label>
@@ -77,24 +90,14 @@ else
                     <div class="col-sm-2"></div>
                 </div>
             }
-
-            <div class="row">
-                <div class="col-sm-4 text-left">
-                    <label>Please upload file</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="file" id="attachment" />
+            <br />
+            <div class="form-group">
+                <div class="col-sm-10 text-right">
+                    <input type="submit" value="Save My Response" class="btn btn-default btn-info" />
                 </div>
                 <div class="col-sm-2"></div>
             </div>
-        }
-        <br />
-        <div class="form-group">
-            <div class="col-sm-10 text-right">
-                <input type="submit" value="Save and Thanks" class="btn btn-default btn-info" />
-            </div>
-            <div class="col-sm-2"></div>
-        </div>
-    </form>
+        </form>
+    }
 }
 

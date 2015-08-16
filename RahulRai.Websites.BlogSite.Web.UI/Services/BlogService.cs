@@ -21,15 +21,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Web.Configuration;
-    using System.Web.Script.Serialization;
 
-    using Microsoft.WindowsAzure.Storage.Blob;
     using Microsoft.WindowsAzure.Storage.Table;
     using Microsoft.WindowsAzure.Storage.Table.Queryable;
 
     using RahulRai.Websites.BlogSite.Web.UI.GlobalAccess;
-    using RahulRai.Websites.Utilities.AzureStorage.BlobStorage;
     using RahulRai.Websites.Utilities.AzureStorage.TableStorage;
     using RahulRai.Websites.Utilities.Common.Entities;
     using RahulRai.Websites.Utilities.Common.RegularTypes;
@@ -62,12 +58,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// The search records size
         /// </summary>
         private readonly int searchRecordsSize;
-
-        /// <summary>
-        /// The survey context
-        /// </summary>
-        private readonly BlobStorageService surveyContext;
-
+        
         /// <summary>
         /// The blog search access
         /// </summary>
@@ -80,12 +71,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="BlogService" /> class.
         /// </summary>
-        /// <param name="surveyContext">The survey context.</param>
         /// <param name="blogContext">The blog context.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <param name="searchRecordsSize">Size of the search records.</param>
         public BlogService(
-            BlobStorageService surveyContext,
             AzureTableStorageService<TableBlogEntity> blogContext,
             int pageSize,
             int searchRecordsSize)
@@ -93,66 +82,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             this.blogContext = blogContext;
             this.pageSize = pageSize;
             this.searchRecordsSize = searchRecordsSize;
-            this.surveyContext = surveyContext;
         }
 
         #endregion
 
         #region Public Methods and Operators
-
-        /// <summary>
-        /// Gets the available surveys.
-        /// </summary>
-        /// <param name="surveyName">Name of the survey.</param>
-        /// <returns>Task&lt;List&lt;System.String&gt;&gt;.</returns>
-        public async Task<List<UserInput>> GetAvailableSurveys(string surveyName)
-        {
-            var surveys = new List<UserInput>();
-            var surveyContainer = WebConfigurationManager.AppSettings[ApplicationConstants.SurveyContainerName];
-            if (string.IsNullOrWhiteSpace(surveyName))
-            {
-                var surveyMaxCount = int.Parse(WebConfigurationManager.AppSettings[ApplicationConstants.AllowedSurveyCount]);
-                var result = await Task.Run(() => this.surveyContext.ListBlobs(surveyContainer, surveyMaxCount));
-                if (null == result)
-                {
-                    return surveys;
-                }
-
-                //// Extract JSON file.
-                foreach (var blob in result.Results)
-                {
-                    var resultBlob = blob as CloudBlockBlob;
-                    var blobContent = await Task.Run(() => resultBlob != null ? this.surveyContext.GetBlobContentAsString(surveyContainer, resultBlob.Name) : null);
-                    if (null == blobContent)
-                    {
-                        continue;
-                    }
-
-                    var userInputObject = new JavaScriptSerializer().Deserialize<UserInput>(blobContent);
-                    if (resultBlob == null)
-                    {
-                        continue;
-                    }
-
-                    userInputObject.DocumentName = resultBlob.Name;
-                    surveys.Add(userInputObject);
-                }
-            }
-            else
-            {
-                var content = await Task.Run(() => this.surveyContext.GetBlobContentAsString(surveyContainer, surveyName));
-                if (string.IsNullOrWhiteSpace(content))
-                {
-                    return null;
-                }
-
-                var userInputObject = new JavaScriptSerializer().Deserialize<UserInput>(content);
-                userInputObject.DocumentName = surveyName;
-                surveys.Add(userInputObject);
-            }
-
-            return surveys;
-        }
 
         /// <summary>
         /// Gets the blog archive.

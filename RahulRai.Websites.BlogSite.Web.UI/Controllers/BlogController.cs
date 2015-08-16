@@ -19,6 +19,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Configuration;
@@ -34,6 +35,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using RahulRai.Websites.Utilities.Common.RegularTypes;
     using RahulRai.Websites.Utilities.Web;
 
+    using WebGrease.Css.Extensions;
+
     #endregion
 
     /// <summary>
@@ -42,11 +45,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     public class BlogController : BaseController
     {
         #region Fields
-
-        /// <summary>
-        /// The BLOB storage context
-        /// </summary>
-        private readonly BlobStorageService blobStorageContext = SurveyStoreAccess.Instance.BlobStorageService;
 
         /// <summary>
         /// The blog context
@@ -181,13 +179,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// <returns>Task&lt;ActionResult&gt;.</returns>
         public async Task<ActionResult> Survey(string surveyName)
         {
-            var surveyList = await Task.Run(() => this.blogService.GetAvailableSurveys(surveyName));
-            if (null == surveyList)
-            {
-                return new HttpNotFoundResult();
-            }
-
-            return this.View(surveyList);
+            return this.View();
         }
 
         #endregion
@@ -200,7 +192,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         protected override void InitializeAction()
         {
             this.blogService = new BlogService(
-                this.blobStorageContext,
                 this.blogContext,
                 this.pageSize,
                 this.searchRecordsSize);

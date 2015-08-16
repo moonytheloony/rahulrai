@@ -50,11 +50,6 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public static string ApplicationResourceRoot = "ApplicationResourceRoot";
 
         /// <summary>
-        /// The allowed survey count
-        /// </summary>
-        public static string AllowedSurveyCount = "AllowedSurveyCount";
-
-        /// <summary>
         ///     My email
         /// </summary>
         public static string MyEmail = "MyEmail";
@@ -165,18 +160,13 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public static string AppInsightKey = "AppInsightKey";
 
         /// <summary>
-        /// The survey connection string
-        /// </summary>
-        public static string SurveyConnectionString = "SurveyConnectionString";
-
-        /// <summary>
-        /// The survey container name
-        /// </summary>
-        public static string SurveyContainerName = "SurveyContainerName";
-
-        /// <summary>
         /// The cache control string
         /// </summary>
         public static string CacheControlString = "max-age=604800,must-revalidate";
+
+        /// <summary>
+        /// The allowed file types
+        /// </summary>
+        public static string AllowedFileTypes = "text/plain,text/html,text/xml,text/richtext,image/gif,image/jpeg,image/pjpeg,image/png,image/x-png,image/tiff,image/bmp,image/x-xbitmap,image/x-jg,application/octet-stream,application/pdf,application/xml,application/atom+xml,application/rss+xml,application/x-zip-compressed,application/x-gzip-compressed";
     }
 }

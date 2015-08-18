@@ -23,6 +23,11 @@
                     Architect<br />
                     Microsoft Technologies
                 </div>
+                <div>
+                    <a class="btn btn-success btn-sm">Subscribe</a>
+                    <a class="btn btn-danger btn-sm" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Rss", id = "0" })">RSS Feed</a>
+                    <a class="btn btn-warning btn-sm" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Rss", id = "1" })">ATOM Feed</a>
+                </div>
             </div>
             <!-- END SIDEBAR USER TITLE -->
             <!-- SIDEBAR MENU -->
@@ -48,7 +53,7 @@
                     </li>
                     <li>
                         <a href="mailto:@myEmail?subject=I found and issue in rahulrai.in">
-                            <i class="glyphicon glyphicon-pushpin"></i>
+                            <i class="glyphicon glyphicon-record"></i>
                             Log Site Issues
                         </a>
                     </li>

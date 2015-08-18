@@ -7,7 +7,7 @@
 // Last Modified On : 08-17-2015
 // ***********************************************************************
 // <copyright file="SurveyMonkeyService.cs" company="Rahul Rai">
-//     Copyright ©  2015 Rahul Rai. All rights reserved.
+//     Copyright (c) Rahul Rai. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************

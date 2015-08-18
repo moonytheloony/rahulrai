@@ -148,6 +148,16 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
+        /// Gets the blogs for RSS feed.
+        /// </summary>
+        /// <returns>Task&lt;List&lt;BlogPost&gt;&gt;.</returns>
+        public async Task<List<BlogPost>> GetBlogsForRssFeed()
+        {
+            var result = await this.GetPagedBlogPreviews(null, false);
+            return result.Select(TableBlogEntity.GetBlogPost).ToList();
+        }
+
+        /// <summary>
         /// Searches the blogs.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>

@@ -4,7 +4,7 @@
 // Created          : 07-30-2015
 //
 // Last Modified By : rahulrai
-// Last Modified On : 08-12-2015
+// Last Modified On : 08-18-2015
 // ***********************************************************************
 // <copyright file="BlogController.cs" company="Rahul Rai">
 //     Copyright (c) Rahul Rai. All rights reserved.
@@ -16,26 +16,21 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
 {
     #region
 
-    using System.Collections.Generic;
+    using System;
     using System.Linq;
-    using System.Net;
-    using System.Text.RegularExpressions;
+    using System.ServiceModel.Syndication;
     using System.Threading.Tasks;
-    using System.Web;
     using System.Web.Configuration;
     using System.Web.Mvc;
-    using System.Web.Script.Serialization;
 
     using RahulRai.Websites.BlogSite.Web.UI.GlobalAccess;
     using RahulRai.Websites.BlogSite.Web.UI.Models;
     using RahulRai.Websites.BlogSite.Web.UI.Services;
-    using RahulRai.Websites.Utilities.AzureStorage.BlobStorage;
     using RahulRai.Websites.Utilities.AzureStorage.TableStorage;
     using RahulRai.Websites.Utilities.Common.Entities;
+    using RahulRai.Websites.Utilities.Common.Helpers;
     using RahulRai.Websites.Utilities.Common.RegularTypes;
     using RahulRai.Websites.Utilities.Web;
-
-    using WebGrease.Css.Extensions;
 
     #endregion
 
@@ -154,6 +149,56 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
+        /// RSSs the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Task&lt;ActionResult&gt;.</returns>
+        public async Task<ActionResult> Rss(string id)
+        {
+            var blogPosts = await this.blogService.GetBlogsForRssFeed();
+            var postItems =
+                blogPosts.Select(
+                    blogPost => new SyndicationItem(
+                        blogPost.Title,
+                        Routines.GeneratePreview(blogPost.Body),
+                        // ReSharper disable once AssignNullToNotNullAttribute
+                        new Uri(
+                            this.Url.RouteUrl(
+                                "BlogPost",
+                                new
+                                {
+                                    postId = blogPost.BlogFormattedUri
+                                },
+                        // ReSharper disable once PossibleNullReferenceException
+                                this.Request.Url.Scheme)),
+                        blogPost.BlogFormattedUri,
+                        new DateTimeOffset(blogPost.PostedDate)));
+            var feed = new SyndicationFeed(
+                "rahulrai.in",
+                "Rahul Rai on Cloud, Technology and Code",
+                // ReSharper disable once PossibleNullReferenceException
+                new Uri(
+                    string.Format(
+                        "{0}://{1}{2}",
+                        this.Request.Url.Scheme,
+                        this.Request.Url.Authority,
+                        this.Url.Content("~"))),
+                postItems)
+                {
+                    Copyright = new TextSyndicationContent(string.Format("Copyright (c) Rahul Rai {0}. All rights reserved.", DateTime.UtcNow.Year)),
+                    Language = "en-US"
+                };
+
+            int defaultValue;
+            if (!int.TryParse(id, out defaultValue) || defaultValue == 0)
+            {
+                return new FeedResult(new Rss20FeedFormatter(feed));
+            }
+
+            return new FeedResult(new Atom10FeedFormatter(feed));
+        }
+
+        /// <summary>
         /// Gets the searched blogs.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
@@ -191,10 +236,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         protected override void InitializeAction()
         {
-            this.blogService = new BlogService(
-                this.blogContext,
-                this.pageSize,
-                this.searchRecordsSize);
+            this.blogService = new BlogService(this.blogContext, this.pageSize, this.searchRecordsSize);
         }
 
         /// <summary>

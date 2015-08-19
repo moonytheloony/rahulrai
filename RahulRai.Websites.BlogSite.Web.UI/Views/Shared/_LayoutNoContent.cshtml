@@ -221,6 +221,22 @@
             $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="tab"]').tooltip();
         });
+
+        //Emphasis on button.
+        $(document).ready(function () {
+            if ($("#focusButton") != null) {
+                var change = false;
+                setInterval(function () {
+                    if (change) {
+                        document.getElementById("focusButton").style.textDecoration = "underline";
+                    } else {
+                        document.getElementById("focusButton").style.textDecoration = "none";
+                    }
+
+                    change = !change;
+                }, 2000);
+            }
+        });
     </script>
 </body>
 </html>

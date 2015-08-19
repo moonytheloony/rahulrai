@@ -31,8 +31,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{7B2165EF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RahulRai.Websites.Tools.DocumentTool", "RahulRai.Websites.Tools.DocumentTool\RahulRai.Websites.Tools.DocumentTool.csproj", "{5990D417-9FD1-4D8A-8340-59C24D2EE86A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RahulRai.Websites.Jobs.MailWorker", "MailWorker\RahulRai.Websites.Jobs.MailWorker.csproj", "{DC0F7738-47C6-4CA9-B2C3-4A32A426BF8E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jobs", "Jobs", "{99CA1A7B-F0AC-4427-B658-79C5A0220000}"
 EndProject
 Global
@@ -69,10 +67,6 @@ Global
 		{5990D417-9FD1-4D8A-8340-59C24D2EE86A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5990D417-9FD1-4D8A-8340-59C24D2EE86A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5990D417-9FD1-4D8A-8340-59C24D2EE86A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC0F7738-47C6-4CA9-B2C3-4A32A426BF8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC0F7738-47C6-4CA9-B2C3-4A32A426BF8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC0F7738-47C6-4CA9-B2C3-4A32A426BF8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC0F7738-47C6-4CA9-B2C3-4A32A426BF8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,7 +79,6 @@ Global
 		{6CDA73B5-A8EF-47B0-8DBC-81BF8E3DE35A} = {8E6CCF7C-144B-427D-97D9-BD10C16F13E4}
 		{852852C1-9CB3-4399-A462-B93F32DAA738} = {8E6CCF7C-144B-427D-97D9-BD10C16F13E4}
 		{5990D417-9FD1-4D8A-8340-59C24D2EE86A} = {7B2165EF-8B56-45D1-A02E-8DB7BF3E5AE7}
-		{DC0F7738-47C6-4CA9-B2C3-4A32A426BF8E} = {99CA1A7B-F0AC-4427-B658-79C5A0220000}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45

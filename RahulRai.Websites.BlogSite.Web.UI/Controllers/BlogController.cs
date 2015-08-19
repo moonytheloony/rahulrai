@@ -268,7 +268,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
-        /// Unsubscribes the specified user string.
+        /// Unsubscribe the specified user string.
         /// </summary>
         /// <param name="userString">The user string.</param>
         /// <returns>Task&lt;ActionResult&gt;.</returns>

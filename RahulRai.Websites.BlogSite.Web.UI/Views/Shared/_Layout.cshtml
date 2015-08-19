@@ -23,10 +23,15 @@
                     Architect<br />
                     Microsoft Technologies
                 </div>
-                <div>
-                    <a class="btn btn-success btn-sm">Subscribe</a>
-                    <a class="btn btn-danger btn-sm" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Rss", id = "0" })">RSS Feed</a>
-                    <a class="btn btn-warning btn-sm" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Rss", id = "1" })">ATOM Feed</a>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <a id="focusButton" class="btn btn-success btn-block" data-toggle="tooltip" title="Get Notified Through Email">Subscribe</a>
+                        </div>
+                        <div class="col-xs-6">
+                            <a class="btn btn-danger btn-block" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Rss", id = "0" })" data-toggle="tooltip" title="Subscribe To RSS Feed">RSS Feed</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- END SIDEBAR USER TITLE -->
@@ -49,6 +54,12 @@
                         <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Survey" })">
                             <i class="glyphicon glyphicon-th-list"></i>
                             Surveys (&beta;)
+                        </a>
+                    </li>
+                    <li class="@Html.IsSelected(actions: "Rss", controllers: "Blog")">
+                        <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Rss", id="1" })">
+                            <i class="glyphicon glyphicon-bullhorn"></i>
+                            ATOM Feed
                         </a>
                     </li>
                     <li>
@@ -126,12 +137,28 @@
     </div>
 </div>
 <script type="text/javascript" language="javascript">
-    // Navigate to cotent pane on page load for small screens.
+    // Navigate to content pane on page load for small screens.
     $(function () {
         if ($(window).width() <= 739) {
             $('html, body').animate({
                 scrollTop: $("#contentPane").offset().top - 100
             }, 1000);
+        }
+    });
+
+    //Emphasis on button.
+    $(document).ready(function () {
+        if ($("#focusButton") != null) {
+            var change = false;
+            setInterval(function () {
+                if (change) {
+                    document.getElementById("focusButton").innerText = "SUBSCRIBE";
+                } else {
+                    document.getElementById("focusButton").innerText = "subscribe";
+                }
+
+                change = !change;
+            }, 2000);
         }
     });
 </script>

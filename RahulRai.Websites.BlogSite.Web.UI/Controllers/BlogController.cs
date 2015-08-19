@@ -4,7 +4,7 @@
 // Created          : 07-30-2015
 //
 // Last Modified By : rahulrai
-// Last Modified On : 08-18-2015
+// Last Modified On : 08-19-2015
 // ***********************************************************************
 // <copyright file="BlogController.cs" company="Rahul Rai">
 //     Copyright (c) Rahul Rai. All rights reserved.
@@ -45,6 +45,12 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// The blog context
         /// </summary>
         private readonly AzureTableStorageService<TableBlogEntity> blogContext = BlogStoreAccess.Instance.BlogTable;
+
+        /// <summary>
+        /// The newsletter context
+        /// </summary>
+        private readonly AzureTableStorageService<TableNewsletterEntity> newsletterContext =
+            NewsletterSubscriberAccess.Instance.NewsletterSubscriberTable;
 
         /// <summary>
         /// The page size
@@ -132,6 +138,38 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
+        /// Newsletters the sign up.
+        /// </summary>
+        /// <returns>ActionResult.</returns>
+        [RequireHttps]
+        public ActionResult NewsletterSignUp()
+        {
+            return this.View();
+        }
+
+        /// <summary>
+        /// Newsletters the sign up.
+        /// </summary>
+        /// <param name="signUpForm">The sign up form.</param>
+        /// <returns>Task&lt;ActionResult&gt;.</returns>
+        [RequireHttps]
+        [HttpPost]
+        public async Task<ActionResult> NewsletterSignUp(NewsletterSignUpForm signUpForm)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(signUpForm);
+            }
+
+            var firstName = signUpForm.FirstName.Trim().ToLowerInvariant();
+            signUpForm.FirstName = firstName.First().ToString().ToUpper() + firstName.Substring(1);
+            signUpForm.Email = signUpForm.Email.ToLowerInvariant();
+            this.ViewBag.FormSubmitted =
+                await Task.Run(() => this.blogService.AddUserToNewsletterSubscriberList(signUpForm));
+            return this.View();
+        }
+
+        /// <summary>
         /// Pages the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
@@ -185,7 +223,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
                         this.Url.Content("~"))),
                 postItems)
                 {
-                    Copyright = new TextSyndicationContent(string.Format("Copyright (c) Rahul Rai {0}. All rights reserved.", DateTime.UtcNow.Year)),
+                    Copyright =
+                        new TextSyndicationContent(
+                            string.Format("Copyright (c) Rahul Rai {0}. All rights reserved.", DateTime.UtcNow.Year)),
                     Language = "en-US"
                 };
 
@@ -227,6 +267,21 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
             return this.View();
         }
 
+        /// <summary>
+        /// Unsubscribes the specified user string.
+        /// </summary>
+        /// <param name="userString">The user string.</param>
+        /// <returns>Task&lt;ActionResult&gt;.</returns>
+        public async Task<ActionResult> Unsubscribe(string userString)
+        {
+            if (string.IsNullOrWhiteSpace(userString))
+            {
+                return this.View();
+            }
+
+            return this.View();
+        }
+
         #endregion
 
         #region Methods
@@ -236,7 +291,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         protected override void InitializeAction()
         {
-            this.blogService = new BlogService(this.blogContext, this.pageSize, this.searchRecordsSize);
+            this.blogService = new BlogService(
+                this.blogContext,
+                this.newsletterContext,
+                this.pageSize,
+                this.searchRecordsSize);
         }
 
         /// <summary>

@@ -187,12 +187,15 @@
     <Compile Include="Entities\FileOperationStatus.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\NewsletterSignUpState.cs" />
+    <Compile Include="Entities\NewsletterSignUpForm.cs" />
     <Compile Include="Entities\OperationResult.cs" />
     <Compile Include="Entities\Page.cs" />
     <Compile Include="Entities\PageDictionary.cs" />
     <Compile Include="Entities\Publication.cs" />
     <Compile Include="Entities\PublicationType.cs" />
     <Compile Include="Entities\TableBlogEntity.cs" />
+    <Compile Include="Entities\TableNewsletterEntity.cs" />
     <Compile Include="Entities\Testimonial.cs" />
     <Compile Include="Entities\ValidateUserInput.cs" />
     <Compile Include="Exceptions\BlogSystemException.cs" />

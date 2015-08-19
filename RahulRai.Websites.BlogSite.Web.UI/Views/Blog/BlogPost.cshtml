@@ -40,9 +40,13 @@
 @if (!string.IsNullOrWhiteSpace(Model.SpecialMention))
 {
     <!--Custom Text-->
-    <p class="panel-info">@Html.Raw(Model.SpecialMention)</p>
+    <p>@Html.Raw(Model.SpecialMention)</p>
     <hr />
 }
+<div class="panel panel-success">
+    <div class="panel-heading"> Did you enjoy reading this post? I can notify you the next time I post something. <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })">Subscribe.</a></div>
+</div>
+<hr />
 <!-- Blog Comments -->
 <div id="disqus_thread">
     @* ReSharper disable once PossibleNullReferenceException *@

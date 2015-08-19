@@ -30,6 +30,11 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public static string BlogKey = "MYBLOG";
 
         /// <summary>
+        /// The subscriber list key
+        /// </summary>
+        public static string SubscriberListKey = "SUBSCRIBER";
+
+        /// <summary>
         ///     The content split length
         /// </summary>
         public static int ContentSplitLength = 1200;
@@ -68,6 +73,11 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         ///     The blog table name
         /// </summary>
         public static string BlogTableName = "BlogTableName";
+
+        /// <summary>
+        /// The newsletter subscriber table name
+        /// </summary>
+        public static string NewsletterSubscriberTableName = "NewsletterSubscriberTableName";
 
         /// <summary>
         ///     The storage account connection string

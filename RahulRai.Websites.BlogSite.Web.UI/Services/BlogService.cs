@@ -4,7 +4,7 @@
 // Created          : 07-30-2015
 //
 // Last Modified By : rahulrai
-// Last Modified On : 08-12-2015
+// Last Modified On : 08-19-2015
 // ***********************************************************************
 // <copyright file="BlogService.cs" company="Rahul Rai">
 //     Copyright (c) Rahul Rai. All rights reserved.
@@ -45,6 +45,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         private readonly AzureTableStorageService<TableBlogEntity> blogContext;
 
         /// <summary>
+        /// The newsletter context
+        /// </summary>
+        private readonly AzureTableStorageService<TableNewsletterEntity> newsletterContext;
+
+        /// <summary>
         /// The page size
         /// </summary>
         private readonly int pageSize;
@@ -58,7 +63,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// The search records size
         /// </summary>
         private readonly int searchRecordsSize;
-        
+
         /// <summary>
         /// The blog search access
         /// </summary>
@@ -72,14 +77,17 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// Initializes a new instance of the <see cref="BlogService" /> class.
         /// </summary>
         /// <param name="blogContext">The blog context.</param>
+        /// <param name="newsletterContext">The newsletter context.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <param name="searchRecordsSize">Size of the search records.</param>
         public BlogService(
             AzureTableStorageService<TableBlogEntity> blogContext,
+            AzureTableStorageService<TableNewsletterEntity> newsletterContext,
             int pageSize,
             int searchRecordsSize)
         {
             this.blogContext = blogContext;
+            this.newsletterContext = newsletterContext;
             this.pageSize = pageSize;
             this.searchRecordsSize = searchRecordsSize;
         }
@@ -87,6 +95,50 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// Adds the user to newsletter subscriber list.
+        /// </summary>
+        /// <param name="signUpForm">The sign up form.</param>
+        /// <returns>NewsletterSignUpState.</returns>
+        public NewsletterSignUpState AddUserToNewsletterSubscriberList(NewsletterSignUpForm signUpForm)
+        {
+            var newsletterTable = this.newsletterContext.CustomOperation();
+            var foundUser = (from record in newsletterTable.CreateQuery<TableNewsletterEntity>()
+                             where
+                                 record.PartitionKey == ApplicationConstants.SubscriberListKey
+                                     && record.RowKey == signUpForm.Email
+                             select record).FirstOrDefault();
+
+            //// If user does not exist. Create a user.
+            if (null == foundUser)
+            {
+                signUpForm.CreatedDate = DateTime.UtcNow;
+                signUpForm.EmailCount = 0;
+                signUpForm.VerificationString = Guid.NewGuid().ToString();
+                signUpForm.IsVerified = false;
+                var tableEntity = new TableNewsletterEntity(signUpForm);
+                this.newsletterContext.InsertOrReplace(tableEntity);
+                this.newsletterContext.Save();
+                return NewsletterSignUpState.Success;
+            }
+
+            //// If user exists and is not verified, reactivate by changing verification string and date.
+            if (!foundUser.IsVerified)
+            {
+                signUpForm.CreatedDate = DateTime.UtcNow;
+                signUpForm.EmailCount = 0;
+                signUpForm.VerificationString = Guid.NewGuid().ToString();
+                signUpForm.IsVerified = false;
+                var tableEntity = new TableNewsletterEntity(signUpForm);
+                this.newsletterContext.InsertOrReplace(tableEntity);
+                this.newsletterContext.Save();
+                return NewsletterSignUpState.Success;
+            }
+
+            //// If user exists. Do nothing.
+            return NewsletterSignUpState.UserExists;
+        }
 
         /// <summary>
         /// Gets the blog archive.
@@ -138,22 +190,22 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
-        /// Gets the latest blogs.
-        /// </summary>
-        /// <returns>List&lt;BlogPost&gt;.</returns>
-        public async Task<List<BlogPost>> GetLatestBlogs()
-        {
-            var result = await this.GetPagedBlogPreviews(null, true);
-            return result.Select(TableBlogEntity.GetBlogPost).ToList();
-        }
-
-        /// <summary>
         /// Gets the blogs for RSS feed.
         /// </summary>
         /// <returns>Task&lt;List&lt;BlogPost&gt;&gt;.</returns>
         public async Task<List<BlogPost>> GetBlogsForRssFeed()
         {
             var result = await this.GetPagedBlogPreviews(null, false);
+            return result.Select(TableBlogEntity.GetBlogPost).ToList();
+        }
+
+        /// <summary>
+        /// Gets the latest blogs.
+        /// </summary>
+        /// <returns>List&lt;BlogPost&gt;.</returns>
+        public async Task<List<BlogPost>> GetLatestBlogs()
+        {
+            var result = await this.GetPagedBlogPreviews(null, true);
             return result.Select(TableBlogEntity.GetBlogPost).ToList();
         }
 

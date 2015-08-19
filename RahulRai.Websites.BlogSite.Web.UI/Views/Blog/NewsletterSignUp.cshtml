@@ -1,0 +1,77 @@
+﻿@using RahulRai.Websites.Utilities.Common.Entities
+@model NewsletterSignUpForm
+<h1>Subscribe</h1>
+<hr>
+<p class="lead">Thank you for choosing to subscribe to my blog! Please fill out the details below.</p>
+<p>
+    <i class="glyphicon glyphicon-exclamation-sign"></i>
+    Facing issues? Please send me an email and I will add you to the list. You can see how this form works <a href="https://github.com/moonytheloony/rahulrai" target="_blank">here</a>.
+</p>
+<hr>
+<div class="alert alert-dismissable">
+    Email functionality is under development. The verification mails will be sent out once this up!
+</div>
+@using (Html.BeginRouteForm("Default", new { action = "NewsletterSignUp", controller = "Blog" }))
+{
+    <form role="form">
+        @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+        {
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert">x</a>
+                <h4>There are errors in entries you made</h4>
+                @Html.ValidationSummary()
+            </div>
+            <script>
+                $(".validation-summary-errors").removeClass("validation-summary-errors");
+                $(".input-validation-error").removeClass("input-validation-error").parent().addClass("has-error");
+            </script>
+        }
+        @if (ViewBag.FormSubmitted != null)
+        {
+            switch ((NewsletterSignUpState)ViewBag.FormSubmitted)
+            {
+                case NewsletterSignUpState.Success:
+                    <div class="alert alert-success">
+                        <h4>Almost Done!</h4>
+                        <h5>Thank you for signing up! I have sent you a verification email. Please follow the instructions specified in the mail.</h5>
+                    </div>
+                    break;
+                case NewsletterSignUpState.UserExists:
+                <div class="alert alert-warning">
+                    <h4>Nope!</h4>
+                    <h5>I can not add that email address to my subscriber list. Sorry!</h5>
+                </div>
+                    break;
+                case NewsletterSignUpState.Failure:
+                <div class="alert alert-danger">
+                    <h4>Sorry!</h4>
+                    <h5>Something got broken! Either retry after some time or @Html.RouteLink("contact me", "Profile", new { action = "Contact", controller = "Profile" })!</h5>
+                </div>
+                    break;
+            }
+        }
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", maxlength = 100, placeholder = "First Name" })
+            </div>
+        </div>
+        <div class="col-md-8">
+            <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", maxlength = 100, placeholder = "youremail@domain.com" })
+            </div>
+        </div>
+        <div class="col-md-8">
+            <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-8 text-right">
+                <input type="submit" value="Sign Me Up" class="btn btn-default btn-info" />
+            </div>
+        </div>
+    </form>
+}

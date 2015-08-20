@@ -5,17 +5,33 @@
 @switch (Model)
 {
     case NewsletterSignUpState.Success:
-        break;
-    case NewsletterSignUpState.UserExists:
+        <p class="lead">Welcome!</p>
+        <p>
+            Hi, Thank you for subscribing to my blog. I hope we can learn from each other while working on things. You can, at any time, <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">connect with me</a> and let me know your feedback.
+        </p>
         break;
     case NewsletterSignUpState.Failure:
-        break;
-    case NewsletterSignUpState.Unsubscribed:
+    <p class="lead">Failed!</p>
+    <p>
+        I failed to activate your subscription to my mailing list. This error might be temporary, therefore I request you to try again after some time. If you need assistance, I request you to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">contact me</a>.
+    </p>
         break;
     case NewsletterSignUpState.NoInput:
+    <p class="lead">Nope!</p>
+    <p>
+        There is no input that I can work with. Either you are trying to game the system or you have a malformed link. I apologize for the latter and request you to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">contact me</a> or try <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })">subscribing</a> again.
+    </p>
         break;
     case NewsletterSignUpState.UserDoesNotExist:
+    <p class="lead">Not Found!</p>
+    <p>
+        This user does not exist in my database. You might already have unsubscribed from the list. If you mistakenly unsubscribed yourself, I invite you to subscribe yourself again <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })">here</a>.
+    </p>
         break;
     default:
-        throw new ArgumentOutOfRangeException();
+    <p class="lead">Failed!</p>
+    <p>
+        I failed to activate your subscription to my mailing list. This error might be temporary, therefore I request you to try again after some time. If you need assistance, I request you to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">contact me</a>.
+    </p>
+        break;
 }

@@ -90,9 +90,11 @@
     // Navigate to cotent pane on page load for small screens.
     $(function () {
         if ($(window).width() <= 739) {
-            $('html, body').animate({
-                scrollTop: $("#contentPane").offset().top - 100
-            }, 1000);
+            setTimeout(function () {
+                $('html, body').animate({
+                    scrollTop: $("#contentPane").offset().top - 100
+                }, 1000);
+            }, 1500);
         }
     });
 </script>

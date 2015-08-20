@@ -32,6 +32,21 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         /// <summary>
         /// The failure
         /// </summary>
-        Failure = 2
+        Failure = 2,
+
+        /// <summary>
+        /// The unsubscribed
+        /// </summary>
+        Unsubscribed = 3,
+
+        /// <summary>
+        /// The no input
+        /// </summary>
+        NoInput = 4,
+
+        /// <summary>
+        /// The user does not exist
+        /// </summary>
+        UserDoesNotExist = 5
     }
 }

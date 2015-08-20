@@ -11,7 +11,9 @@
             <div class="line text-muted"></div>
             <!-- Separator -->
             <div class="separator text-muted">
-                <h3><time>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(monthGroup.Month)</time></h3>
+                <h3>
+                    <time>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(monthGroup.Month)</time>
+                </h3>
             </div>
             <!-- /Separator -->
             @foreach (var blogPost in monthGroup.Posts)

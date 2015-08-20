@@ -1,6 +1,4 @@
-﻿@using System.Configuration
-@using RahulRai.Websites.Utilities.Common.Helpers
-@using RahulRai.Websites.Utilities.Common.RegularTypes
+﻿@using RahulRai.Websites.Utilities.Common.Helpers
 @model IEnumerable<RahulRai.Websites.Utilities.Common.Entities.BlogPost>
 @{
     var hasErrors = ViewBag.Errors != null && ViewBag.Errors.Count > 0;
@@ -32,7 +30,7 @@ else
         <h2>
             Top Results for Your Search
         </h2>
-        <br />
+        <br/>
         foreach (var blogPost in Model)
         {
             <!-- Blog Post -->
@@ -48,14 +46,15 @@ else
                     <div class="col-xs-6 text-right">
                         <span class="glyphicon glyphicon-star comment"></span>
                         <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })#disqus_thread"
-                           data-disqus-identifier="/post/@blogPost.BlogFormattedUri" class="comment"></a>
+                           data-disqus-identifier="/post/@blogPost.BlogFormattedUri" class="comment">
+                        </a>
                     </div>
                 </div>
             </div>
-            <br />
+            <br/>
             <p>@Routines.GeneratePreview(blogPost.Body)</p>
             <a class="btn btn-primary" href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-            <hr />
+            <hr/>
         }
     }
 }
@@ -63,7 +62,7 @@ else
 <script type="text/javascript">
     //Iniailize Disqus
     var disqus_shortname = 'rahulrai';
-    (function () {
+    (function() {
         var s = document.createElement('script');
         s.async = true;
         s.type = 'text/javascript';

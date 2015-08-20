@@ -1711,6 +1711,7 @@
     <Content Include="Views\Blog\Survey.cshtml" />
     <Content Include="Views\Blog\NewsletterSignUp.cshtml" />
     <Content Include="Views\Blog\Unsubscribe.cshtml" />
+    <Content Include="Views\Blog\ActivateSubscription.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1720,7 +1721,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Feed\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RahulRai.Websites.Utilities.AzureStorage\RahulRai.Websites.Utilities.AzureStorage.csproj">

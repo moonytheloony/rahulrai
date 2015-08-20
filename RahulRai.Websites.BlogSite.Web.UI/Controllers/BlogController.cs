@@ -272,14 +272,35 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// </summary>
         /// <param name="userString">The user string.</param>
         /// <returns>Task&lt;ActionResult&gt;.</returns>
+        [RequireHttps]
         public async Task<ActionResult> Unsubscribe(string userString)
         {
-            if (string.IsNullOrWhiteSpace(userString))
+            Guid testGuid;
+            if (string.IsNullOrWhiteSpace(userString) || !Guid.TryParse(userString, out testGuid))
             {
-                return this.View();
+                return this.View(NewsletterSignUpState.NoInput);
             }
 
-            return this.View();
+            var response = await Task.Run(() => this.blogService.UnsubscribeUser(userString));
+            return this.View(response);
+        }
+
+        /// <summary>
+        /// Activates the subscription.
+        /// </summary>
+        /// <param name="userString">The user string.</param>
+        /// <returns>Task&lt;ActionResult&gt;.</returns>
+        [RequireHttps]
+        public async Task<ActionResult> ActivateSubscription(string userString)
+        {
+            Guid testGuid;
+            if (string.IsNullOrWhiteSpace(userString) || !Guid.TryParse(userString, out testGuid))
+            {
+                return this.View(NewsletterSignUpState.NoInput);
+            }
+
+            var response = await Task.Run(() => this.blogService.ActivateUserSubscription(userString));
+            return this.View(response);
         }
 
         #endregion

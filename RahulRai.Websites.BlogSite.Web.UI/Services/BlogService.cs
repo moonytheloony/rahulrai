@@ -226,6 +226,54 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
                     .Select(TableBlogEntity.GetBlogPost);
         }
 
+        /// <summary>
+        /// Unsubscribes the user.
+        /// </summary>
+        /// <param name="userString">The user string.</param>
+        /// <returns>NewsletterSignUpState.</returns>
+        public NewsletterSignUpState UnsubscribeUser(string userString)
+        {
+            var newsletterTable = this.newsletterContext.CustomOperation();
+            var foundUser = (from record in newsletterTable.CreateQuery<TableNewsletterEntity>()
+                             where
+                                 record.PartitionKey == ApplicationConstants.SubscriberListKey
+                                     && record.VerificationString == userString
+                             select record).FirstOrDefault();
+            if (null == foundUser)
+            {
+                return NewsletterSignUpState.UserDoesNotExist;
+            }
+
+            //// Delete user record.
+            this.newsletterContext.Delete(foundUser);
+            this.newsletterContext.Save();
+            return NewsletterSignUpState.Unsubscribed;
+        }
+
+        /// <summary>
+        /// Activates the user subscription.
+        /// </summary>
+        /// <param name="userString">The user string.</param>
+        /// <returns>NewsletterSignUpState.</returns>
+        public NewsletterSignUpState ActivateUserSubscription(string userString)
+        {
+            var newsletterTable = this.newsletterContext.CustomOperation();
+            var foundUser = (from record in newsletterTable.CreateQuery<TableNewsletterEntity>()
+                             where
+                                 record.PartitionKey == ApplicationConstants.SubscriberListKey
+                                     && record.VerificationString == userString
+                             select record).FirstOrDefault();
+            if (null == foundUser)
+            {
+                return NewsletterSignUpState.UserDoesNotExist;
+            }
+
+            foundUser.IsVerified = true;
+            this.newsletterContext.InsertOrReplace(foundUser);
+            this.newsletterContext.Save();
+            return NewsletterSignUpState.Success;
+        }
+
         #endregion
 
         #region Methods

@@ -1,15 +1,15 @@
 ﻿@using RahulRai.Websites.Utilities.Common.Entities
-@model NewsletterSignUpForm
+@model RahulRai.Websites.Utilities.Common.Entities.NewsletterSignUpForm
 <h1>Subscribe</h1>
 <hr>
-<p class="lead">Thank you for choosing to subscribe to my blog! Please fill out the details below.</p>
+<p class="lead">Thank you for choosing to subscribe to my blog! Please submit the details below.</p>
 <p>
     <i class="glyphicon glyphicon-exclamation-sign"></i>
-    Facing issues? Please send me an email and I will add you to the list. You can see how this form works <a href="https://github.com/moonytheloony/rahulrai" target="_blank">here</a>.
+    Facing issues? Please send me an email from the address you want to subscribe and I will add you to the list.
 </p>
 <hr>
 <div class="alert alert-warning">
-    Email functionality is under development. The verification mails will be sent out once this up!
+    Email functionality is under development. The verification mails will be sent out once mail component is up!
 </div>
 @using (Html.BeginRouteForm("Default", new { action = "NewsletterSignUp", controller = "Blog" }))
 {
@@ -37,16 +37,16 @@
                     </div>
                     break;
                 case NewsletterSignUpState.UserExists:
-                <div class="alert alert-warning">
-                    <h4>Nope!</h4>
-                    <h5>I can not add that email address to my subscriber list. Sorry!</h5>
-                </div>
+                    <div class="alert alert-warning">
+                        <h4>Nope!</h4>
+                        <h5>I can not add that email address to my subscriber list. Sorry!</h5>
+                    </div>
                     break;
                 case NewsletterSignUpState.Failure:
-                <div class="alert alert-danger">
-                    <h4>Sorry!</h4>
-                    <h5>Something got broken! Either retry after some time or @Html.RouteLink("contact me", "Profile", new { action = "Contact", controller = "Profile" })!</h5>
-                </div>
+                    <div class="alert alert-danger">
+                        <h4>Sorry!</h4>
+                        <h5>Something got broken! Either retry after some time or @Html.RouteLink("contact me", "Profile", new { action = "Contact", controller = "Profile" })!</h5>
+                    </div>
                     break;
             }
         }
@@ -57,7 +57,7 @@
             </div>
         </div>
         <div class="col-md-8">
-            <br />
+            <br/>
         </div>
         <div class="form-group">
             <div class="col-md-8">
@@ -66,11 +66,11 @@
             </div>
         </div>
         <div class="col-md-8">
-            <br />
+            <br/>
         </div>
         <div class="form-group">
             <div class="col-md-8 text-right">
-                <input type="submit" value="Sign Me Up" class="btn btn-default btn-info" />
+                <input type="submit" value="Sign Me Up" class="btn btn-default btn-info"/>
             </div>
         </div>
     </form>

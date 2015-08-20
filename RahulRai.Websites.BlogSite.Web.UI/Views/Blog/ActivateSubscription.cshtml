@@ -1,0 +1,21 @@
+﻿@using RahulRai.Websites.Utilities.Common.Entities
+@model RahulRai.Websites.Utilities.Common.Entities.NewsletterSignUpState
+<h1>ActivateSubscription</h1>
+<hr>
+@switch (Model)
+{
+    case NewsletterSignUpState.Success:
+        break;
+    case NewsletterSignUpState.UserExists:
+        break;
+    case NewsletterSignUpState.Failure:
+        break;
+    case NewsletterSignUpState.Unsubscribed:
+        break;
+    case NewsletterSignUpState.NoInput:
+        break;
+    case NewsletterSignUpState.UserDoesNotExist:
+        break;
+    default:
+        throw new ArgumentOutOfRangeException();
+}

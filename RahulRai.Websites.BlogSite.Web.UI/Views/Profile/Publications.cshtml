@@ -3,11 +3,12 @@
     var myEmail = ViewBag.MyEmail;
 }
 @using RahulRai.Websites.Utilities.Common.Entities
-@model IEnumerable<Publication>
+@model IEnumerable<RahulRai.Websites.Utilities.Common.Entities.Publication>
 <h1>Publications</h1>
 <hr>
 <!-- Date/Time -->
-<p><span class="glyphicon glyphicon-time"></span> Updated on June 30, 2015 at 9:00 PM</p>
+<p><span class="glyphicon glyphicon-time"></span> Updated on June 30, 2015 at 9:00 PM
+</p>
 <hr>
 <div class="container">
     <div class="row">
@@ -55,7 +56,7 @@
             <div class="tab-content" id="link_other">
                 <div class="tab-pane fade in active" id="books">
                     <div class="text-right">
-                        <a href="mailto:@myEmail?subject=Authoring or Review Request" class="btn btn-success">Authoring or Review Request<span style="margin-left:10px;" class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="mailto:@myEmail?subject=Authoring or Review Request" class="btn btn-success">Authoring or Review Request<span style="margin-left: 10px;" class="glyphicon glyphicon-pencil"></span></a>
                     </div>
                     <div class="text-left">
                         <h1>Books</h1>
@@ -77,7 +78,7 @@
                 </div>
                 <div class="tab-pane fade" id="articles">
                     <div class="text-right">
-                        <a href="mailto:@myEmail?subject=Authoring or Revieweing Request" class="btn btn-success">Authoring & Reviewing Request<span style="margin-left:10px;" class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="mailto:@myEmail?subject=Authoring or Revieweing Request" class="btn btn-success">Authoring & Reviewing Request<span style="margin-left: 10px;" class="glyphicon glyphicon-pencil"></span></a>
                     </div>
                     <div class="text-left">
                         <h1>Articles</h1>
@@ -99,7 +100,7 @@
                 </div>
                 <div class="tab-pane fade" id="talk">
                     <div class="text-right">
-                        <a href="mailto:@myEmail?subject=Invite For a Talk" class="btn btn-success">Invite Me to Speak<span style="margin-left:10px;" class="glyphicon glyphicon-volume-up"></span></a>
+                        <a href="mailto:@myEmail?subject=Invite For a Talk" class="btn btn-success">Invite Me to Speak<span style="margin-left: 10px;" class="glyphicon glyphicon-volume-up"></span></a>
                     </div>
                     <div class="text-left">
                         <h1>Talk</h1>
@@ -121,7 +122,7 @@
                 </div>
                 <div class="tab-pane fade" id="community">
                     <div class="text-right">
-                        <a href="mailto:@myEmail?subject=Invite For a Community Initiative" class="btn btn-success">Invite Me to Community Initiative<span style="margin-left:10px;" class="glyphicon glyphicon-user"></span></a>
+                        <a href="mailto:@myEmail?subject=Invite For a Community Initiative" class="btn btn-success">Invite Me to Community Initiative<span style="margin-left: 10px;" class="glyphicon glyphicon-user"></span></a>
                     </div>
                     <div class="text-left">
                         <h1>Community</h1>
@@ -143,7 +144,7 @@
                 </div>
                 <div class="tab-pane fade" id="upcoming">
                     <div class="text-right">
-                        <a href="mailto:@myEmail?subject=Request to Join You" class="btn btn-success">Join Me in an Initiative<span style="margin-left:10px;" class="glyphicon glyphicon-calendar"></span></a>
+                        <a href="mailto:@myEmail?subject=Request to Join You" class="btn btn-success">Join Me in an Initiative<span style="margin-left: 10px;" class="glyphicon glyphicon-calendar"></span></a>
                     </div>
                     <div class="text-left">
                         <h1>Upcoming</h1>

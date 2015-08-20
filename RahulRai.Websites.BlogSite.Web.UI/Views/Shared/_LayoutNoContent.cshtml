@@ -32,7 +32,19 @@
     <script type="text/javascript">
         ////Application Insight Web Page Load Time Tracking.
         var appInsights = window.appInsights || function (config) {
-            function s(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, r = document, f = window, e = "script", o = r.createElement(e), i, u; for (o.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", r.getElementsByTagName(e)[0].parentNode.appendChild(o), t.cookie = r.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;) s("track" + i.pop()); return config.disableExceptionTracking || (i = "onerror", s("_" + i), u = f[i], f[i] = function (config, r, f, e, o) { var s = u && u(config, r, f, e, o); return s !== !0 && t["_" + i](config, r, f, e, o), s }), t
+            function s(config) {
+                t[config] = function () {
+                    var i = arguments;
+                    t.queue.push(function () { t[config].apply(t, i) })
+                }
+            }
+
+            var t = { config: config }, r = document, f = window, e = "script", o = r.createElement(e), i, u;
+            for (o.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", r.getElementsByTagName(e)[0].parentNode.appendChild(o), t.cookie = r.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;) s("track" + i.pop());
+            return config.disableExceptionTracking || (i = "onerror", s("_" + i), u = f[i], f[i] = function (config, r, f, e, o) {
+                var s = u && u(config, r, f, e, o);
+                return s !== !0 && t["_" + i](config, r, f, e, o), s
+            }), t
         }({
             instrumentationKey: "@appInsightKey"
         });
@@ -53,10 +65,15 @@
     <!--Google Analytics-->
     <script language="javascript" type="text/javascript">
         (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
                 (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
         ga('create', 'UA-7566205-4', 'auto');
@@ -92,7 +109,9 @@
                                 <div class="input-group text-right">
                                     @Html.TextBox("searchTerm", null, new { @class = "form-control", placeholder = "Where's that blog?", maxlength = 20 })
                                     <div class="input-group-btn">
-                                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                        <button class="btn btn-default" type="submit">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -122,19 +141,33 @@
                     <p>
                         Site <a href="#" data-toggle="modal" data-target="#myModal">Affiliations</a> and <a href="#" data-toggle="modal" data-target="#disclaimer">Disclaimer</a>
                     </p>
-                    <p>Powered by <a href="http://azure.microsoft.com/en-us/">Microsoft Azure App Services</a> </p>
-                    <p>Continuous deployment through <a href="http://github.com">GITHub</a></p>
+                    <p>
+                        Powered by <a href="http://azure.microsoft.com/en-us/">Microsoft Azure App Services</a>
+                    </p>
+                    <p>
+                        Continuous deployment through <a href="http://github.com">GITHub</a>
+                    </p>
                     <p>
                         UX with <i class="glyphicon glyphicon-heart" style="color: red"></i>
                         <a href="https://www.facebook.com/neha.bharadwaj2">Neha Rai</a>
                     </p>
                 </div>
                 <div class="col-xs-6 text-right">
-                    <a href="https://www.facebook.com/moonytheloony"><img src="~/Content/Social/48/fb.png" alt="facebook" class="iconImage img-responsive" /></a>
-                    <a href="https://in.linkedin.com/in/rahulrahul"><img src="~/Content/Social/48/linkedin.png" alt="linkedin" class="iconImage img-responsive" /></a>
-                    <a href="https://social.msdn.microsoft.com/profile/rahul.rai/"><img src="~/Content/Social/48/Microsoft.png" alt="MSDN" class="iconImage img-responsive" /></a>
-                    <a href="https://github.com/moonytheloony"><img src="~/Content/Social/48/github.png" alt="GITHub" class="iconImage img-responsive" /></a>
-                    <a href="mailto:@myEmail"><img src="~/Content/Social/48/email.png" alt="email" class="iconImage img-responsive" data-toggle="tooltip" title="rahulrai@rahulrai.in" /></a>
+                    <a href="https://www.facebook.com/moonytheloony">
+                        <img src="~/Content/Social/48/fb.png" alt="facebook" class="iconImage img-responsive" />
+                    </a>
+                    <a href="https://in.linkedin.com/in/rahulrahul">
+                        <img src="~/Content/Social/48/linkedin.png" alt="linkedin" class="iconImage img-responsive" />
+                    </a>
+                    <a href="https://social.msdn.microsoft.com/profile/rahul.rai/">
+                        <img src="~/Content/Social/48/Microsoft.png" alt="MSDN" class="iconImage img-responsive" />
+                    </a>
+                    <a href="https://github.com/moonytheloony">
+                        <img src="~/Content/Social/48/github.png" alt="GITHub" class="iconImage img-responsive" />
+                    </a>
+                    <a href="mailto:@myEmail">
+                        <img src="~/Content/Social/48/email.png" alt="email" class="iconImage img-responsive" data-toggle="tooltip" title="rahulrai@rahulrai.in" />
+                    </a>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -207,7 +240,16 @@
     <!--/Affiliations-->
     <!-- Begin DigiCert site seal JavaScript code -->
     <script type="text/javascript" async defer>
-        var __dcid = __dcid || []; __dcid.push(["DigiCertClickID_3Wm3PlNT", "3", "l", "white", "3Wm3PlNT"]); (function () { var cid = document.createElement("script"); cid.async = true; cid.src = "//seal.digicert.com/seals/cascade/seal.min.js"; var s = document.getElementsByTagName("script"); var ls = s[(s.length - 1)]; ls.parentNode.insertBefore(cid, ls.nextSibling); }());
+        var __dcid = __dcid || [];
+        __dcid.push(["DigiCertClickID_3Wm3PlNT", "3", "l", "white", "3Wm3PlNT"]);
+        (function () {
+            var cid = document.createElement("script");
+            cid.async = true;
+            cid.src = "//seal.digicert.com/seals/cascade/seal.min.js";
+            var s = document.getElementsByTagName("script");
+            var ls = s[(s.length - 1)];
+            ls.parentNode.insertBefore(cid, ls.nextSibling);
+        }());
     </script>
     <!-- End DigiCert site seal JavaScript code -->
     <script type="text/javascript">
@@ -224,7 +266,7 @@
 
         //Emphasis on button.
         $(document).ready(function () {
-            if ($("#focusButton") != null) {
+            if (document.getElementById("focusButton") != null) {
                 var change = false;
                 setInterval(function () {
                     if (change) {

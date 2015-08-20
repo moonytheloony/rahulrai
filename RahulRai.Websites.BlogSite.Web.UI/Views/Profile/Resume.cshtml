@@ -1,15 +1,15 @@
-﻿@using System.Web.Configuration
-@using RahulRai.Websites.Utilities.Common.RegularTypes
-@using RahulRai.Websites.BlogSite.Web.UI.Models
-@{
+﻿@{
     Layout = "~/Views/Shared/_Profile.cshtml";
 }
 
-@model PassKey
+@using System.Web.Configuration
+@using RahulRai.Websites.Utilities.Common.RegularTypes
+@model RahulRai.Websites.BlogSite.Web.UI.Models.PassKey
 <h1>Resume</h1>
 <hr>
 <!-- Date/Time -->
-<p><span class="glyphicon glyphicon-time"></span> Updated on June 30, 2015 at 9:00 PM</p>
+<p><span class="glyphicon glyphicon-time"></span> Updated on June 30, 2015 at 9:00 PM
+</p>
 <hr>
 @if (ViewBag.IsValid == null || ViewBag.IsValid != true)
 {
@@ -69,7 +69,7 @@ else
 {
     <div class="h_iframe hidden-xs">
         <!-- a transparent image is preferable -->
-        <img class="ratio" src="http://placehold.it/16x20" width="16" height="20" alt="placeholder" />
+        <img class="ratio" src="http://placehold.it/16x20" width="16" height="20" alt="placeholder"/>
         <iframe src="https://docs.google.com/viewer?srcid=@WebConfigurationManager.AppSettings[ApplicationConstants.ResumeDocumentKey]&pid=explorer&efh=false&a=v&chrome=false&embedded=true" allowfullscreen></iframe>
     </div>
     <div class="visible-xs">

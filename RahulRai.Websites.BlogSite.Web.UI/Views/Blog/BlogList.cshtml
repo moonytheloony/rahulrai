@@ -15,14 +15,15 @@
             <div class="col-xs-6 text-right">
                 <span class="glyphicon glyphicon-star comment"></span>
                 <a href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })#disqus_thread"
-                   data-disqus-identifier="/post/@blogPost.BlogFormattedUri" class="comment"></a>
+                   data-disqus-identifier="/post/@blogPost.BlogFormattedUri" class="comment">
+                </a>
             </div>
         </div>
     </div>
-    <br />
+    <br/>
     <p>@Routines.GeneratePreview(blogPost.Body)</p>
     <a class="btn btn-primary" href="@Url.RouteUrl("BlogPost", new { postId = blogPost.BlogFormattedUri })">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-    <hr />
+    <hr/>
 }
 <!-- Pager -->
 @if (ViewBag.Previous || ViewBag.Next)
@@ -47,7 +48,7 @@
 <script type="text/javascript">
     //Iniailize Disqus
     var disqus_shortname = 'rahulrai';
-    (function () {
+    (function() {
         var s = document.createElement('script');
         s.async = true;
         s.type = 'text/javascript';
@@ -55,5 +56,5 @@
         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
 </script>
-<link rel="prerender" href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "ProfileContent" })" />
-<link rel="prerender" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Archive" })" />
+<link rel="prerender" href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "ProfileContent" })"/>
+<link rel="prerender" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Archive" })"/>

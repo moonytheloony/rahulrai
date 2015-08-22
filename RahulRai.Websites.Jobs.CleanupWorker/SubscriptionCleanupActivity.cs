@@ -19,7 +19,6 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
     using System;
     using System.Linq;
 
-    using Microsoft.Azure.WebJobs;
     using Microsoft.WindowsAzure.Storage.RetryPolicies;
     using Microsoft.WindowsAzure.Storage.Table;
     using Microsoft.WindowsAzure.Storage.Table.Queryable;
@@ -33,15 +32,6 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
     /// </summary>
     public class SubscriptionCleanupActivity
     {
-        #region Constants
-
-        /// <summary>
-        /// The subscriber table
-        /// </summary>
-        private const string SubscriberTable = "newslettersubscriber";
-
-        #endregion
-
         #region Static Fields
 
         /// <summary>
@@ -63,7 +53,7 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
         /// Cleanups the old subscribers.
         /// </summary>
         /// <param name="subscriberTable">The subscriber table.</param>
-        public static void CleanupOldSubscribers([Table(SubscriberTable)] CloudTable subscriberTable)
+        public static void CleanupOldSubscribers(CloudTable subscriberTable)
         {
             try
             {

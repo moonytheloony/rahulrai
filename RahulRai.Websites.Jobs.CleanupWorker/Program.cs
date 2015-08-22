@@ -18,7 +18,7 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
 
     using System.Configuration;
 
-    using Microsoft.Azure.WebJobs;
+    using Microsoft.WindowsAzure.Storage;
 
     using RahulRai.Websites.Utilities.Common.RegularTypes;
 
@@ -36,15 +36,15 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
         /// </summary>
         private static void Main()
         {
-            var configuration = new JobHostConfiguration
-                {
-                    StorageConnectionString =
-                        ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString],
-                    DashboardConnectionString =
-                        ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString]
-                };
-            var host = new JobHost(configuration);
-            host.RunAndBlock();
+            var storageAccount =
+                CloudStorageAccount.Parse(
+                    ConfigurationManager.AppSettings[ApplicationConstants.StorageAccountConnectionString]);
+            var cloudTableClient = storageAccount.CreateCloudTableClient();
+            var cloudTable =
+                cloudTableClient.GetTableReference(
+                    ConfigurationManager.AppSettings[ApplicationConstants.NewsletterSubscriberTableName]);
+            cloudTable.CreateIfNotExists();
+            SubscriptionCleanupActivity.CleanupOldSubscribers(cloudTable);
         }
 
         #endregion

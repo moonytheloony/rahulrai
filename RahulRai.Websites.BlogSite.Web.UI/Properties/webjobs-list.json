@@ -1,0 +1,11 @@
+﻿{
+  "$schema": "http://schemastore.org/schemas/json/webjobs-list.json",
+  "WebJobs": [
+    {
+        "filePath": "../RahulRai.Websites.Jobs.MailWorker/RahulRai.Websites.Jobs.MailWorker.csproj"
+    },
+    { 
+        "filePath":  "../RahulRai.Websites.Jobs.CleanupWorker/RahulRai.Websites.Jobs.CleanupWorker.csproj"
+    }
+  ]
+}

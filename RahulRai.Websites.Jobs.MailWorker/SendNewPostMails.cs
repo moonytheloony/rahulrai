@@ -190,7 +190,7 @@ namespace RahulRai.Websites.Jobs.MailWorker
             string formattedUri,
             string bodySnippet)
         {
-            var subject = string.Format("Read {0} on rahulrai.in", title);
+            var subject = string.Format("New blog on rahulrai.in: {0}", title);
             Parallel.ForEach(
                 userDetails,
                 userDetail =>

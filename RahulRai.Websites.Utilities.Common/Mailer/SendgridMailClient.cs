@@ -20,6 +20,8 @@ namespace RahulRai.Websites.Utilities.Common.Mailer
     using System.Net.Mail;
     using System.Web;
 
+    using RahulRai.Websites.Utilities.Common.Helpers;
+
     using SendGrid;
 
     #endregion
@@ -73,7 +75,7 @@ namespace RahulRai.Websites.Utilities.Common.Mailer
             myMessage.AddTo(receiverAddress);
             myMessage.From = new MailAddress(senderAddress, senderName);
             myMessage.Subject = subject;
-            myMessage.Text = body;
+            myMessage.Text = Routines.GeneratePreview(body);
             myMessage.Html = body;
             var transportWeb = new Web(this.credentials);
             var task = transportWeb.DeliverAsync(myMessage);

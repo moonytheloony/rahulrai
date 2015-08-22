@@ -135,7 +135,7 @@ namespace RahulRai.Websites.Jobs.MailWorker
         /// <param name="userDetail">The user detail.</param>
         private static void SendNewSubscriberMailToUser(Tuple<string, string, string, DateTime> userDetail)
         {
-            var subject = string.Format("[TimeSensitive]: Hi {0}! Welcome to rahulrai.in", userDetail.Item1);
+            var subject = string.Format("Hi {0}! Welcome to rahulrai.in‏", userDetail.Item1);
             var mailBody =
                 TemplateString.Replace("[NAME]", userDetail.Item1)
                     .Replace("[CODESTRING]", userDetail.Item2)

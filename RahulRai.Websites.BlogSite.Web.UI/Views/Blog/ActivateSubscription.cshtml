@@ -1,13 +1,13 @@
 ﻿@using RahulRai.Websites.Utilities.Common.Entities
 @model NewsletterSignUpState
-<h1>ActivateSubscription</h1>
+<h1>Activate Subscription</h1>
 <hr>
 @switch (Model)
 {
     case NewsletterSignUpState.Success:
         <p class="lead">Welcome!</p>
         <p>
-            Thank you for subscribing to my blog. I hope we can learn from each other while working on things. Feel free to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">connect with me</a> and let me know your feedback anytime.
+            Thank you for subscribing to my blog. I hope we can learn from each other while working on things. Feel free to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">connect with me</a> and send me your feedback anytime.
         </p>
         break;
     case NewsletterSignUpState.Failure:

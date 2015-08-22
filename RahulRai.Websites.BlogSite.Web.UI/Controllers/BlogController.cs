@@ -26,6 +26,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using RahulRai.Websites.BlogSite.Web.UI.GlobalAccess;
     using RahulRai.Websites.BlogSite.Web.UI.Models;
     using RahulRai.Websites.BlogSite.Web.UI.Services;
+    using RahulRai.Websites.Utilities.AzureStorage.QueueStorage;
     using RahulRai.Websites.Utilities.AzureStorage.TableStorage;
     using RahulRai.Websites.Utilities.Common.Entities;
     using RahulRai.Websites.Utilities.Common.Helpers;
@@ -45,6 +46,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// The blog context
         /// </summary>
         private readonly AzureTableStorageService<TableBlogEntity> blogContext = BlogStoreAccess.Instance.BlogTable;
+
+        /// <summary>
+        /// The queue context
+        /// </summary>
+        private readonly AzureQueueService newSubscriberQueueContext = NewSubscriberQueueAccess.Instance.AzureQueueService;
 
         /// <summary>
         /// The newsletter context
@@ -261,8 +267,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         /// Surveys the specified survey name.
         /// </summary>
         /// <param name="surveyName">Name of the survey.</param>
-        /// <returns>Task&lt;ActionResult&gt;.</returns>
-        public async Task<ActionResult> Survey(string surveyName)
+        /// <returns>ActionResult.</returns>
+        public ActionResult Survey(string surveyName)
         {
             return this.View();
         }
@@ -315,6 +321,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
             this.blogService = new BlogService(
                 this.blogContext,
                 this.newsletterContext,
+                this.newSubscriberQueueContext,
                 this.pageSize,
                 this.searchRecordsSize);
         }

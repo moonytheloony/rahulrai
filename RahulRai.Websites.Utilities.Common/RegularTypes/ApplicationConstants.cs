@@ -178,5 +178,35 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// The allowed file types
         /// </summary>
         public static string AllowedFileTypes = "text/plain,text/html,text/xml,text/richtext,image/gif,image/jpeg,image/pjpeg,image/png,image/x-png,image/tiff,image/bmp,image/x-xbitmap,image/x-jg,application/octet-stream,application/pdf,application/xml,application/atom+xml,application/rss+xml,application/x-zip-compressed,application/x-gzip-compressed";
+
+        /// <summary>
+        /// The new blog post queue name
+        /// </summary>
+        public static string NewBlogPostQueueName = "NewBlogPostQueueName";
+
+        /// <summary>
+        /// The new subscriber queue name
+        /// </summary>
+        public static string NewSubscriberQueueName = "NewSubscriberQueueName";
+
+        /// <summary>
+        /// The sendgrid user name
+        /// </summary>
+        public static string SendgridUserName = "SendgridUserName";
+
+        /// <summary>
+        /// The sendgrid password
+        /// </summary>
+        public static string SendgridPassword = "SendgridPassword";
+
+        /// <summary>
+        /// The mailer name
+        /// </summary>
+        public static string MailerName = "MailerName";
+
+        /// <summary>
+        /// The mailer address
+        /// </summary>
+        public static string MailerAddress = "MailerAddress";
     }
 }

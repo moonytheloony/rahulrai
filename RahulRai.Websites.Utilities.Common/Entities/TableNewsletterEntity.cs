@@ -41,7 +41,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
             this.Email = signUpForm.Email;
             this.IsVerified = signUpForm.IsVerified;
             this.CreatedDate = signUpForm.CreatedDate;
-            this.EmailCount = signUpForm.EmailCount;
+            this.LastEmailIdentifier = signUpForm.LastEmailIdentifier;
             this.VerificationString = signUpForm.VerificationString;
             this.RowKey = signUpForm.Email;
             this.PartitionKey = ApplicationConstants.SubscriberListKey;
@@ -77,10 +77,10 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the email count.
+        /// Gets or sets the last email identifier.
         /// </summary>
-        /// <value>The email count.</value>
-        public int EmailCount { get; set; }
+        /// <value>The last email identifier.</value>
+        public string LastEmailIdentifier { get; set; }
 
         /// <summary>
         /// Gets or sets the first name.
@@ -121,7 +121,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
                     Email = this.Email,
                     FirstName = this.FirstName,
                     IsVerified = this.IsVerified,
-                    EmailCount = this.EmailCount,
+                    LastEmailIdentifier = this.LastEmailIdentifier,
                     VerificationString = this.VerificationString,
                     CreatedDate = this.CreatedDate
                 };

@@ -66,10 +66,10 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public string VerificationString { get; set; }
 
         /// <summary>
-        /// Gets or sets the email count.
+        /// Gets or sets the last email identifier.
         /// </summary>
-        /// <value>The email count.</value>
-        public int EmailCount { get; set; }
+        /// <value>The last email identifier.</value>
+        public string LastEmailIdentifier { get; set; }
 
         /// <summary>
         /// Gets or sets the created date.

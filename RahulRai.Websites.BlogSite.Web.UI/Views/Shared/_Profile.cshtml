@@ -5,83 +5,81 @@
     var myEmail = ViewBag.MyEmail;
 }
 <a class="visible-xs" id="menu"></a>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="profile-sidebar" id="sidebar">
-                <br />
-                <!-- SIDEBAR USERPIC -->
-                <div class="profile-userpic">
-                    <img src=@(resourceBasePath + "RahulRai.png") class="img-responsive" alt="Profile Picture">
+<div class="row">
+    <div class="col-sm-3">
+        <div class="profile-sidebar" id="sidebar">
+            <br />
+            <!-- SIDEBAR USERPIC -->
+            <div class="profile-userpic">
+                <img src=@(resourceBasePath + "RahulRai.png") class="img-responsive" alt="Profile Picture">
+            </div>
+            <!-- END SIDEBAR USERPIC -->
+            <!-- SIDEBAR USER TITLE -->
+            <div class="profile-usertitle">
+                <div class="profile-usertitle-name">
+                    Rahul Rai
                 </div>
-                <!-- END SIDEBAR USERPIC -->
-                <!-- SIDEBAR USER TITLE -->
-                <div class="profile-usertitle">
-                    <div class="profile-usertitle-name">
-                        Rahul Rai
-                    </div>
-                    <div class="profile-usertitle-job">
-                        Architect<br />
-                        Microsoft Technologies
-                    </div>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-xs-6" style="padding-left: 25px">
-                                <a id="focusButton" class="btn btn-danger btn-block btn-md" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })" data data-toggle="tooltip" title="Get Notified Through Email">Subscribe</a>
-                            </div>
-                            <div class="col-xs-6" style="padding-right: 25px">
-                                <a class="btn btn-success btn-block btn-md" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Rss", id = "0" })" data-toggle="tooltip" title="Subscribe To RSS Feed">RSS Feed</a>
-                            </div>
+                <div class="profile-usertitle-job">
+                    Architect<br />
+                    Microsoft Technologies
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-6" style="padding-left: 25px">
+                            <a id="focusButton" class="btn btn-danger btn-block btn-md" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })" data data-toggle="tooltip" title="Get Notified Through Email">Subscribe</a>
+                        </div>
+                        <div class="col-xs-6" style="padding-right: 25px">
+                            <a class="btn btn-success btn-block btn-md" href="@Url.RouteUrl("Default", new { controller = "Blog", action = "Rss", id = "0" })" data-toggle="tooltip" title="Subscribe To RSS Feed">RSS Feed</a>
                         </div>
                     </div>
                 </div>
-                <!-- END SIDEBAR USER TITLE -->
-                <!-- SIDEBAR MENU -->
-                <div class="profile-usermenu">
-                    <ul class="nav">
-                        <li class="@Html.IsSelected(actions: "ProfileContent", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "ProfileContent" }))">
-                                <i class="glyphicon glyphicon-cog"></i>
-                                Profile
-                            </a>
-                        </li>
-                        <li class="@Html.IsSelected(actions: "Testimonials", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Testimonials" }))">
-                                <i class="glyphicon glyphicon-thumbs-up"></i>
-                                Testimonials
-                            </a>
-                        </li>
-                        <li class="@Html.IsSelected(actions: "Publications", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Publications" }))">
-                                <i class="glyphicon glyphicon-book"></i>
-                                Publications
-                            </a>
-                        </li>
-                        <li class="@Html.IsSelected(actions: "Resume", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Resume" }))">
-                                <i class="glyphicon glyphicon-star"></i>
-                                Resume
-                            </a>
-                        </li>
-                        <li class="@Html.IsSelected(actions: "Contact", controllers: "Profile")">
-                            <a href="@(Url.RouteUrl("Profile", new { action = "Contact" }))">
-                                <i class="glyphicon glyphicon-phone"></i>
-                                Contact
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- END MENU -->
             </div>
+            <!-- END SIDEBAR USER TITLE -->
+            <!-- SIDEBAR MENU -->
+            <div class="profile-usermenu">
+                <ul class="nav">
+                    <li class="@Html.IsSelected(actions: "ProfileContent", controllers: "Profile")">
+                        <a href="@(Url.RouteUrl("Profile", new { action = "ProfileContent" }))">
+                            <i class="glyphicon glyphicon-cog"></i>
+                            Profile
+                        </a>
+                    </li>
+                    <li class="@Html.IsSelected(actions: "Testimonials", controllers: "Profile")">
+                        <a href="@(Url.RouteUrl("Profile", new { action = "Testimonials" }))">
+                            <i class="glyphicon glyphicon-thumbs-up"></i>
+                            Testimonials
+                        </a>
+                    </li>
+                    <li class="@Html.IsSelected(actions: "Publications", controllers: "Profile")">
+                        <a href="@(Url.RouteUrl("Profile", new { action = "Publications" }))">
+                            <i class="glyphicon glyphicon-book"></i>
+                            Publications
+                        </a>
+                    </li>
+                    <li class="@Html.IsSelected(actions: "Resume", controllers: "Profile")">
+                        <a href="@(Url.RouteUrl("Profile", new { action = "Resume" }))">
+                            <i class="glyphicon glyphicon-star"></i>
+                            Resume
+                        </a>
+                    </li>
+                    <li class="@Html.IsSelected(actions: "Contact", controllers: "Profile")">
+                        <a href="@(Url.RouteUrl("Profile", new { action = "Contact" }))">
+                            <i class="glyphicon glyphicon-phone"></i>
+                            Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- END MENU -->
         </div>
-        <div class="col-sm-9">
-            <div class="profile-content" id="contentPane">
-                <a class="visible-xs" id="content"></a>
-                @RenderBody()
-                <div class="visible-xs text-right">
-                    <br />
-                    <a href="#menu">Back To Menu</a>
-                </div>
+    </div>
+    <div class="col-sm-9">
+        <div class="profile-content" id="contentPane">
+            <a class="visible-xs" id="content"></a>
+            @RenderBody()
+            <div class="visible-xs text-right">
+                <br />
+                <a href="#menu">Back To Menu</a>
             </div>
         </div>
     </div>
@@ -94,7 +92,7 @@
                 $('html, body').animate({
                     scrollTop: $("#contentPane").offset().top - 100
                 }, 1000);
-            }, 1500);
+            }, 1000);
         }
     });
 </script>

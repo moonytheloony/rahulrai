@@ -17,7 +17,16 @@ namespace RahulRai.Websites.Utilities.Common.Mailer
     /// <summary>
     /// Interface IMailSystem
     /// </summary>
-    internal interface IMailSystem
+    public interface IMailSystem
     {
+        /// <summary>
+        /// Sends the email.
+        /// </summary>
+        /// <param name="receiverAddress">The receiver address.</param>
+        /// <param name="senderAddress">The sender address.</param>
+        /// <param name="senderName">Name of the sender.</param>
+        /// <param name="subject">The subject.</param>
+        /// <param name="body">The body.</param>
+        void SendEmail(string receiverAddress, string senderAddress, string senderName, string subject, string body);
     }
 }

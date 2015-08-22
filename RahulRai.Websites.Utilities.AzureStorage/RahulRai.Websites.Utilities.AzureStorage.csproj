@@ -157,6 +157,7 @@
     <Compile Include="BlobStorage\BlobStorageService.cs" />
     <Compile Include="DocumentDB\DocumentDbService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueStorage\AzureQueueService.cs" />
     <Compile Include="Search\AzureSearchService.cs" />
     <Compile Include="SurveyMonkey\SurveyMonkeyService.cs" />
     <Compile Include="TableStorage\AzureTableStorageAssist.cs" />

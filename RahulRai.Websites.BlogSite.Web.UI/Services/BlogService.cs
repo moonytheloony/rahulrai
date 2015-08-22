@@ -4,7 +4,7 @@
 // Created          : 07-30-2015
 //
 // Last Modified By : rahulrai
-// Last Modified On : 08-19-2015
+// Last Modified On : 08-20-2015
 // ***********************************************************************
 // <copyright file="BlogService.cs" company="Rahul Rai">
 //     Copyright (c) Rahul Rai. All rights reserved.
@@ -26,6 +26,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
     using Microsoft.WindowsAzure.Storage.Table.Queryable;
 
     using RahulRai.Websites.BlogSite.Web.UI.GlobalAccess;
+    using RahulRai.Websites.Utilities.AzureStorage.QueueStorage;
     using RahulRai.Websites.Utilities.AzureStorage.TableStorage;
     using RahulRai.Websites.Utilities.Common.Entities;
     using RahulRai.Websites.Utilities.Common.RegularTypes;
@@ -48,6 +49,11 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// The newsletter context
         /// </summary>
         private readonly AzureTableStorageService<TableNewsletterEntity> newsletterContext;
+
+        /// <summary>
+        /// The new subscriber queue context
+        /// </summary>
+        private readonly AzureQueueService newSubscriberQueueContext;
 
         /// <summary>
         /// The page size
@@ -78,16 +84,19 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// </summary>
         /// <param name="blogContext">The blog context.</param>
         /// <param name="newsletterContext">The newsletter context.</param>
+        /// <param name="newSubscriberQueueContext">The new subscriber queue context.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <param name="searchRecordsSize">Size of the search records.</param>
         public BlogService(
             AzureTableStorageService<TableBlogEntity> blogContext,
             AzureTableStorageService<TableNewsletterEntity> newsletterContext,
+            AzureQueueService newSubscriberQueueContext,
             int pageSize,
             int searchRecordsSize)
         {
             this.blogContext = blogContext;
             this.newsletterContext = newsletterContext;
+            this.newSubscriberQueueContext = newSubscriberQueueContext;
             this.pageSize = pageSize;
             this.searchRecordsSize = searchRecordsSize;
         }
@@ -95,6 +104,30 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// Activates the user subscription.
+        /// </summary>
+        /// <param name="userString">The user string.</param>
+        /// <returns>NewsletterSignUpState.</returns>
+        public NewsletterSignUpState ActivateUserSubscription(string userString)
+        {
+            var newsletterTable = this.newsletterContext.CustomOperation();
+            var foundUser = (from record in newsletterTable.CreateQuery<TableNewsletterEntity>()
+                             where
+                                 record.PartitionKey == ApplicationConstants.SubscriberListKey
+                                     && record.VerificationString == userString
+                             select record).FirstOrDefault();
+            if (null == foundUser)
+            {
+                return NewsletterSignUpState.UserDoesNotExist;
+            }
+
+            foundUser.IsVerified = true;
+            this.newsletterContext.InsertOrReplace(foundUser);
+            this.newsletterContext.Save();
+            return NewsletterSignUpState.Success;
+        }
 
         /// <summary>
         /// Adds the user to newsletter subscriber list.
@@ -114,12 +147,14 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             if (null == foundUser)
             {
                 signUpForm.CreatedDate = DateTime.UtcNow;
-                signUpForm.EmailCount = 0;
+                signUpForm.LastEmailIdentifier = string.Empty;
                 signUpForm.VerificationString = Guid.NewGuid().ToString();
                 signUpForm.IsVerified = false;
                 var tableEntity = new TableNewsletterEntity(signUpForm);
                 this.newsletterContext.InsertOrReplace(tableEntity);
                 this.newsletterContext.Save();
+                //// Add message to queue.
+                this.AddMessageToNewUserQueue(signUpForm.Email);
                 return NewsletterSignUpState.Success;
             }
 
@@ -127,12 +162,14 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             if (!foundUser.IsVerified)
             {
                 signUpForm.CreatedDate = DateTime.UtcNow;
-                signUpForm.EmailCount = 0;
+                signUpForm.LastEmailIdentifier = string.Empty;
                 signUpForm.VerificationString = Guid.NewGuid().ToString();
                 signUpForm.IsVerified = false;
                 var tableEntity = new TableNewsletterEntity(signUpForm);
                 this.newsletterContext.InsertOrReplace(tableEntity);
                 this.newsletterContext.Save();
+                //// Add message to queue.
+                this.AddMessageToNewUserQueue(signUpForm.Email);
                 return NewsletterSignUpState.Success;
             }
 
@@ -250,30 +287,6 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             return NewsletterSignUpState.Unsubscribed;
         }
 
-        /// <summary>
-        /// Activates the user subscription.
-        /// </summary>
-        /// <param name="userString">The user string.</param>
-        /// <returns>NewsletterSignUpState.</returns>
-        public NewsletterSignUpState ActivateUserSubscription(string userString)
-        {
-            var newsletterTable = this.newsletterContext.CustomOperation();
-            var foundUser = (from record in newsletterTable.CreateQuery<TableNewsletterEntity>()
-                             where
-                                 record.PartitionKey == ApplicationConstants.SubscriberListKey
-                                     && record.VerificationString == userString
-                             select record).FirstOrDefault();
-            if (null == foundUser)
-            {
-                return NewsletterSignUpState.UserDoesNotExist;
-            }
-
-            foundUser.IsVerified = true;
-            this.newsletterContext.InsertOrReplace(foundUser);
-            this.newsletterContext.Save();
-            return NewsletterSignUpState.Success;
-        }
-
         #endregion
 
         #region Methods
@@ -312,6 +325,15 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             }
 
             return errorList;
+        }
+
+        /// <summary>
+        /// Adds the message to new user queue.
+        /// </summary>
+        /// <param name="email">The email.</param>
+        private void AddMessageToNewUserQueue(string email)
+        {
+            this.newSubscriberQueueContext.AddMessageToQueue(email);
         }
 
         /// <summary>

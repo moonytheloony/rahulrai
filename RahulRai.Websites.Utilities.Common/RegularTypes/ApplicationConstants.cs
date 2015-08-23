@@ -208,5 +208,15 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         /// The mailer address
         /// </summary>
         public static string MailerAddress = "MailerAddress";
+
+        /// <summary>
+        /// The survey monkey API key
+        /// </summary>
+        public static string SurveyMonkeyApiKey = "SurveyMonkeyApiKey";
+
+        /// <summary>
+        /// The survey monkey token
+        /// </summary>
+        public static string SurveyMonkeyToken = "SurveyMonkeyToken";
     }
 }

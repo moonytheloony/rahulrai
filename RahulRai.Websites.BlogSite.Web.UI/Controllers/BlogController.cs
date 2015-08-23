@@ -17,6 +17,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     #region
 
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.ServiceModel.Syndication;
     using System.Threading.Tasks;
@@ -31,7 +32,10 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
     using RahulRai.Websites.Utilities.Common.Entities;
     using RahulRai.Websites.Utilities.Common.Helpers;
     using RahulRai.Websites.Utilities.Common.RegularTypes;
+    using RahulRai.Websites.Utilities.Common.SurveyMonkey;
     using RahulRai.Websites.Utilities.Web;
+
+    using SurveyMonkey;
 
     #endregion
 
@@ -271,6 +275,34 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         public ActionResult Survey(string surveyName)
         {
             return this.View();
+        }
+
+        /// <summary>
+        /// Surveys the specified survey name.
+        /// </summary>
+        /// <param name="surveyName">Name of the survey.</param>
+        /// <returns>ActionResult.</returns>
+        [HttpPost]
+        public async Task<ActionResult> SurveyData(string surveyName)
+        {
+            try
+            {
+                var surveyMonkeyAppKey = WebConfigurationManager.AppSettings[ApplicationConstants.SurveyMonkeyApiKey];
+                var surveyMonkeyToken = WebConfigurationManager.AppSettings[ApplicationConstants.SurveyMonkeyToken];
+                var surveyList = await Task.Run(
+                    () =>
+                    {
+                        var surveyMonkeyService = new SurveyMonkeyService(surveyMonkeyAppKey, surveyMonkeyToken);
+                        return surveyMonkeyService.GetAvailableSurveys();
+                    }) ?? new List<Survey>();
+
+                return this.PartialView(surveyList.ToList());
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                return this.PartialView(new List<Survey>());
+            }
         }
 
         /// <summary>

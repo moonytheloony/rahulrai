@@ -1,3 +1,24 @@
 ﻿<h1>Ongoing Surveys</h1>
-<hr/>
-I am working on integrating Survey Monkey APIs. Please wait.
+<hr>
+<div id="waitDiv">
+    <h2>Please Wait..</h2>
+    <p class="lead">I am fetching data from Survey Monkey. Hang On!</p>
+</div>
+<div id="result" data-url="@Url.RouteUrl("Default", new {action="SurveyData",controller="Blog"})"></div>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url: $('#result').data('url'),
+            type: 'POST',
+            complete: function () {
+                $('#waitDiv').hide();
+            },
+            success: function (result) {
+                $('#result').html(result);
+            },
+            error: function () {
+                $('#waitDiv').innerHTML = "Survey Monkey failed to supply data. Please try again after some time.";
+            }
+        });
+    });
+</script>

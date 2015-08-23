@@ -1,0 +1,60 @@
+﻿@model List<SurveyMonkey.Survey>
+@{
+    var userVoiceSurveys = Model.Where(survey => survey.TitleText.Contains("User Voice"));
+    var regularSurveys = Model.Where(survey => !survey.TitleText.Contains("User Voice"));
+}
+<h2>User Voice Surveys</h2>
+@if (!userVoiceSurveys.Any())
+{
+    <i>No user voice survey available.</i>
+}
+else
+{
+    foreach (var userVoiceSurvey in userVoiceSurveys)
+    {
+        <h3>
+            <a href="@userVoiceSurvey.Collectors.First().Url" target="_blank">@userVoiceSurvey.TitleText</a>
+        </h3>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 text-left">
+                    Posted on: @userVoiceSurvey.DateCreated.ToLocalTime().ToString("f")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-left">
+                    Contains @userVoiceSurvey.QuestionCount Questions
+                </div>
+            </div>
+        </div>
+        <hr class="sloganWrapper" />
+    }
+}
+<br />
+<h2>Regular Surveys</h2>
+@if (!regularSurveys.Any())
+{
+    <i>No regular survey available.</i>
+}
+else
+{
+    foreach (var regularSurvey in regularSurveys)
+    {
+        <h3>
+            <a href="@regularSurvey.Collectors.First().Url" target="_blank">@regularSurvey.TitleText</a>
+        </h3>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 text-left">
+                    Posted on: @regularSurvey.DateCreated.ToLocalTime().ToString("f")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-left">
+                    Contains @regularSurvey.QuestionCount Questions
+                </div>
+            </div>
+        </div>
+        <hr class="sloganWrapper" />
+    }
+}

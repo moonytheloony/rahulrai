@@ -117,7 +117,7 @@ namespace RahulRai.Websites.Utilities.Common.Helpers
         /// </summary>
         /// <param name="value">The source string.</param>
         /// <param name="maxLength">The max length.</param>
-        /// <returns>The <see cref="IEnumerable" />.</returns>
+        /// <returns>The <see />.</returns>
         public static IEnumerable<string> SplitByLength(this string value, int maxLength)
         {
             for (var index = 0; index < value.Length; index += maxLength)

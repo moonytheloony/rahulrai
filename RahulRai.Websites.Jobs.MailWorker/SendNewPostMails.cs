@@ -131,8 +131,9 @@ namespace RahulRai.Websites.Jobs.MailWorker
                              where
                                  record.PartitionKey == ApplicationConstants.SubscriberListKey
                                      && record.Properties["LastEmailIdentifier"].StringValue != result.RowKey
+                                     && record.Properties["LastEmailIdentifier"].StringValue != string.Format("Faulted {0}", DateTime.UtcNow.Date)
                                      && record.Properties["IsVerified"].BooleanValue == true
-                             select record).Take(100).AsTableQuery();
+                             select record).Take(10).AsTableQuery();
                 TableContinuationToken token = null;
                 do
                 {
@@ -145,19 +146,34 @@ namespace RahulRai.Websites.Jobs.MailWorker
                         return;
                     }
 
-                    foreach (var record in segment)
+                    Console.Out.WriteLine("Going to send mails to users");
+                    if (SendNewPostMailsToUsers(userDetails, title, postedDate, formattedUri, bodySnippet))
                     {
-                        record.Properties["LastEmailIdentifier"].StringValue = result.RowKey;
-                        batchUpdate.Add(TableOperation.InsertOrReplace(record));
-                        userDetails.Add(
-                            new Tuple<string, string, string>(
-                                record.Properties["FirstName"].StringValue,
-                                record.RowKey,
-                                record.Properties["VerificationString"].StringValue));
+                        foreach (var record in segment)
+                        {
+                            record.Properties["LastEmailIdentifier"].StringValue = result.RowKey;
+                            batchUpdate.Add(TableOperation.InsertOrReplace(record));
+                            userDetails.Add(
+                                new Tuple<string, string, string>(
+                                    record.Properties["FirstName"].StringValue,
+                                    record.RowKey,
+                                    record.Properties["VerificationString"].StringValue));
+                        }
+                    }
+                    else
+                    {
+                        foreach (var record in segment)
+                        {
+                            record.Properties["LastEmailIdentifier"].StringValue = string.Format("Faulted {0}", DateTime.UtcNow.Date);
+                            batchUpdate.Add(TableOperation.InsertOrReplace(record));
+                            userDetails.Add(
+                                new Tuple<string, string, string>(
+                                    record.Properties["FirstName"].StringValue,
+                                    record.RowKey,
+                                    record.Properties["VerificationString"].StringValue));
+                        }
                     }
 
-                    Console.Out.WriteLine("Going to send mails to users");
-                    SendNewPostMailsToUsers(userDetails, title, postedDate, formattedUri, bodySnippet);
                     subscriberTable.ExecuteBatch(batchUpdate, TableRequestOptions);
                     token = segment.ContinuationToken;
                 }
@@ -183,27 +199,38 @@ namespace RahulRai.Websites.Jobs.MailWorker
         /// <param name="postedDate">The posted date.</param>
         /// <param name="formattedUri">The formatted URI.</param>
         /// <param name="bodySnippet">The body snippet.</param>
-        private static void SendNewPostMailsToUsers(
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private static bool SendNewPostMailsToUsers(
             IEnumerable<Tuple<string, string, string>> userDetails,
             string title,
             DateTime? postedDate,
             string formattedUri,
             string bodySnippet)
         {
-            var subject = string.Format("New blog on rahulrai.in: {0}", title);
-            Parallel.ForEach(
-                userDetails,
-                userDetail =>
-                {
-                    var mailBody =
-                        TemplateString.Replace("[NAME]", userDetail.Item1)
-                            .Replace("[BLOGTITLE]", title)
-                            .Replace("[BODYSNIP]", bodySnippet)
-                            .Replace("[POSTLINK]", formattedUri)
-                            .Replace("[CODESTRING]", userDetail.Item3)
-                            .Replace("[POSTDATE]", (postedDate ?? DateTime.MinValue).ToLocalTime().ToString("f"));
-                    mailSystem.SendEmail(userDetail.Item2, MailerAddress, MailerName, subject, mailBody);
-                });
+            try
+            {
+                var subject = string.Format("New blog on rahulrai.in: {0}", title);
+                Parallel.ForEach(
+                    userDetails,
+                    userDetail =>
+                    {
+                        var mailBody =
+                            TemplateString.Replace("[NAME]", userDetail.Item1)
+                                .Replace("[BLOGTITLE]", title)
+                                .Replace("[BODYSNIP]", bodySnippet)
+                                .Replace("[POSTLINK]", formattedUri)
+                                .Replace("[CODESTRING]", userDetail.Item3)
+                                .Replace("[POSTDATE]", (postedDate ?? DateTime.MinValue).ToLocalTime().ToString("f"));
+                        mailSystem.SendEmail(userDetail.Item2, MailerAddress, MailerName, subject, mailBody);
+                    });
+            }
+            catch (Exception exception)
+            {
+                Console.Error.WriteLine("Error at Time:{0} Message:{1}", DateTime.UtcNow, exception);
+                return false;
+            }
+
+            return true;
         }
 
         #endregion

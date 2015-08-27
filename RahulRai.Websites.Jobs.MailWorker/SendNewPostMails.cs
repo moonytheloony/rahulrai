@@ -35,24 +35,24 @@ namespace RahulRai.Websites.Jobs.MailWorker
     #endregion
 
     /// <summary>
-    /// Class SendNewPostMails.
+    ///     Class SendNewPostMails.
     /// </summary>
     public class SendNewPostMails
     {
         #region Constants
 
         /// <summary>
-        /// The blog table
+        ///     The blog table
         /// </summary>
         public const string BlogTable = "blogs";
 
         /// <summary>
-        /// The new post queue
+        ///     The new post queue
         /// </summary>
         public const string NewPostQueue = "newblogpost";
 
         /// <summary>
-        /// The subscriber table
+        ///     The subscriber table
         /// </summary>
         public const string SubscriberTable = "newslettersubscriber";
 
@@ -61,17 +61,18 @@ namespace RahulRai.Websites.Jobs.MailWorker
         #region Static Fields
 
         /// <summary>
-        /// The mailer address
+        ///     The mailer address
         /// </summary>
-        private static readonly string MailerAddress = ConfigurationManager.AppSettings[ApplicationConstants.MailerAddress];
+        private static readonly string MailerAddress =
+            ConfigurationManager.AppSettings[ApplicationConstants.MailerAddress];
 
         /// <summary>
-        /// The mailer name
+        ///     The mailer name
         /// </summary>
         private static readonly string MailerName = ConfigurationManager.AppSettings[ApplicationConstants.MailerName];
 
         /// <summary>
-        /// The table request options
+        ///     The table request options
         /// </summary>
         private static readonly TableRequestOptions TableRequestOptions = new TableRequestOptions
             {
@@ -82,12 +83,12 @@ namespace RahulRai.Websites.Jobs.MailWorker
             };
 
         /// <summary>
-        /// The template string
+        ///     The template string
         /// </summary>
         private static readonly string TemplateString = File.ReadAllText("NewPost.html");
 
         /// <summary>
-        /// The mail system
+        ///     The mail system
         /// </summary>
         private static IMailSystem mailSystem;
 
@@ -96,7 +97,7 @@ namespace RahulRai.Websites.Jobs.MailWorker
         #region Public Methods and Operators
 
         /// <summary>
-        /// Processes the queue message.
+        ///     Processes the queue message.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="blogTable">The blog table.</param>
@@ -131,21 +132,29 @@ namespace RahulRai.Websites.Jobs.MailWorker
                              where
                                  record.PartitionKey == ApplicationConstants.SubscriberListKey
                                      && record.Properties["LastEmailIdentifier"].StringValue != result.RowKey
-                                     && record.Properties["LastEmailIdentifier"].StringValue != string.Format("Faulted {0}", DateTime.UtcNow.Date)
+                                     && record.Properties["LastEmailIdentifier"].StringValue
+                                         != string.Format("Faulted {0}", DateTime.UtcNow.Date)
                                      && record.Properties["IsVerified"].BooleanValue == true
-                             select record).Take(10).AsTableQuery();
+                             select record).Take(50).AsTableQuery();
                 TableContinuationToken token = null;
                 do
                 {
                     var segment = subscriberTable.ExecuteQuerySegmented(query, token, TableRequestOptions);
                     var batchUpdate = new TableBatchOperation();
-                    var userDetails = new List<Tuple<string, string, string>>();
                     if (null == segment || !segment.Any())
                     {
                         Console.Out.WriteLine("No users found. Aborting current call.");
                         return;
                     }
 
+                    //// Compose Tuple of records of users.
+                    var userDetails =
+                        segment.Select(
+                            record =>
+                                new Tuple<string, string, string>(
+                                    record.Properties["FirstName"].StringValue,
+                                    record.RowKey,
+                                    record.Properties["VerificationString"].StringValue)).ToList();
                     Console.Out.WriteLine("Going to send mails to users");
                     if (SendNewPostMailsToUsers(userDetails, title, postedDate, formattedUri, bodySnippet))
                     {
@@ -153,24 +162,16 @@ namespace RahulRai.Websites.Jobs.MailWorker
                         {
                             record.Properties["LastEmailIdentifier"].StringValue = result.RowKey;
                             batchUpdate.Add(TableOperation.InsertOrReplace(record));
-                            userDetails.Add(
-                                new Tuple<string, string, string>(
-                                    record.Properties["FirstName"].StringValue,
-                                    record.RowKey,
-                                    record.Properties["VerificationString"].StringValue));
                         }
                     }
                     else
                     {
                         foreach (var record in segment)
                         {
-                            record.Properties["LastEmailIdentifier"].StringValue = string.Format("Faulted {0}", DateTime.UtcNow.Date);
+                            record.Properties["LastEmailIdentifier"].StringValue = string.Format(
+                                "Faulted {0}",
+                                DateTime.UtcNow.Date);
                             batchUpdate.Add(TableOperation.InsertOrReplace(record));
-                            userDetails.Add(
-                                new Tuple<string, string, string>(
-                                    record.Properties["FirstName"].StringValue,
-                                    record.RowKey,
-                                    record.Properties["VerificationString"].StringValue));
                         }
                     }
 
@@ -192,7 +193,7 @@ namespace RahulRai.Websites.Jobs.MailWorker
         #region Methods
 
         /// <summary>
-        /// Sends the new post mails to users.
+        ///     Sends the new post mails to users.
         /// </summary>
         /// <param name="userDetails">The user details.</param>
         /// <param name="title">The title.</param>
@@ -209,19 +210,23 @@ namespace RahulRai.Websites.Jobs.MailWorker
         {
             try
             {
-                var subject = string.Format("New blog on rahulrai.in: {0}", title);
+                var subject = string.Format("New blog posted on rahulrai.in: {0}", title);
                 Parallel.ForEach(
                     userDetails,
                     userDetail =>
                     {
+                        Console.Out.WriteLine("Sending mail to {0}", userDetail.Item2);
                         var mailBody =
                             TemplateString.Replace("[NAME]", userDetail.Item1)
                                 .Replace("[BLOGTITLE]", title)
                                 .Replace("[BODYSNIP]", bodySnippet)
                                 .Replace("[POSTLINK]", formattedUri)
                                 .Replace("[CODESTRING]", userDetail.Item3)
-                                .Replace("[POSTDATE]", (postedDate ?? DateTime.MinValue).ToLocalTime().ToString("f"));
+                                .Replace(
+                                    "[POSTDATE]",
+                                    (postedDate ?? DateTime.MinValue).ToLocalTime().ToString("f"));
                         mailSystem.SendEmail(userDetail.Item2, MailerAddress, MailerName, subject, mailBody);
+                        Console.Out.WriteLine("Mail sent to {0}", userDetail.Item2);
                     });
             }
             catch (Exception exception)

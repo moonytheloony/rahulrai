@@ -319,9 +319,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             }
 
             //// No special characters.
-            if (!Regex.IsMatch(searchTerm, @"^([ a-zA-Z0-9-]+)$"))
+            if (!Regex.IsMatch(searchTerm, @"^([ a-zA-Z0-9-\*]+)$"))
             {
-                errorList.Add("You can only use alphabets, numbers, spaces and dashes in your search query.");
+                errorList.Add("You can use only alphabets, numbers, spaces, dashes and astericks in your search query. Use * for wildcard matching.");
             }
 
             return errorList;

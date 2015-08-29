@@ -426,8 +426,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
                     ApplicationConstants.BlogKey);
                 var combinedFilter = TableQuery.CombineFilters(rowFilter, TableOperators.And, partitionFilter);
                 rowKeyFilterCondition = string.IsNullOrWhiteSpace(rowKeyFilterCondition)
-                    ? rowFilter
-                    : TableQuery.CombineFilters(combinedFilter, TableOperators.Or, rowFilter);
+                    ? combinedFilter
+                    : TableQuery.CombineFilters(rowKeyFilterCondition, TableOperators.Or, combinedFilter);
             }
 
             var activeTable = this.blogContext.CustomOperation();

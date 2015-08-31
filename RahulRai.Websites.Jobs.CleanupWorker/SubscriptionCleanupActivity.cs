@@ -64,6 +64,9 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
         /// </summary>
         private static readonly string TemplateString = File.ReadAllText("NewUser.html");
 
+        /// <summary>
+        ///     The mail system.
+        /// </summary>
         private static IMailSystem mailSystem;
 
         #endregion
@@ -93,19 +96,20 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
                     if (null == segment || !segment.Any())
                     {
                         Console.Out.WriteLine("No users found. Aborting current call.");
-                        return;
                     }
-
-                    //// Log users we are going to delete.
-                    foreach (var user in segment)
+                    else
                     {
-                        Console.Out.WriteLine("Deleting {0}", user.Properties["Email"].StringValue);
-                        batchDelete.Add(TableOperation.Delete(user));
-                    }
+                        //// Log users we are going to delete.
+                        foreach (var user in segment)
+                        {
+                            Console.Out.WriteLine("Deleting {0}", user.Properties["Email"].StringValue);
+                            batchDelete.Add(TableOperation.Delete(user));
+                        }
 
-                    Console.Out.WriteLine("Going to delete inactive users");
-                    subscriberTable.ExecuteBatch(batchDelete, TableRequestOptions);
-                    token = segment.ContinuationToken;
+                        Console.Out.WriteLine("Going to delete inactive users");
+                        subscriberTable.ExecuteBatch(batchDelete, TableRequestOptions);
+                        token = segment.ContinuationToken;
+                    }
                 }
                 while (token != null);
 
@@ -130,29 +134,30 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
                     if (null == segment || !segment.Any())
                     {
                         Console.Out.WriteLine("No user found for reminder. Aborting current call.");
-                        return;
                     }
-
-                    //// Log users we are going to remind.
-                    foreach (var user in segment)
+                    else
                     {
-                        Console.Out.WriteLine("Reminding {0}", user.Properties["Email"].StringValue);
-                        var reminderStatus =
-                            SendReminderMail(
-                                new Tuple<string, string, string, DateTime>(
-                                    user.Properties["FirstName"].StringValue,
-                                    user.Properties["VerificationString"].StringValue,
-                                    user.Properties["Email"].StringValue,
-                            // ReSharper disable once PossibleInvalidOperationException
-                                    user.Properties["CreatedDate"].DateTime.Value));
-                        Console.Out.WriteLine(
-                            "Reminded {0} with state {1}",
-                            user.Properties["Email"].StringValue,
-                            reminderStatus);
-                    }
+                        //// Log users we are going to remind.
+                        foreach (var user in segment)
+                        {
+                            Console.Out.WriteLine("Reminding {0}", user.Properties["Email"].StringValue);
+                            var reminderStatus =
+                                SendReminderMail(
+                                    new Tuple<string, string, string, DateTime>(
+                                        user.Properties["FirstName"].StringValue,
+                                        user.Properties["VerificationString"].StringValue,
+                                        user.Properties["Email"].StringValue,
+                                // ReSharper disable once PossibleInvalidOperationException
+                                        user.Properties["CreatedDate"].DateTime.Value));
+                            Console.Out.WriteLine(
+                                "Reminded {0} with state {1}",
+                                user.Properties["Email"].StringValue,
+                                reminderStatus);
+                        }
 
-                    Console.Out.WriteLine("All users reminded");
-                    reminderContinuationToken = segment.ContinuationToken;
+                        Console.Out.WriteLine("All users reminded");
+                        reminderContinuationToken = segment.ContinuationToken;
+                    }
                 }
                 while (reminderContinuationToken != null);
             }
@@ -167,6 +172,11 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
 
         #region Methods
 
+        /// <summary>
+        /// Send reminder mail.
+        /// </summary>
+        /// <param name="userDetail">The user details.</param>
+        /// <returns>State of operation.</returns>
         private static bool SendReminderMail(Tuple<string, string, string, DateTime> userDetail)
         {
             try

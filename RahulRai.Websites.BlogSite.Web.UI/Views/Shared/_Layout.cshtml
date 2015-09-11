@@ -11,7 +11,9 @@
             <br />
             <!-- SIDEBAR USERPIC -->
             <div class="profile-userpic">
-                <img src=@(resourceBasePath + "RahulRai.png") class="img-responsive" alt="Profile Picture">
+                <a href="@(Url.RouteUrl("Default", new { controller = "Profile", action = "ProfileContent" }))">
+                    <img src=@(resourceBasePath + "RahulRai.png") class="img-responsive" alt="Profile Picture">
+                </a>
             </div>
             <!-- END SIDEBAR USERPIC -->
             <!-- SIDEBAR USER TITLE -->

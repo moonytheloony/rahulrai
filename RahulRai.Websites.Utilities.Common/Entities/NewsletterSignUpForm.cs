@@ -66,6 +66,12 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         public string VerificationString { get; set; }
 
         /// <summary>
+        /// Gets or sets the unsubscribe string.
+        /// </summary>
+        /// <value>The unsubscribe string.</value>
+        public string UnsubscribeString { get; set; }
+
+        /// <summary>
         /// Gets or sets the last email identifier.
         /// </summary>
         /// <value>The last email identifier.</value>

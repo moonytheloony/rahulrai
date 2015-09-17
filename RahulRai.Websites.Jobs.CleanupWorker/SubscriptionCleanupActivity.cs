@@ -168,6 +168,53 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
             }
         }
 
+        /// <summary>
+        /// Changes user validation and unsubscribe codes.
+        /// </summary>
+        /// <param name="subscriberTable">The subscriber table.</param>
+        public static void RefreshUserValidationStrings(CloudTable subscriberTable)
+        {
+            try
+            {
+                var query = (from record in subscriberTable.CreateQuery<DynamicTableEntity>()
+                             where
+                             record.PartitionKey == ApplicationConstants.SubscriberListKey
+                             && record.Properties["IsVerified"].BooleanValue == true
+                             select record).Take(100).AsTableQuery();
+                TableContinuationToken token = null;
+                do
+                {
+                    var segment = subscriberTable.ExecuteQuerySegmented(query, token, TableRequestOptions);
+                    var batchUpdate = new TableBatchOperation();
+                    if (null == segment || !segment.Any())
+                    {
+                        Console.Out.WriteLine("No users found. Aborting current call.");
+                    }
+                    else
+                    {
+                        //// Log users we are going to update.
+                        foreach (var user in segment)
+                        {
+                            Console.Out.WriteLine("Updating {0}", user.Properties["Email"].StringValue);
+                            user.Properties["VerificationString"].StringValue = Guid.NewGuid().ToString();
+                            user.Properties["UnsubscribeString"].StringValue = Guid.NewGuid().ToString();
+                            batchUpdate.Add(TableOperation.Replace(user));
+                        }
+
+                        Console.Out.WriteLine("Going to update user secrets");
+                        subscriberTable.ExecuteBatch(batchUpdate, TableRequestOptions);
+                        token = segment.ContinuationToken;
+                    }
+                }
+                while (token != null);
+                Console.Out.WriteLine("Secrets of all users updated.");
+            }
+            catch (Exception exception)
+            {
+                Console.Error.WriteLine("Error at Time:{0} Exception:{1}", DateTime.UtcNow, exception);
+                throw;
+            }
+        }
         #endregion
 
         #region Methods

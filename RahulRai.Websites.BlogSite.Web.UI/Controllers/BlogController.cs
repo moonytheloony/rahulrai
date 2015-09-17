@@ -324,6 +324,23 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Controllers
         }
 
         /// <summary>
+        /// Completes the unsubscribe process by deleting user data.
+        /// </summary>
+        /// <param name="userString">User unsubscribe string</param>
+        /// <returns>Status of unsubscribe</returns>
+        public async Task<ActionResult> CompleteUnsubscritionProcess(string userString)
+        {
+            Guid testGuid;
+            if (string.IsNullOrWhiteSpace(userString) || !Guid.TryParse(userString, out testGuid))
+            {
+                return this.View("Unsubscribe", NewsletterSignUpState.NoInput);
+            }
+
+            var response = await Task.Run(() => this.blogService.CompleteUnsubscritionProcess(userString));
+            return this.View("Unsubscribe", response);
+        }
+
+        /// <summary>
         /// Activates the subscription.
         /// </summary>
         /// <param name="userString">The user string.</param>

@@ -77,52 +77,97 @@ namespace RahulRai.Websites.Jobs.MailWorker
         private static readonly string TemplateString = File.ReadAllText("NewUser.html");
 
         /// <summary>
+        /// Unsubscribe template string
+        /// </summary>
+        private static readonly string UnsubscribeTemplateString = File.ReadAllText("Unsubscribe.html");
+
+        /// <summary>
         /// The mail system
         /// </summary>
         private static IMailSystem mailSystem;
+
+        /// <summary>
+        /// Locking object
+        /// </summary>
+        private static readonly object LockingObject = new object();
 
         #endregion
 
         #region Public Methods and Operators
 
         /// <summary>
-        /// Processes the new subscriber queue message.
+        /// Processes the subscriber queue message.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="subscriberTable">The subscriber table.</param>
-        public static void ProcessNewSubscriberQueueMessage(
+        public static void ProcessSubscriberQueueMessage(
             [QueueTrigger(NewSubscriberQueue)] string message,
             [Table(SubscriberTable)] CloudTable subscriberTable)
         {
             try
             {
-                Console.Out.WriteLine("New subscriber message captured {0}", message);
-                var sendgridUserName = ConfigurationManager.AppSettings[ApplicationConstants.SendgridUserName];
-                var sendgridPassword = ConfigurationManager.AppSettings[ApplicationConstants.SendgridPassword];
-                mailSystem = new SendgridMailClient(sendgridUserName, sendgridPassword);
-                var operation = TableOperation.Retrieve(ApplicationConstants.SubscriberListKey, message);
-                var result = subscriberTable.Execute(operation, TableRequestOptions).Result as DynamicTableEntity;
-                if (null == result)
+                lock (LockingObject)
                 {
-                    Console.Error.WriteLine("There was no record found for {0}", message);
-                    return;
-                }
+                    var isUnsubsribeMessage = false;
+                    Console.Out.WriteLine("New subscriber message captured {0}", message);
+                    var sendgridUserName = ConfigurationManager.AppSettings[ApplicationConstants.SendgridUserName];
+                    var sendgridPassword = ConfigurationManager.AppSettings[ApplicationConstants.SendgridPassword];
+                    mailSystem = new SendgridMailClient(sendgridUserName, sendgridPassword);
+                    if (message.StartsWith("unsubscribe:", StringComparison.OrdinalIgnoreCase))
+                    {
+                        message = message.Split(':')[1];
+                        isUnsubsribeMessage = true;
+                    }
 
-                Console.Out.WriteLine("Going to send mail to {0}", message);
-                // ReSharper disable once PossibleInvalidOperationException
-                SendNewSubscriberMailToUser(
-                    new Tuple<string, string, string, DateTime>(
-                        result.Properties["FirstName"].StringValue,
-                        result.Properties["VerificationString"].StringValue,
-                        message,
-                        result.Properties["CreatedDate"].DateTime.Value));
-                Console.Out.WriteLine("Mail sent to {0}", message);
+                    var operation = TableOperation.Retrieve(ApplicationConstants.SubscriberListKey, message);
+                    var result = subscriberTable.Execute(operation, TableRequestOptions).Result as DynamicTableEntity;
+                    if (null == result)
+                    {
+                        Console.Error.WriteLine("There was no record found for {0}", message);
+                        return;
+                    }
+
+                    Console.Out.WriteLine("Going to send mail to {0}", message);
+                    if (isUnsubsribeMessage)
+                    {
+                        // ReSharper disable once PossibleInvalidOperationException
+                        SendUnsubscribeMailToUser(
+                            new Tuple<string, string, string, DateTime>(
+                                result.Properties["FirstName"].StringValue,
+                                result.Properties["UnsubscribeString"].StringValue,
+                                message,
+                                result.Properties["CreatedDate"].DateTime.Value));
+                    }
+                    else
+                    {
+                        // ReSharper disable once PossibleInvalidOperationException
+                        SendNewSubscriberMailToUser(
+                            new Tuple<string, string, string, DateTime>(
+                                result.Properties["FirstName"].StringValue,
+                                result.Properties["VerificationString"].StringValue,
+                                message,
+                                result.Properties["CreatedDate"].DateTime.Value));
+                    }
+
+                    Console.Out.WriteLine("Mail sent to {0}", message);
+                }
             }
             catch (Exception exception)
             {
                 Console.Error.WriteLine("Error at Time:{0} Exception:{1}", DateTime.UtcNow, exception);
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Send unsubscribe mail to user.
+        /// </summary>
+        /// <param name="userDetail">User details.</param>
+        private static void SendUnsubscribeMailToUser(Tuple<string, string, string, DateTime> userDetail)
+        {
+            var subject = string.Format("Hi {0}! Would you like to unsubscribe?‏", userDetail.Item1);
+            var mailBody = UnsubscribeTemplateString.Replace("[NAME]", userDetail.Item1).Replace("[CODESTRING]", userDetail.Item2);
+            mailSystem.SendEmail(userDetail.Item3, MailerAddress, MailerName, subject, mailBody);
         }
 
         #endregion

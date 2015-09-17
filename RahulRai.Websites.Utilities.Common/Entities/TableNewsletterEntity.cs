@@ -43,6 +43,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
             this.CreatedDate = signUpForm.CreatedDate;
             this.LastEmailIdentifier = signUpForm.LastEmailIdentifier;
             this.VerificationString = signUpForm.VerificationString;
+            this.UnsubscribeString = signUpForm.UnsubscribeString;
             this.RowKey = signUpForm.Email;
             this.PartitionKey = ApplicationConstants.SubscriberListKey;
         }
@@ -81,6 +82,12 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         /// </summary>
         /// <value>The last email identifier.</value>
         public string LastEmailIdentifier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unsubscribe string
+        /// </summary>
+        /// <value>The unsubscribe string.</value>
+        public string UnsubscribeString { get; set; }
 
         /// <summary>
         /// Gets or sets the first name.
@@ -123,6 +130,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
                     IsVerified = this.IsVerified,
                     LastEmailIdentifier = this.LastEmailIdentifier,
                     VerificationString = this.VerificationString,
+                    UnsubscribeString = this.UnsubscribeString,
                     CreatedDate = this.CreatedDate
                 };
         }

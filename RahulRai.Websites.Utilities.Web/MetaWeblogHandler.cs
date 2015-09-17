@@ -226,6 +226,7 @@ namespace RahulRai.Websites.Utilities.Web
         string IMetaWeblog.AddPost(string blogid, string username, string password, dynamic post, bool publish)
         {
             ValidateUser(username, password);
+            ClearCache();
             var postTitle = post["title"];
             TraceUtility.LogInformation("Add Post invoked for title {0}", postTitle);
             var description = post["description"];
@@ -310,6 +311,7 @@ namespace RahulRai.Websites.Utilities.Web
         bool IMetaWeblog.DeletePost(string key, string postid, string username, string password, bool publish)
         {
             ValidateUser(username, password);
+            ClearCache();
             try
             {
                 TraceUtility.LogInformation("Delete post invoked for {0}", postid);
@@ -571,6 +573,7 @@ namespace RahulRai.Websites.Utilities.Web
         bool IMetaWeblog.UpdatePost(string postid, string username, string password, dynamic post, bool publish)
         {
             ValidateUser(username, password);
+            ClearCache();
             var postTitle = post["title"];
             TraceUtility.LogInformation("Update post invoked for {0} ID {1}", postTitle, postid);
             var description = post["description"];
@@ -638,6 +641,15 @@ namespace RahulRai.Websites.Utilities.Web
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Remove clog related keys when a new blog is posted.
+        /// </summary>
+        private static void ClearCache()
+        {
+            ApplicationCache.Remove(ApplicationConstants.BlogsCacheKey);
+            ApplicationCache.Remove(ApplicationConstants.BlogsFirstTokenCacheKey);
+        }
 
         /// <summary>
         /// Validates the user.

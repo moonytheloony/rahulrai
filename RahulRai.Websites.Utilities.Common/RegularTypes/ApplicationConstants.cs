@@ -165,6 +165,16 @@ namespace RahulRai.Websites.Utilities.Common.RegularTypes
         public static string TestimonialCacheKey = "Testimonials";
 
         /// <summary>
+        /// The blog post cache key.
+        /// </summary>
+        public static string BlogsCacheKey = "BlogsCacheKey";
+
+        /// <summary>
+        /// Continuation token for the first page result.
+        /// </summary>
+        public static string BlogsFirstTokenCacheKey = "BlogsFirstTokenCacheKey";
+
+        /// <summary>
         /// The application insight key
         /// </summary>
         public static string AppInsightKey = "AppInsightKey";

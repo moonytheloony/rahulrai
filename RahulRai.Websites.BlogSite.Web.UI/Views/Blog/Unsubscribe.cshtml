@@ -11,27 +11,39 @@
         </p>
         break;
     case NewsletterSignUpState.Unsubscribed:
-        <p class="lead">Goodbye Friend!</p>
-        <p>
-            As promised, you have been unsubscribed from my mailing list and all your records have been permanently deleted from my database. If you mistakenly unsubscribed yourself, I invite you to subscribe yourself again <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })">here</a>.
-        </p>
+    <p class="lead">Goodbye Friend!</p>
+    <p>
+        As promised, you have been unsubscribed from my mailing list and all your records have been permanently deleted from my database. If you mistakenly unsubscribed yourself, I invite you to subscribe yourself again <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })">here</a>.
+    </p>
         break;
     case NewsletterSignUpState.NoInput:
-        <p class="lead">Nope!</p>
-        <p>
-            There is no input that I can work with. Either you are trying to game the system or you have a malformed link. I apologize for the latter and request you to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">contact me</a>.
-        </p>
+    <p class="lead">Nope!</p>
+    <p>
+        There is no input that I can work with. Either you are trying to game the system or you have a malformed link. I apologize for the latter and request you to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">contact me</a>.
+    </p>
         break;
     case NewsletterSignUpState.UserDoesNotExist:
-        <p class="lead">Not Found!</p>
-        <p>
-            This user does not exist in my database. You might already have unsubscribed from the list. If you mistakenly unsubscribed yourself, I invite you to subscribe yourself again <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })">here</a>.
-        </p>
+    <p class="lead">Not Found!</p>
+    <p>
+        This user does not exist in my database. You might already have unsubscribed from the list. If you mistakenly unsubscribed yourself, I invite you to subscribe yourself again <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })">here</a>.
+    </p>
+        break;
+    case NewsletterSignUpState.UnsubsribeMailSent:
+    <p class="lead">One Last Thing!</p>
+    <p>
+        You are one step away from getting unsubscribed. I have sent you an email with a magic link. If you click that link, our relationship would be over.
+    </p>
+        break;
+    case NewsletterSignUpState.UnsubscribeMailFailed:
+    <p class="lead">Error Sending Email!</p>
+    <p>
+        I failed to send you the subscription opt-out email. I apologize for the inconvenience caused and request you to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">send me an email</a> from the email account which you want to opt out of subscription.
+    </p>
         break;
     default:
-        <p class="lead">Failed!</p>
-        <p>
-            I failed to unsubscribe you from my mailing list. This error might be temporary, therefore I request you to try again after some time. If you need assistance, I request you to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">contact me</a>.
-        </p>
+    <p class="lead">Failed!</p>
+    <p>
+        I failed to unsubscribe you from my mailing list. This error might be temporary, therefore I request you to try again after some time. If you need assistance, I request you to <a href="@Url.RouteUrl("Profile", new { controller = "Profile", action = "Contact" })">contact me</a>.
+    </p>
         break;
 }

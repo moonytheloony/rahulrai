@@ -29,7 +29,9 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
     using RahulRai.Websites.Utilities.AzureStorage.QueueStorage;
     using RahulRai.Websites.Utilities.AzureStorage.TableStorage;
     using RahulRai.Websites.Utilities.Common.Entities;
+    using RahulRai.Websites.Utilities.Common.Helpers;
     using RahulRai.Websites.Utilities.Common.RegularTypes;
+    using RahulRai.Websites.Utilities.Web;
 
     #endregion
 
@@ -149,6 +151,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
                 signUpForm.CreatedDate = DateTime.UtcNow;
                 signUpForm.LastEmailIdentifier = string.Empty;
                 signUpForm.VerificationString = Guid.NewGuid().ToString();
+                signUpForm.UnsubscribeString = Guid.NewGuid().ToString();
                 signUpForm.IsVerified = false;
                 var tableEntity = new TableNewsletterEntity(signUpForm);
                 this.newsletterContext.InsertOrReplace(tableEntity);
@@ -164,6 +167,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
                 signUpForm.CreatedDate = DateTime.UtcNow;
                 signUpForm.LastEmailIdentifier = string.Empty;
                 signUpForm.VerificationString = Guid.NewGuid().ToString();
+                signUpForm.UnsubscribeString = Guid.NewGuid().ToString();
                 signUpForm.IsVerified = false;
                 var tableEntity = new TableNewsletterEntity(signUpForm);
                 this.newsletterContext.InsertOrReplace(tableEntity);
@@ -242,8 +246,35 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         /// <returns>List&lt;BlogPost&gt;.</returns>
         public async Task<List<BlogPost>> GetLatestBlogs()
         {
+            IEnumerable<BlogPost> cacheResult;
+            TableContinuationToken token;
+            //// Check in cache first. Retry operation on first failure. Product Issue :(
+            try
+            {
+                cacheResult = ApplicationCache.Get<IEnumerable<BlogPost>>(ApplicationConstants.BlogsCacheKey);
+                token = ApplicationCache.Get<TableContinuationToken>(ApplicationConstants.BlogsFirstTokenCacheKey);
+            }
+            catch (Exception)
+            {
+                cacheResult = ApplicationCache.Get<IEnumerable<BlogPost>>(ApplicationConstants.BlogsCacheKey);
+                token = ApplicationCache.Get<TableContinuationToken>(ApplicationConstants.BlogsFirstTokenCacheKey);
+            }
+
+            if (null != cacheResult)
+            {
+                //// We need to add token to user page dictionary as well.
+                if (null != token)
+                {
+                    UserPageDictionary.PageDictionary.AddPage(token);
+                }
+
+                return cacheResult.ToList();
+            }
+
             var result = await this.GetPagedBlogPreviews(null, true);
-            return result.Select(TableBlogEntity.GetBlogPost).ToList();
+            var firstPageBlogs = result.Select(TableBlogEntity.GetBlogPost).ToList();
+            ApplicationCache.Set(ApplicationConstants.BlogsCacheKey, firstPageBlogs);
+            return firstPageBlogs;
         }
 
         /// <summary>
@@ -272,9 +303,39 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         {
             var newsletterTable = this.newsletterContext.CustomOperation();
             var foundUser = (from record in newsletterTable.CreateQuery<TableNewsletterEntity>()
+                             where record.PartitionKey == ApplicationConstants.SubscriberListKey && record.VerificationString == userString
+                             select record).FirstOrDefault();
+            if (null == foundUser)
+            {
+                return NewsletterSignUpState.UserDoesNotExist;
+            }
+
+            //// Send email to user.
+            try
+            {
+                this.AddMessageToUnsubsribeUserQueue(foundUser.Email);
+            }
+            catch (Exception exception)
+            {
+                TraceUtility.LogError(exception);
+                return NewsletterSignUpState.UnsubscribeMailFailed;
+            }
+
+            return NewsletterSignUpState.UnsubsribeMailSent;
+        }
+
+        /// <summary>
+        /// Complete unsubscription process by deleting user data.
+        /// </summary>
+        /// <param name="userString">User unsubscribe string.</param>
+        /// <returns>Status of deletion.</returns>
+        public NewsletterSignUpState CompleteUnsubscritionProcess(string userString)
+        {
+            var newsletterTable = this.newsletterContext.CustomOperation();
+            var foundUser = (from record in newsletterTable.CreateQuery<TableNewsletterEntity>()
                              where
                                  record.PartitionKey == ApplicationConstants.SubscriberListKey
-                                     && record.VerificationString == userString
+                                     && record.UnsubscribeString == userString
                              select record).FirstOrDefault();
             if (null == foundUser)
             {
@@ -337,6 +398,15 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
         }
 
         /// <summary>
+        /// Adds the message to 
+        /// </summary>
+        /// <param name="email">The email.</param>
+        private void AddMessageToUnsubsribeUserQueue(string email)
+        {
+            this.newSubscriberQueueContext.AddMessageToQueue(string.Format("Unsubscribe:{0}", email));
+        }
+
+        /// <summary>
         /// Blogs the archive.
         /// </summary>
         /// <param name="token">The token.</param>
@@ -385,14 +455,19 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
                              record.PartitionKey == ApplicationConstants.BlogKey
                                  && record.Properties["IsDraft"].BooleanValue == false
                                  && record.Properties["IsDeleted"].BooleanValue == false
-                                 && string.Compare(record.RowKey, this.rowKeyToUse, StringComparison.OrdinalIgnoreCase)
-                                     > 0
+                                 && string.Compare(record.RowKey, this.rowKeyToUse, StringComparison.OrdinalIgnoreCase) > 0
                          select record).Take(this.pageSize);
-            var result =
-                await Task.Run(() => query.AsTableQuery().ExecuteSegmented(token, this.blogContext.TableRequestOptions));
-            if (shouldAddPage && null != result.ContinuationToken)
+            var result = await Task.Run(() => query.AsTableQuery().ExecuteSegmented(token, this.blogContext.TableRequestOptions));
+            if (!shouldAddPage || null == result.ContinuationToken)
             {
-                UserPageDictionary.PageDictionary.AddPage(result.ContinuationToken);
+                return result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>());
+            }
+
+            UserPageDictionary.PageDictionary.AddPage(result.ContinuationToken);
+            //// If this is the first page response. Add it to cache as well.
+            if (null == token)
+            {
+                ApplicationCache.Set(ApplicationConstants.BlogsFirstTokenCacheKey, result.ContinuationToken);
             }
 
             return result.Select(element => element.ConvertDynamicEntityToEntity<TableBlogEntity>());

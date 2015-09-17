@@ -25,6 +25,7 @@ namespace RahulRai.Websites.Utilities.Common.Entities
     /// <summary>
     ///     Class BlogPost.
     /// </summary>
+    [Serializable]
     public class BlogPost
     {
         /// <summary>

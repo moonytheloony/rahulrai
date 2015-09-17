@@ -88,6 +88,15 @@ namespace RahulRai.Websites.Utilities.Web
         }
 
         /// <summary>
+        /// Removes a key from cache
+        /// </summary>
+        /// <param name="key">Key to remove.</param>
+        public static void Remove(string key)
+        {
+            Cache.KeyDelete(key);
+        }
+
+        /// <summary>
         /// Serializes the specified object.
         /// </summary>
         /// <param name="obj">The object.</param>

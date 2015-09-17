@@ -47,6 +47,16 @@ namespace RahulRai.Websites.Utilities.Common.Entities
         /// <summary>
         /// The user does not exist
         /// </summary>
-        UserDoesNotExist = 5
+        UserDoesNotExist = 5,
+
+        /// <summary>
+        /// Unsubscribe mail sent
+        /// </summary>
+        UnsubsribeMailSent = 6,
+
+        /// <summary>
+        /// Unsubscribe mail failed
+        /// </summary>
+        UnsubscribeMailFailed = 7
     }
 }

@@ -16,6 +16,7 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
 {
     #region
 
+    using System;
     using System.Configuration;
 
     using Microsoft.WindowsAzure.Storage;
@@ -45,6 +46,10 @@ namespace RahulRai.Websites.Jobs.CleanupWorker
                     ConfigurationManager.AppSettings[ApplicationConstants.NewsletterSubscriberTableName]);
             cloudTable.CreateIfNotExists();
             SubscriptionCleanupActivity.CleanupOldSubscribers(cloudTable);
+            if (DateTime.Today.DayOfWeek == DayOfWeek.Thursday)
+            {
+                SubscriptionCleanupActivity.RefreshUserValidationStrings(cloudTable);
+            }
         }
 
         #endregion

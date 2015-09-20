@@ -12,16 +12,16 @@
         </div>
         <div class="col-md-4 text-right" id="link_other">
             <a href="http://twitter.com/share?url=@Request.Url.AbsoluteUri&text=@Model.Title">
-                <img src="~/Content/Social/48/twitter.png" alt="share on twitter" class="iconImage img-responsive" data-toggle="tooltip" title="Tweet"/>
+                <img src="~/Content/Social/48/twitter.png" alt="share on twitter" class="iconImage img-responsive" data-toggle="tooltip" title="Tweet" />
             </a>
             <a href="http://www.facebook.com/sharer.php?u=@Request.Url.AbsoluteUri">
-                <img src="~/Content/Social/48/fb.png" alt="share on facebook" class="iconImage img-responsive" data-toggle="tooltip" title="Post"/>
+                <img src="~/Content/Social/48/fb.png" alt="share on facebook" class="iconImage img-responsive" data-toggle="tooltip" title="Post" />
             </a>
             <a href="https://www.linkedin.com/shareArticle?mini=true&url=@Request.Url.AbsoluteUri&summary=@Model.Title&source=rahulrai.in">
-                <img src="~/Content/Social/48/linkedin.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="Share"/>
+                <img src="~/Content/Social/48/linkedin.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="Share" />
             </a>
             <a href="whatsapp://send?text=Read about @Model.Title here @Request.Url.AbsoluteUri">
-                <img src="~/Content/Social/48/whatsapp.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="WhatsApp (mobile)"/>
+                <img src="~/Content/Social/48/whatsapp.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="WhatsApp (mobile)" />
             </a>
         </div>
     </div>
@@ -35,35 +35,39 @@
     <div class="row visible-xs visible-sm">
         <div class="col-xs-12 text-center" id="link_other">
             <a href="http://twitter.com/share?url=@Request.Url.AbsoluteUri&text=@Model.Title">
-                <img src="~/Content/Social/48/twitter.png" alt="share on twitter" class="iconImage img-responsive" data-toggle="tooltip" title="Tweet"/>
+                <img src="~/Content/Social/48/twitter.png" alt="share on twitter" class="iconImage img-responsive" data-toggle="tooltip" title="Tweet" />
             </a>
             <a href="http://www.facebook.com/sharer.php?u=@Request.Url.AbsoluteUri">
-                <img src="~/Content/Social/48/fb.png" alt="share on facebook" class="iconImage img-responsive" data-toggle="tooltip" title="Post"/>
+                <img src="~/Content/Social/48/fb.png" alt="share on facebook" class="iconImage img-responsive" data-toggle="tooltip" title="Post" />
             </a>
             <a href="https://www.linkedin.com/shareArticle?mini=true&url=@Request.Url.AbsoluteUri&summary=@Model.Title&source=rahulrai.in">
-                <img src="~/Content/Social/48/linkedin.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="Share"/>
+                <img src="~/Content/Social/48/linkedin.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="Share" />
             </a>
             <a href="whatsapp://send?text=Read about @Model.Title here @Request.Url.AbsoluteUri">
-                <img src="~/Content/Social/48/whatsapp.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="WhatsApp (mobile)"/>
+                <img src="~/Content/Social/48/whatsapp.png" alt="share on linkedin" class="iconImage img-responsive" data-toggle="tooltip" title="WhatsApp (mobile)" />
             </a>
         </div>
     </div>
 </div>
-<hr/>
-<!-- Post Content -->
-@Html.Raw(Model.Body)
-<hr/>
+<hr />
+<!--Fixed issue related to overflowing text-->
+<div style="white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word; overflow: hidden;">
+    <!-- Post Content -->
+    @Html.Raw(Model.Body)
+</div>
+<hr />
 @if (!string.IsNullOrWhiteSpace(Model.SpecialMention))
 {
     <!--Custom Text-->
     <p>@Html.Raw(Model.SpecialMention)</p>
-    <hr/>
+    <hr />
 }
 <div class="panel panel-success">
-    <div class="panel-heading"> Did you enjoy reading this post? I can notify you the next time I post something. <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })">Subscribe.</a>
+    <div class="panel-heading">
+        Did you enjoy reading this post? I can notify you the next time I post something. <a href="@Url.RouteUrl("Default", new { controller = "Blog", action = "NewsletterSignUp" })">Subscribe.</a>
     </div>
 </div>
-<hr/>
+<hr />
 <!-- Blog Comments -->
 <div id="disqus_thread">
     @* ReSharper disable once PossibleNullReferenceException *@
@@ -73,7 +77,7 @@
         var disqus_url = '@Request.Url.ToString()';
         var disqus_identifier = '@Request.Url.AbsolutePath';
         /* * * DON'T EDIT BELOW THIS LINE * * */
-        (function() {
+        (function () {
             var dsq = document.createElement('script');
             dsq.type = 'text/javascript';
             dsq.async = true;

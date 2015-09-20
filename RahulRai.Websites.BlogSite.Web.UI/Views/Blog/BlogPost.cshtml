@@ -51,10 +51,8 @@
 </div>
 <hr />
 <!--Fixed issue related to overflowing text-->
-<div style="white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word; overflow: hidden;">
-    <!-- Post Content -->
-    @Html.Raw(Model.Body)
-</div>
+<!-- Post Content -->
+@Html.Raw(Model.Body)
 <hr />
 @if (!string.IsNullOrWhiteSpace(Model.SpecialMention))
 {

@@ -177,7 +177,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI.Services
             postedTestimonial.AuthorLastName = textInfo.ToTitleCase(postedTestimonial.AuthorLastName.Trim());
 
             //// Format Job
-            postedTestimonial.AuthorDesignation = Regex.Replace(postedTestimonial.AuthorDesignation.Trim(), @"\s+", " ");
+            postedTestimonial.AuthorDesignation = string.IsNullOrWhiteSpace(postedTestimonial.AuthorDesignation) ? string.Empty : Regex.Replace(postedTestimonial.AuthorDesignation.Trim(), @"\s+", " ");
             postedTestimonial.AuthorOrganization = Regex.Replace(postedTestimonial.AuthorOrganization.Trim(), @"\s+", " ");
             postedTestimonial.AuthorDesignation = textInfo.ToTitleCase(postedTestimonial.AuthorDesignation.Trim());
             postedTestimonial.AuthorOrganization = textInfo.ToTitleCase(postedTestimonial.AuthorOrganization.Trim());

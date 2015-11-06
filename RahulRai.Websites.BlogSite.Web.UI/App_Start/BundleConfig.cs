@@ -37,7 +37,8 @@ namespace RahulRai.Websites.BlogSite.Web.UI
                 "~/Scripts/SyntaxHighlighter/shBrushCss*",
                 "~/Scripts/SyntaxHighlighter/shBrushJScript*",
                 "~/Scripts/SyntaxHighlighter/shBrushXml*",
-                "~/Scripts/SyntaxHighlighter/shBrushSql*"));
+                "~/Scripts/SyntaxHighlighter/shBrushSql*",
+                "~/Scripts/SyntaxHighlighter/shBrushPowerShell*"));
 
             bundles.Add(new StyleBundle("~/styles/SyntaxHighlighter").Include(
                 "~/Content/SyntaxHighlighter/shCore.css",

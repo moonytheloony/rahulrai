@@ -8,7 +8,8 @@
 <h1>Curriculum Vitae</h1>
 <hr>
 <!-- Date/Time -->
-<p><span class="glyphicon glyphicon-time"></span> Updated on September 30, 2015 at 9:00 PM
+<p>
+    <span class="glyphicon glyphicon-time"></span> Updated on September 30, 2015 at 9:00 PM
 </p>
 <hr>
 @if (ViewBag.IsValid == null || ViewBag.IsValid != true)
@@ -69,8 +70,8 @@ else
 {
     <div class="h_iframe hidden-xs">
         <!-- a transparent image is preferable -->
-        <img class="ratio" src="http://placehold.it/16x20" width="16" height="20" alt="placeholder"/>
-        <iframe src="https://docs.google.com/viewer?srcid=@WebConfigurationManager.AppSettings[ApplicationConstants.ResumeDocumentKey]&pid=explorer&efh=false&a=v&chrome=false&embedded=true" allowfullscreen></iframe>
+        <img class="ratio" src="http://placehold.it/16x20" width="16" height="20" alt="placeholder" />
+        <iframe src="@WebConfigurationManager.AppSettings[ApplicationConstants.ResumeDocumentKey]" scrolling="auto"></iframe>
     </div>
     <div class="visible-xs">
         Please use a higher resolution display to view this file.

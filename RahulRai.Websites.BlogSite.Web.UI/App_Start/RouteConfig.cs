@@ -41,6 +41,7 @@ namespace RahulRai.Websites.BlogSite.Web.UI
             routes.MapRoute("BlogPost", "post/{postId}", new { controller = "Blog", action = "GetBlogPost" });
             routes.MapRoute("Error", "Error/{action}", new { controller = "Error" });
             routes.MapRoute("Profile", "Profile/{action}/{id}", new { controller = "Profile", id = UrlParameter.Optional });
+            routes.MapRoute("Sitemap", "sitemap/", new { controller = "Sitemap", action = "Index" });
             routes.MapRoute("Default", "{controller}/{action}/{id}", new { controller = "Blog", action = "GetLatestBlogs", id = UrlParameter.Optional });
         }
     }

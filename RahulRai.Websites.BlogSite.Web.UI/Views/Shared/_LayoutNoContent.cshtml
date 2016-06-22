@@ -1,4 +1,4 @@
-﻿@using System.Web.Configuration
+@using System.Web.Configuration
 @using RahulRai.Websites.Utilities.Common.RegularTypes
 <!DOCTYPE html>
 <html lang="en">
@@ -190,10 +190,9 @@
                     <dl>
                         <dt>SSL Secure</dt>
                         <dd>
-                            <!-- Begin DigiCert site seal HTML -->
-                            <div id="DigiCertClickID_3Wm3PlNT" data-language="en" class="allow-test-seal" width="30px">
-                            </div>
-                            <!-- End DigiCert site seal HTML -->
+                            <!-- Begin Positive SSL site seal HTML -->
+                            <a  href="https://www.positivessl.com/" id="comodoTL" />
+                            <!-- End Positive SSL site seal HTML -->
                         </dd>
                         <dt>Mails with <i class="glyphicon glyphicon-heart" style="color: red"></i></dt>
                         <dd>
@@ -240,20 +239,16 @@
         </div>
     </div>
     <!--/Affiliations-->
-    <!-- Begin DigiCert site seal JavaScript code -->
-    <script type="text/javascript" async defer>
-        var __dcid = __dcid || [];
-        __dcid.push(["DigiCertClickID_3Wm3PlNT", "3", "l", "white", "3Wm3PlNT"]);
-        (function () {
-            var cid = document.createElement("script");
-            cid.async = true;
-            cid.src = "//seal.digicert.com/seals/cascade/seal.min.js";
-            var s = document.getElementsByTagName("script");
-            var ls = s[(s.length - 1)];
-            ls.parentNode.insertBefore(cid, ls.nextSibling);
-        }());
+    <!-- Begin Positive SSL site seal JavaScript code -->
+    <script type="text/javascript"> //<![CDATA[ 
+        var tlJsHost = ((window.location.protocol == "https:") ? "https://secure.comodo.com/" : "http://www.trustlogo.com/");
+        document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
+        //]]>
     </script>
-    <!-- End DigiCert site seal JavaScript code -->
+    <script language="JavaScript" type="text/javascript">
+        TrustLogo("https://rahulrai.blob.core.windows.net/applicationresources/comodo_secure_seal_76x26_transp.png", "CL1", "none");
+    </script>
+    <!-- End Positive SSL site seal JavaScript code -->
     <script type="text/javascript">
         //Open links in new tab
         $(document).ready(function () {
